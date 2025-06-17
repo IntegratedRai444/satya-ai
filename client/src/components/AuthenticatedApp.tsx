@@ -36,8 +36,7 @@ import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
 import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 import AIAccessRequestForm from "@/components/AIAccessRequestForm";
 import CyberSecurityAcademy from "@/components/CyberSecurityAcademy";
-import EnhancedSecurityPortal from "@/components/EnhancedSecurityPortal";
-import SecurityMascotCompanion from "@/components/SecurityMascotCompanion";
+import UnifiedSecurityPortal from "@/components/UnifiedSecurityPortal";
 
 interface UserData {
   id: string;
@@ -173,8 +172,7 @@ function NormalUserRouter() {
         <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
         <Route path="/ai-access-request" component={AIAccessRequestForm} />
         <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
-        <Route path="/enhanced-security" component={EnhancedSecurityPortal} />
-        <Route path="/security-companion" component={SecurityMascotCompanion} />
+        <Route path="/unified-security" component={UnifiedSecurityPortal} />
         <Route component={NotFound} />
       </Switch>
     </div>

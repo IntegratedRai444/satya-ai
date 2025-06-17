@@ -97,10 +97,10 @@ export function GlobalNavigation() {
       description: 'CyberNexus 3D Operations Hub'
     },
     {
-      path: '/security-companion',
-      label: 'AI Companion',
-      icon: Bot,
-      description: 'Interactive security learning companion'
+      path: '/unified-security',
+      label: 'Security Portal',
+      icon: Shield,
+      description: 'Unified AI security analysis & learning platform'
     }
   ];
 
