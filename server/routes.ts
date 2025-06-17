@@ -2556,6 +2556,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Real Threat Intelligence API using newsdata.io
+  app.get("/api/threat-intelligence/cybersecurity", async (req, res) => {
+    try {
+      const { country, language, page } = req.query;
+      const result = await threatIntelligenceService.getCyberSecurityNews({
+        country: country as string,
+        language: language as string,
+        page: page as string
+      });
+      res.json(result);
+    } catch (error) {
+      console.error("Failed to fetch cybersecurity news:", error);
+      res.status(500).json({ 
+        error: "Failed to fetch cybersecurity threat intelligence", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/threat-intelligence/ai-security", async (req, res) => {
+    try {
+      const result = await threatIntelligenceService.getAISecurityNews();
+      res.json(result);
+    } catch (error) {
+      console.error("Failed to fetch AI security news:", error);
+      res.status(500).json({ 
+        error: "Failed to fetch AI security threat intelligence", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/threat-intelligence/category/:category", async (req, res) => {
+    try {
+      const category = req.params.category as 'malware' | 'phishing' | 'ransomware' | 'data-breach' | 'vulnerability';
+      const validCategories = ['malware', 'phishing', 'ransomware', 'data-breach', 'vulnerability'];
+      
+      if (!validCategories.includes(category)) {
+        return res.status(400).json({ 
+          error: "Invalid category",
+          valid_categories: validCategories
+        });
+      }
+
+      const result = await threatIntelligenceService.getThreatsByCategory(category);
+      res.json(result);
+    } catch (error) {
+      console.error(`Failed to fetch ${req.params.category} threats:`, error);
+      res.status(500).json({ 
+        error: `Failed to fetch ${req.params.category} threat intelligence`, 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/threat-intelligence/summary", async (req, res) => {
+    try {
+      const summary = await threatIntelligenceService.getThreatIntelligenceSummary();
+      res.json(summary);
+    } catch (error) {
+      console.error("Failed to generate threat intelligence summary:", error);
+      res.status(500).json({ 
+        error: "Failed to generate threat intelligence summary", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // Startup Security Audit API Routes
   app.post("/api/security/scan", async (req, res) => {
     try {

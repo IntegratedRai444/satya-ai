@@ -274,7 +274,7 @@ export class ThreatIntelligenceService {
           const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
           return pubDate > oneDayAgo;
         }).length,
-        affectedCountries: [...new Set(allResults.flatMap(r => r.country))],
+        affectedCountries: Array.from(new Set(allResults.flatMap(r => r.country))),
         topThreatVectors: this.getTopItems(allResults.flatMap(r => r.attack_vectors), 5),
         emergingThreats: this.getTopItems(allResults.filter(r => r.threat_level === 'high' || r.threat_level === 'critical').map(r => r.title), 5)
       };
