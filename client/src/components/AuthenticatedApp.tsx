@@ -37,6 +37,7 @@ import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 import AIAccessRequestForm from "@/components/AIAccessRequestForm";
 import CyberSecurityAcademy from "@/components/CyberSecurityAcademy";
 import EnhancedSecurityPortal from "@/components/EnhancedSecurityPortal";
+import SecurityMascotCompanion from "@/components/SecurityMascotCompanion";
 
 interface UserData {
   id: string;

@@ -13,7 +13,8 @@ import {
   Globe,
   Bot,
   LogOut,
-  User
+  User,
+  Layers
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -92,7 +93,7 @@ export function GlobalNavigation() {
     {
       path: '/cybernexus',
       label: 'Command Center',
-      icon: Layers,
+      icon: Settings,
       description: 'CyberNexus 3D Operations Hub'
     }
   ];

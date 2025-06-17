@@ -49,6 +49,7 @@ import {
   Bot,
   Cpu,
   Network,
+  Clock,
   HardDrive,
   Router,
   Fingerprint,
@@ -783,51 +784,75 @@ export default function CyberNexusCommandCenter() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white">System Operations</CardTitle>
+                  <CardTitle className="text-white">Advanced Operations</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                    <Play className="h-4 w-4 mr-2" />
-                    Start Full System Scan
-                  </Button>
-                  <Button className="w-full bg-green-600 hover:bg-green-700">
-                    <Shield className="h-4 w-4 mr-2" />
-                    Activate Defense Mode
+                    <Globe className="h-4 w-4 mr-2" />
+                    Integration with Real Threat Intelligence APIs
                   </Button>
                   <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                    <Atom className="h-4 w-4 mr-2" />
-                    Initialize Quantum Core
+                    <Brain className="h-4 w-4 mr-2" />
+                    Machine Learning Models for Advanced Threat Prediction
+                  </Button>
+                  <Button className="w-full bg-green-600 hover:bg-green-700">
+                    <Users className="h-4 w-4 mr-2" />
+                    Real-time Collaboration Features for Security Teams
                   </Button>
                   <Button className="w-full bg-orange-600 hover:bg-orange-700">
-                    <Target className="h-4 w-4 mr-2" />
-                    Deploy Threat Hunters
+                    <FileText className="h-4 w-4 mr-2" />
+                    Advanced Export Capabilities with Custom Report Generation
                   </Button>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Node Management</CardTitle>
+                  <CardTitle className="text-white">Interactive Features</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Active Nodes</span>
-                      <span className="text-green-400">{filteredNodes.filter(n => n.status === 'active').length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Warning Nodes</span>
-                      <span className="text-yellow-400">{filteredNodes.filter(n => n.status === 'warning').length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Critical Nodes</span>
-                      <span className="text-red-400">{filteredNodes.filter(n => n.status === 'critical').length}</span>
-                    </div>
-                  </div>
-                  <Button className="w-full bg-slate-600 hover:bg-slate-700">
-                    <Settings className="h-4 w-4 mr-2" />
-                    Configure Node Settings
+                  <Button className="w-full bg-cyan-600 hover:bg-cyan-700">
+                    <Bot className="h-4 w-4 mr-2" />
+                    Playful Security Mascot Companion for Learning
                   </Button>
+                  <Button className="w-full bg-red-600 hover:bg-red-700">
+                    <Target className="h-4 w-4 mr-2" />
+                    Gamified Threat Detection Challenge Mode
+                  </Button>
+                  <Button className="w-full bg-yellow-600 hover:bg-yellow-700">
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Interactive Cybersecurity Skill Tree Progression
+                  </Button>
+                  <Button className="w-full bg-pink-600 hover:bg-pink-700">
+                    <Clock className="h-4 w-4 mr-2" />
+                    Animated Threat Intelligence Timeline
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800 border-slate-700 lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="text-white">Enhanced Storytelling & Learning</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button className="bg-indigo-600 hover:bg-indigo-700">
+                      <Eye className="h-4 w-4 mr-2" />
+                      User-Friendly Cyber Threat Storytelling Feature
+                    </Button>
+                    <Button className="bg-emerald-600 hover:bg-emerald-700">
+                      <Activity className="h-4 w-4 mr-2" />
+                      Real-time Threat Visualization Dashboard
+                    </Button>
+                    <Button className="bg-violet-600 hover:bg-violet-700">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Adaptive Security Response System
+                    </Button>
+                    <Button className="bg-amber-600 hover:bg-amber-700">
+                      <Zap className="h-4 w-4 mr-2" />
+                      Predictive Threat Analysis Engine
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
