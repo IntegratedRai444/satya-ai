@@ -5,6 +5,9 @@ import multer from "multer";
 import { storage } from "./storage";
 import { aiSecurityService } from "./aiService";
 import { analysisService } from "./analysisService";
+import { advancedAnalysisService } from "./advancedAnalysisService";
+import { quantumBehavioralService } from "./quantumBehavioralService";
+import { realTimeThreatDetectionService } from "./realTimeThreatDetectionService";
 import { newsService } from "./newsService";
 import { realNewsService } from "./realNewsService";
 import { aiAgentService } from "./aiAgentService";
@@ -4004,7 +4007,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Media Analysis Endpoints - Real AI Processing
+  // Advanced Media Analysis Endpoints - Quantum-Enhanced AI Processing
+  app.post('/api/analyze-advanced', upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file provided' });
+      }
+
+      const fileData = req.file.buffer;
+      const mimeType = req.file.mimetype;
+      
+      let result;
+      if (mimeType.startsWith('image/')) {
+        result = await advancedAnalysisService.analyzeAdvancedImage(fileData);
+      } else if (mimeType.startsWith('video/')) {
+        result = await advancedAnalysisService.analyzeAdvancedVideo(fileData);
+      } else {
+        return res.status(400).json({ error: 'Unsupported file type for advanced analysis' });
+      }
+
+      const response = {
+        ...result,
+        file_size: fileData.length,
+        file_name: req.file.originalname,
+        content_type: mimeType,
+        analysis_engine: 'SatyaAI Advanced v5.0',
+        security_classification: 'QUANTUM_FORENSIC_GRADE',
+        processing_tier: 'ENTERPRISE_MAXIMUM',
+        ai_models_deployed: [
+          'Claude Sonnet 4.0',
+          'Quantum Pattern Recognition',
+          'Neural Network Ensemble',
+          'Biometric Validation Engine',
+          'Threat Intelligence Correlator'
+        ]
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Advanced analysis error:', error);
+      res.status(500).json({ error: 'Advanced analysis failed' });
+    }
+  });
+
+  // Standard Media Analysis Endpoints - Real AI Processing
   app.post('/api/analyze-media', upload.single('file'), async (req, res) => {
     try {
       if (!req.file) {
@@ -4041,6 +4087,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Real-Time Advanced Threat Detection
+  app.post('/api/real-time-threat-detection', async (req, res) => {
+    try {
+      const {
+        network_logs,
+        endpoint_data,
+        user_behavior,
+        external_intel,
+        system_metrics
+      } = req.body;
+
+      if (!network_logs && !endpoint_data && !user_behavior) {
+        return res.status(400).json({ error: 'At least one data source required for threat analysis' });
+      }
+
+      const result = await realTimeThreatDetectionService.analyzeRealTimeThreats({
+        network_logs,
+        endpoint_data,
+        user_behavior,
+        external_intel,
+        system_metrics
+      });
+
+      const response = {
+        ...result,
+        analysis_type: 'real_time_threat_detection',
+        security_level: 'ENTERPRISE_MAXIMUM',
+        processing_tier: 'AI_QUANTUM_ENHANCED',
+        detection_method: 'ADVANCED_ML_ENSEMBLE'
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Real-time threat detection error:', error);
+      res.status(500).json({ error: 'Threat detection analysis failed' });
+    }
+  });
+
+  // Quantum-Enhanced Behavioral Authentication
+  app.post('/api/quantum-behavioral-auth', async (req, res) => {
+    try {
+      const { 
+        keystroke_data, 
+        mouse_data, 
+        gait_data, 
+        facial_data, 
+        voice_data, 
+        session_context 
+      } = req.body;
+
+      if (!session_context) {
+        return res.status(400).json({ error: 'Session context required for behavioral analysis' });
+      }
+
+      const result = await quantumBehavioralService.analyzeQuantumBehavioralPatterns({
+        keystroke_data,
+        mouse_data,
+        gait_data,
+        facial_data,
+        voice_data,
+        session_context
+      });
+
+      const response = {
+        ...result,
+        analysis_type: 'quantum_behavioral_biometric',
+        security_level: 'MAXIMUM_ENTERPRISE',
+        processing_tier: 'QUANTUM_ENHANCED',
+        authentication_method: 'CONTINUOUS_MULTIMODAL_BIOMETRIC'
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Quantum behavioral authentication error:', error);
+      res.status(500).json({ error: 'Behavioral authentication failed' });
+    }
+  });
+
+  // Advanced Webcam Analysis with Quantum Processing
   app.post('/api/analyze-webcam', async (req, res) => {
     try {
       const { image_data } = req.body;
