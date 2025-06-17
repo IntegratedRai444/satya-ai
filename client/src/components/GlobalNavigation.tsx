@@ -78,10 +78,10 @@ export function GlobalNavigation() {
       description: 'Advanced AI security features'
     },
     {
-      path: '/ai-employee-designer',
-      label: 'AI Employees',
+      path: '/intelligent-workforce',
+      label: 'Workforce Creator',
       icon: Bot,
-      description: 'Design and manage AI employees'
+      description: 'Design and manage intelligent AI workers'
     }
   ];
 
