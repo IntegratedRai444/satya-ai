@@ -95,6 +95,12 @@ export function GlobalNavigation() {
       label: 'Command Center',
       icon: Settings,
       description: 'CyberNexus 3D Operations Hub'
+    },
+    {
+      path: '/security-companion',
+      label: 'AI Companion',
+      icon: Bot,
+      description: 'Interactive security learning companion'
     }
   ];
 

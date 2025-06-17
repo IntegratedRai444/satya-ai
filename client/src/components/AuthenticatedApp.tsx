@@ -174,6 +174,7 @@ function NormalUserRouter() {
         <Route path="/ai-access-request" component={AIAccessRequestForm} />
         <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
         <Route path="/enhanced-security" component={EnhancedSecurityPortal} />
+        <Route path="/security-companion" component={SecurityMascotCompanion} />
         <Route component={NotFound} />
       </Switch>
     </div>

@@ -11,7 +11,7 @@ import { realTimeThreatDetectionService } from "./realTimeThreatDetectionService
 import { newsService } from "./newsService";
 import { realNewsService } from "./realNewsService";
 import { aiAgentService } from "./aiAgentService";
-import { threatIntelligenceService, type ThreatIntelligenceQuery } from "./threatIntelligenceService";
+import { threatIntelligenceService } from "./threatIntelligenceService";
 import { 
   insertThreatSchema, 
   insertIncidentSchema, 
