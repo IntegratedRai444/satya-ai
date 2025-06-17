@@ -1,0 +1,134 @@
+"You are now acting as an elite AI architect and cybersecurity engineer. Your task is to help build a fully advanced, stealth-based, AI-powered cybersecurity SaaS company called SatyaSec. This system protects startups using transformers, vision/audio models, penetration simulation, and adaptive agents—all while hiding the AI nature from clients. Begin the full development cycle based on this outline. Follow stealth rules: hide AI labels, obfuscate LLM usage, and label modules as analytics or simulation tools. Provide step-by-step guidance, code, deployment strategies, and agent creation flows. Here's the breakdown:"
+
+1. System Architecture Goals
+Build modular services using FastAPI and Next.js.
+
+All models (CLIP, SAM, DeBERTa, Whisper, etc.) must be served stealthily using obfuscated inference pipelines.
+
+Use VLLM and Transformers for model serving and disguise outputs using rule-based mimicry.
+
+Create core modules:
+
+Sentinel Engine (TFT-based detection)
+
+Forensics Suite (CLIP, SAM, DINO)
+
+PenSim Simulator (GPT-based red teaming)
+
+Messaging Filter (Transformer NLP)
+
+Endpoint Guardian (Rust+WASM)
+
+Incident Assistant (LLM bot disguised as a dashboard wizard)
+
+2. Founder Portal: SatyaX
+Create a hidden admin panel with:
+
+Agent Generator
+
+Red Team Launcher
+
+AutoPatch Trigger
+
+Vault Log Explorer
+
+Secure prompt execution for fine-tuning and cloning
+
+Build secure prompt endpoints like:
+
+create_agent(name, role, model, visibility)
+
+assign_agent(agent_id, client_id, mode)
+
+simulate_attack(client_id, vector)
+
+summarize_logs(client_id, range)
+
+trigger_autopatch(client_id)
+
+3. Frontend Requirements
+Use TailwindCSS + ShadCN for sleek design.
+
+Dashboard should not reveal AI or model names.
+
+Use charts via Recharts, tokenized logs via tRPC, and React state for module toggles.
+
+Interface should mimic enterprise-grade SIEM or analytics tools.
+
+4. Backend & Agent Orchestration
+Backend in FastAPI
+
+Deploy AI models through hidden VLLM containers
+
+Create Dockerized stealth agents with microservice control
+
+Use Redis for session state and PostgreSQL for logs/metrics
+
+Connect Kafka streams for real-time detection + agent sync
+
+5. Security Layer
+Use OAuth2 + RBAC for external login
+
+Founder panel: secured by mTLS and TPM key binding
+
+JWTs with dynamic key rotation
+
+Obfuscate all LLM endpoints using proxy-based routing
+
+6. Model Usage
+HuggingFace transformers:
+
+DeBERTa for anomaly logs
+
+Whisper + Wav2Vec2 for audio forgery
+
+CLIP + SAM + DINOv2 for media forensics
+
+TFT or Informer for time series attack prediction
+
+All model outputs converted into logs, not raw text
+
+Label reports as “correlated insights” or “heuristic models”
+
+7. Deployment
+Containerize each microservice
+
+Kubernetes with hidden namespaces for agent deployments
+
+GitHub Actions for CI/CD
+
+Use LangServe for transformer pipelines
+
+8. Founder Automation
+Add voice CLI for SatyaX portal using Whisper
+
+Build Gradio CLI-style terminal for SatyaX with password vault
+
+Store logs in encrypted S3 bucket behind VPC
+
+SatyaX should offer the following secret commands:
+
+bash
+Copy
+Edit
+create_agent("ForensicEye", "vision_forensics", "CLIP+SAM", "hidden")
+simulate_attack("startup42", "phishing+malware")
+generate_compliance_report("client123", "SOC2")
+clone_agent("DarkSentinel", "sandbox")
+purge_agent_logs("agent707")
+9. Compliance & Reports
+Auto-generate templates for SOC2, GDPR, ISO27001
+
+Use GPT-based templating engine, but replace LLM logs with technical summaries
+
+Charts in reports must be stylized using SVG renderers
+
+10. Post-MVP Scaling
+Add Zero Trust Agent Mesh (ZTAM)
+
+Launch SatyaSecHub (plugin system)
+
+Enable offline mode with self-hosted agent bundles
+
+Create stealth honeypot & log faker module
+
