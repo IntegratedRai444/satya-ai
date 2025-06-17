@@ -4165,6 +4165,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Employee Access Request Management
+  app.post('/api/ai-employee-access-request', async (req, res) => {
+    try {
+      const {
+        userName,
+        userEmail,
+        companyName,
+        businessType,
+        companySize,
+        website,
+        accessLevel,
+        aiEmployeeCount,
+        useCases,
+        businessJustification,
+        technicalRequirements,
+        complianceNeeds,
+        expectedBenefit
+      } = req.body;
+
+      // Create access request with unique ID
+      const accessRequest = {
+        id: `req-${Date.now()}`,
+        userId: `user-${Date.now()}`,
+        userName,
+        userEmail,
+        companyName,
+        businessType,
+        companySize,
+        website,
+        requestedAccess: accessLevel,
+        reason: businessJustification,
+        status: 'pending',
+        requestDate: new Date().toISOString(),
+        aiEmployeeLimit: aiEmployeeCount,
+        features: technicalRequirements,
+        useCases,
+        complianceNeeds,
+        expectedBenefit,
+        reviewDate: null,
+        reviewedBy: null
+      };
+
+      // In a real implementation, this would save to database
+      console.log('New AI Employee Access Request:', accessRequest);
+
+      res.json({
+        success: true,
+        message: 'Access request submitted successfully',
+        requestId: accessRequest.id,
+        status: 'pending',
+        expectedReviewTime: '24-48 hours'
+      });
+    } catch (error) {
+      console.error('AI employee access request error:', error);
+      res.status(500).json({ error: 'Failed to submit access request' });
+    }
+  });
+
+  // Get AI Employee Access Requests (Founder Only)
+  app.get('/api/ai-employee-access-requests', async (req, res) => {
+    try {
+      // In a real implementation, this would fetch from database
+      const mockRequests = [
+        {
+          id: "req-001",
+          userId: "user-123",
+          userName: "Sarah Johnson",
+          userEmail: "sarah@techstartup.com",
+          companyName: "TechStartup Inc",
+          businessType: "Software Development",
+          requestedAccess: "premium",
+          reason: "Need AI employees for customer support automation and code review processes",
+          status: "pending",
+          requestDate: "2024-01-15T10:30:00Z",
+          aiEmployeeLimit: 10,
+          features: ["Custom AI Training", "Multi-language Support", "API Integration"]
+        }
+      ];
+
+      res.json(mockRequests);
+    } catch (error) {
+      console.error('Failed to fetch access requests:', error);
+      res.status(500).json({ error: 'Failed to fetch access requests' });
+    }
+  });
+
+  // Approve/Reject AI Employee Access Request (Founder Only)
+  app.post('/api/ai-employee-access-request/:requestId/review', async (req, res) => {
+    try {
+      const { requestId } = req.params;
+      const { action, reviewNotes } = req.body; // action: 'approve' | 'reject'
+
+      // In a real implementation, this would update the database
+      const response = {
+        success: true,
+        requestId,
+        action,
+        reviewDate: new Date().toISOString(),
+        reviewedBy: 'Founder Admin',
+        message: action === 'approve' 
+          ? 'AI employee access granted successfully' 
+          : 'AI employee access request rejected'
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Failed to review access request:', error);
+      res.status(500).json({ error: 'Failed to review access request' });
+    }
+  });
+
   // Advanced Webcam Analysis with Quantum Processing
   app.post('/api/analyze-webcam', async (req, res) => {
     try {

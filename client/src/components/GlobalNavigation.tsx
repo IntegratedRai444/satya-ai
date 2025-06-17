@@ -36,6 +36,12 @@ export function GlobalNavigation() {
       description: 'Unified AI-powered media forensics'
     },
     {
+      path: '/ai-employee-request',
+      label: 'Request AI Access',
+      icon: Bot,
+      description: 'Apply for AI employee creation access'
+    },
+    {
       path: '/enterprise',
       label: '3D Portal',
       icon: Building2,

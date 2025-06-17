@@ -96,7 +96,7 @@ const complianceNeeds = [
   "Data Residency Requirements"
 ];
 
-export default function AIEmployeeRequestForm({ onSubmit }: { onSubmit?: () => void }) {
+export default function AIEmployeeRequestForm() {
   const [formData, setFormData] = useState<AccessRequestForm>({
     userName: "",
     userEmail: "",
@@ -121,12 +121,23 @@ export default function AIEmployeeRequestForm({ onSubmit }: { onSubmit?: () => v
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await fetch('/api/ai-employee-access-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit request');
+      }
+
+      const result = await response.json();
       
       toast({
         title: "Request Submitted Successfully",
-        description: "Your AI employee access request has been submitted for review. You'll receive a response within 24-48 hours.",
+        description: `Your AI employee access request has been submitted for review. Request ID: ${result.requestId}. Expected review time: ${result.expectedReviewTime}`,
       });
 
       // Reset form
@@ -145,8 +156,6 @@ export default function AIEmployeeRequestForm({ onSubmit }: { onSubmit?: () => v
         complianceNeeds: [],
         expectedBenefit: ""
       });
-
-      onSubmit?.();
     } catch (error) {
       toast({
         title: "Submission Failed",
