@@ -153,7 +153,8 @@ function NormalUserRouter() {
         <Route path="/satyaai-3d" component={SatyaAI3DComplete} />
         <Route path="/complete-hub" component={CompleteCyberIntelligenceHub} />
         <Route path="/complete-front" component={CompleteFrontPage} />
-        <Route path="/extensive-front" component={ExtensiveFrontPage} />
+        <Route path="/extensive-front" component={CyberNexusCommandCenter} />
+        <Route path="/cybernexus" component={CyberNexusCommandCenter} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/enterprise" component={Holographic3DPortal} />
         <Route path="/enterprise-saas" component={EnterpriseSaaS} />

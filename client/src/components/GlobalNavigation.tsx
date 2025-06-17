@@ -88,6 +88,12 @@ export function GlobalNavigation() {
       label: 'Workforce Creator',
       icon: Bot,
       description: 'Design and manage intelligent AI workers'
+    },
+    {
+      path: '/cybernexus',
+      label: 'Command Center',
+      icon: Layers,
+      description: 'CyberNexus 3D Operations Hub'
     }
   ];
 

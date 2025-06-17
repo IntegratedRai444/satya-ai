@@ -835,7 +835,7 @@ export default function CyberNexusCommandCenter() {
         </Tabs>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
           100% { transform: translateY(-10px); }
