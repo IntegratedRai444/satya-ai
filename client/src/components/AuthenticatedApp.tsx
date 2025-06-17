@@ -30,7 +30,7 @@ import EnterpriseSaaS from "@/components/EnterpriseSaaS";
 import UnifiedCyberPlatform from "@/components/UnifiedCyberPlatform";
 import CyberTech3DLanding from "@/components/CyberTech3DLanding";
 import SatyaAIExactDashboard from "@/components/SatyaAIExactDashboard";
-import AIEmployeeDesigner from "@/components/AIEmployeeDesigner";
+import IntelligentWorkforceCreator from "@/components/IntelligentWorkforceCreator";
 import ExtensiveFrontPage from "@/components/ExtensiveFrontPage";
 import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
 import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
@@ -165,7 +165,7 @@ function NormalUserRouter() {
         <Route path="/startup-audit" component={StartupSecurityAudit} />
         <Route path="/cyber-ai" component={ComprehensiveCyberAI} />
         <Route path="/suraksha" component={SuRakshaSecurityPlatform} />
-        <Route path="/ai-employee-designer" component={AIEmployeeDesigner} />
+        <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
         <Route component={NotFound} />
       </Switch>
     </div>

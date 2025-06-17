@@ -4276,6 +4276,124 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Workers Management
+  app.get('/api/ai-workers', async (req, res) => {
+    try {
+      // Mock data for AI workers
+      const aiWorkers = [
+        {
+          id: 'worker_001',
+          name: 'Aria CyberGuard',
+          role: 'Senior Cybersecurity Analyst',
+          department: 'Security Operations',
+          specialization: 'Threat Intelligence & Analysis',
+          skills: ['SIEM Management', 'Incident Response', 'Forensic Analysis', 'Risk Assessment'],
+          personality: { adaptability: 85, leadership: 90, innovation: 95, collaboration: 80 },
+          capabilities: { advancedAnalytics: true, cybersecurityExpertise: true, realTimeProcessing: true, quantumComputing: false, neuralNetworkDesign: true, blockchainIntegration: false },
+          workingHours: '24/7',
+          timezone: 'Global',
+          securityClearance: 'Top Secret',
+          status: 'active',
+          performance: { efficiency: 94, accuracy: 97, taskCompletion: 91, innovation: 89 },
+          autonomyLevel: 90,
+          learningRate: 95,
+          createdAt: '2024-01-10T08:00:00Z',
+          lastActive: '2024-01-16T14:30:00Z'
+        },
+        {
+          id: 'worker_002',
+          name: 'Maxwell DataMind',
+          role: 'Chief Data Intelligence Officer',
+          department: 'Analytics & Intelligence',
+          specialization: 'Quantum Data Processing',
+          skills: ['Machine Learning', 'Quantum Algorithms', 'Predictive Analytics', 'Data Mining'],
+          personality: { adaptability: 75, leadership: 85, innovation: 100, collaboration: 70 },
+          capabilities: { advancedAnalytics: true, cybersecurityExpertise: false, realTimeProcessing: true, quantumComputing: true, neuralNetworkDesign: true, blockchainIntegration: true },
+          workingHours: '24/7',
+          timezone: 'Global',
+          securityClearance: 'Secret',
+          status: 'active',
+          performance: { efficiency: 96, accuracy: 99, taskCompletion: 94, innovation: 98 },
+          autonomyLevel: 95,
+          learningRate: 98,
+          createdAt: '2024-01-08T10:15:00Z',
+          lastActive: '2024-01-16T16:45:00Z'
+        },
+        {
+          id: 'worker_003',
+          name: 'Nova NetworkGuard',
+          role: 'Network Security Architect',
+          department: 'Infrastructure Security',
+          specialization: 'Zero-Trust Architecture',
+          skills: ['Network Design', 'Penetration Testing', 'Vulnerability Assessment', 'Security Architecture'],
+          personality: { adaptability: 80, leadership: 75, innovation: 85, collaboration: 90 },
+          capabilities: { advancedAnalytics: true, cybersecurityExpertise: true, realTimeProcessing: true, quantumComputing: false, neuralNetworkDesign: false, blockchainIntegration: true },
+          workingHours: '24/7',
+          timezone: 'Global',
+          securityClearance: 'Top Secret',
+          status: 'training',
+          performance: { efficiency: 88, accuracy: 92, taskCompletion: 87, innovation: 84 },
+          autonomyLevel: 85,
+          learningRate: 88,
+          createdAt: '2024-01-12T12:00:00Z',
+          lastActive: '2024-01-16T12:20:00Z'
+        }
+      ];
+
+      res.json(aiWorkers);
+    } catch (error) {
+      console.error('Failed to fetch AI workers:', error);
+      res.status(500).json({ error: 'Failed to fetch AI workers' });
+    }
+  });
+
+  // Create new AI worker
+  app.post('/api/ai-workers', async (req, res) => {
+    try {
+      const workerData = req.body;
+      
+      // In a real implementation, this would save to database
+      const newWorker = {
+        ...workerData,
+        id: `worker_${Date.now()}`,
+        status: 'training',
+        performance: { efficiency: 0, accuracy: 0, taskCompletion: 0, innovation: 0 },
+        createdAt: new Date().toISOString(),
+        lastActive: new Date().toISOString()
+      };
+
+      console.log('Created new AI worker:', newWorker);
+
+      res.json({
+        success: true,
+        worker: newWorker,
+        message: 'AI worker created successfully'
+      });
+    } catch (error) {
+      console.error('Failed to create AI worker:', error);
+      res.status(500).json({ error: 'Failed to create AI worker' });
+    }
+  });
+
+  // Deploy AI worker
+  app.post('/api/ai-workers/:workerId/deploy', async (req, res) => {
+    try {
+      const { workerId } = req.params;
+      
+      // In a real implementation, this would update the database
+      res.json({
+        success: true,
+        workerId,
+        status: 'deployed',
+        message: 'AI worker deployed successfully',
+        deploymentTime: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Failed to deploy AI worker:', error);
+      res.status(500).json({ error: 'Failed to deploy AI worker' });
+    }
+  });
+
   // Advanced Webcam Analysis with Quantum Processing
   app.post('/api/analyze-webcam', async (req, res) => {
     try {
