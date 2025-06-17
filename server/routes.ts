@@ -4491,6 +4491,275 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // CyberSecurity Academy API endpoints
+  app.get('/api/academy/courses', async (req, res) => {
+    try {
+      const courses = [
+        {
+          id: 'cyber-fundamentals',
+          title: 'Cybersecurity Fundamentals',
+          category: 'cybersecurity',
+          level: 'beginner',
+          duration: 30,
+          modules: 30,
+          description: 'Master the core principles of cybersecurity including threat landscapes, risk management, and defense strategies.',
+          skills: ['Network Security', 'Risk Assessment', 'Incident Response', 'Security Frameworks'],
+          progress: 67,
+          completed: false,
+          enrolled: true
+        },
+        {
+          id: 'blockchain-security',
+          title: 'Blockchain & Web3 Security',
+          category: 'blockchain',
+          level: 'intermediate',
+          duration: 25,
+          modules: 25,
+          description: 'Learn blockchain security, smart contract auditing, and Web3 threat mitigation strategies.',
+          skills: ['Smart Contract Security', 'DeFi Protocols', 'Crypto Auditing', 'Web3 Pentesting'],
+          progress: 24,
+          completed: false,
+          enrolled: true
+        },
+        {
+          id: 'ai-security',
+          title: 'AI & ML Security',
+          category: 'ai',
+          level: 'advanced',
+          duration: 28,
+          modules: 28,
+          description: 'Advanced AI security including adversarial attacks, model poisoning, and AI ethics.',
+          skills: ['Adversarial ML', 'Model Security', 'AI Ethics', 'Bias Detection'],
+          progress: 0,
+          completed: false,
+          enrolled: false
+        },
+        {
+          id: 'cyber-law',
+          title: 'Cybersecurity Law & Compliance',
+          category: 'law',
+          level: 'intermediate',
+          duration: 20,
+          modules: 20,
+          description: 'Navigate cybersecurity regulations, privacy laws, and compliance frameworks.',
+          skills: ['GDPR Compliance', 'Legal Frameworks', 'Privacy Law', 'Incident Reporting'],
+          progress: 100,
+          completed: true,
+          enrolled: true
+        },
+        {
+          id: 'ethical-hacking',
+          title: 'Ethical Hacking & Penetration Testing',
+          category: 'ethical-hacking',
+          level: 'advanced',
+          duration: 35,
+          modules: 35,
+          description: 'Master ethical hacking techniques, penetration testing methodologies, and vulnerability assessment.',
+          skills: ['Penetration Testing', 'Vulnerability Assessment', 'Social Engineering', 'Red Team Operations'],
+          progress: 43,
+          completed: false,
+          enrolled: true
+        },
+        {
+          id: 'web3-development',
+          title: 'Secure Web3 Development',
+          category: 'web3',
+          level: 'intermediate',
+          duration: 30,
+          modules: 30,
+          description: 'Build secure decentralized applications with best practices and security patterns.',
+          skills: ['Smart Contracts', 'DApp Security', 'Consensus Mechanisms', 'Zero-Knowledge Proofs'],
+          progress: 15,
+          completed: false,
+          enrolled: false
+        }
+      ];
+      
+      res.json(courses);
+    } catch (error) {
+      console.error('Failed to fetch courses:', error);
+      res.status(500).json({ error: 'Failed to fetch courses' });
+    }
+  });
+
+  app.get('/api/academy/progress', async (req, res) => {
+    try {
+      const progress = {
+        totalPoints: 2850,
+        coursesCompleted: 3,
+        currentStreak: 15,
+        totalStudyTime: 45,
+        achievements: [
+          {
+            id: 'first-course',
+            title: 'First Steps',
+            description: 'Complete your first course module',
+            unlocked: true,
+            date: '2024-12-01',
+            points: 100
+          },
+          {
+            id: 'week-streak',
+            title: 'Weekly Warrior',
+            description: 'Maintain a 7-day learning streak',
+            unlocked: true,
+            date: '2024-12-08',
+            points: 250
+          },
+          {
+            id: 'security-master',
+            title: 'Security Master',
+            description: 'Complete 3 cybersecurity courses',
+            unlocked: false,
+            points: 500
+          }
+        ]
+      };
+      
+      res.json(progress);
+    } catch (error) {
+      console.error('Failed to fetch progress:', error);
+      res.status(500).json({ error: 'Failed to fetch progress' });
+    }
+  });
+
+  app.post('/api/academy/complete-module', async (req, res) => {
+    try {
+      const { courseId, moduleId } = req.body;
+      
+      // In a real implementation, this would update the database
+      const moduleCompletion = {
+        courseId,
+        moduleId,
+        completedAt: new Date().toISOString(),
+        pointsEarned: 50,
+        streakMaintained: true
+      };
+      
+      res.json({
+        success: true,
+        completion: moduleCompletion,
+        message: 'Module completed successfully!'
+      });
+    } catch (error) {
+      console.error('Failed to complete module:', error);
+      res.status(500).json({ error: 'Failed to complete module' });
+    }
+  });
+
+  app.post('/api/academy/enroll-course', async (req, res) => {
+    try {
+      const { courseId } = req.body;
+      
+      // In a real implementation, this would update the database
+      const enrollment = {
+        courseId,
+        enrolledAt: new Date().toISOString(),
+        progress: 0,
+        estimatedCompletion: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+      };
+      
+      res.json({
+        success: true,
+        enrollment,
+        message: 'Successfully enrolled in course!'
+      });
+    } catch (error) {
+      console.error('Failed to enroll in course:', error);
+      res.status(500).json({ error: 'Failed to enroll in course' });
+    }
+  });
+
+  // Enhanced Security Portal API endpoints
+  app.post('/api/security/vulnerability-scan', async (req, res) => {
+    try {
+      const { target, scanType = 'comprehensive' } = req.body;
+      
+      if (!target) {
+        return res.status(400).json({ error: 'Target is required' });
+      }
+      
+      // Simulate scan processing time
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const vulnerabilities = [
+        {
+          id: `vuln_${Date.now()}_1`,
+          severity: 'critical',
+          title: 'SQL Injection Vulnerability',
+          description: 'Potential SQL injection in user input parameter',
+          location: `${target}/login`,
+          cve: 'CVE-2023-1234',
+          cvss: 9.8,
+          remediation: 'Implement parameterized queries and input validation',
+          detectedAt: new Date().toISOString()
+        },
+        {
+          id: `vuln_${Date.now()}_2`,
+          severity: 'high',
+          title: 'Cross-Site Scripting (XSS)',
+          description: 'Reflected XSS vulnerability in search functionality',
+          location: `${target}/search`,
+          cvss: 7.4,
+          remediation: 'Sanitize user input and implement Content Security Policy',
+          detectedAt: new Date().toISOString()
+        },
+        {
+          id: `vuln_${Date.now()}_3`,
+          severity: 'medium',
+          title: 'Missing Security Headers',
+          description: 'Critical security headers not implemented',
+          location: `${target}/*`,
+          cvss: 4.3,
+          remediation: 'Add security headers: X-Frame-Options, X-Content-Type-Options, etc.',
+          detectedAt: new Date().toISOString()
+        }
+      ];
+      
+      res.json({
+        scanId: `scan_${Date.now()}`,
+        target,
+        scanType,
+        status: 'completed',
+        vulnerabilities,
+        summary: {
+          total: vulnerabilities.length,
+          critical: vulnerabilities.filter(v => v.severity === 'critical').length,
+          high: vulnerabilities.filter(v => v.severity === 'high').length,
+          medium: vulnerabilities.filter(v => v.severity === 'medium').length,
+          low: vulnerabilities.filter(v => v.severity === 'low').length
+        },
+        completedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Vulnerability scan failed:', error);
+      res.status(500).json({ error: 'Vulnerability scan failed' });
+    }
+  });
+
+  app.get('/api/security/metrics', async (req, res) => {
+    try {
+      const metrics = {
+        vulnerabilities: {
+          critical: 2,
+          high: 8,
+          medium: 15,
+          low: 23
+        },
+        networkSecurity: 94,
+        systemIntegrity: 87,
+        accessControl: 96,
+        dataProtection: 91,
+        lastUpdated: new Date().toISOString()
+      };
+      
+      res.json(metrics);
+    } catch (error) {
+      console.error('Failed to fetch security metrics:', error);
+      res.status(500).json({ error: 'Failed to fetch security metrics' });
+    }
+  });
+
   // Advanced Webcam Analysis with Quantum Processing
   app.post('/api/analyze-webcam', async (req, res) => {
     try {

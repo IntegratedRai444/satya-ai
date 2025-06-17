@@ -31,7 +31,7 @@ import UnifiedCyberPlatform from "@/components/UnifiedCyberPlatform";
 import CyberTech3DLanding from "@/components/CyberTech3DLanding";
 import SatyaAIExactDashboard from "@/components/SatyaAIExactDashboard";
 import IntelligentWorkforceCreator from "@/components/IntelligentWorkforceCreator";
-import ExtensiveFrontPage from "@/components/ExtensiveFrontPage";
+import CyberNexusCommandCenter from "@/components/CyberNexusCommandCenter";
 import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
 import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 import AIAccessRequestForm from "@/components/AIAccessRequestForm";
