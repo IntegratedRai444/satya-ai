@@ -70,6 +70,7 @@ import {
 import CompanyManagementSystem from './CompanyManagementSystem';
 import FounderCompanyControl from './FounderCompanyControl';
 import FounderUserManagement from './FounderUserManagement';
+import AIEmployeeAccessManager from './AIEmployeeAccessManager';
 
 interface AgentData {
   id: string;
@@ -335,6 +336,10 @@ export default function SatyaXFounderPortal({ userData, onLogout }: FounderPorta
             <TabsTrigger value="users" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
               <Users className="w-4 h-4 mr-2" />
               User Management
+            </TabsTrigger>
+            <TabsTrigger value="ai-access" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
+              <Bot className="w-4 h-4 mr-2" />
+              AI Employee Access
             </TabsTrigger>
           </TabsList>
 
@@ -732,6 +737,11 @@ export default function SatyaXFounderPortal({ userData, onLogout }: FounderPorta
               isFounder: true,
               username: 'rishabhkapoor'
             }} />
+          </TabsContent>
+
+          {/* AI Employee Access Management */}
+          <TabsContent value="ai-access" className="space-y-6">
+            <AIEmployeeAccessManager />
           </TabsContent>
         </Tabs>
       </div>

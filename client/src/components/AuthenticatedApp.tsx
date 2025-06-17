@@ -33,6 +33,7 @@ import SatyaAIExactDashboard from "@/components/SatyaAIExactDashboard";
 import AIEmployeeDesigner from "@/components/AIEmployeeDesigner";
 import ExtensiveFrontPage from "@/components/ExtensiveFrontPage";
 import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
+import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 
 interface UserData {
   id: string;
@@ -141,6 +142,7 @@ function NormalUserRouter() {
       <Switch>
         <Route path="/" component={SatyaAIExactDashboard} />
         <Route path="/analysis" component={UnifiedAnalysis} />
+        <Route path="/ai-employee-request" component={AIEmployeeRequestForm} />
         <Route path="/3d-landing" component={CyberTech3DLanding} />
         <Route path="/unified" component={UnifiedCyberPlatform} />
         <Route path="/satyaai-exact" component={SatyaAIExactDesign} />
