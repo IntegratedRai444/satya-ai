@@ -30,6 +30,12 @@ export function GlobalNavigation() {
       description: 'Main threat analysis dashboard'
     },
     {
+      path: '/analysis',
+      label: 'Media Analysis',
+      icon: Brain,
+      description: 'Unified AI-powered media forensics'
+    },
+    {
       path: '/enterprise',
       label: '3D Portal',
       icon: Building2,
