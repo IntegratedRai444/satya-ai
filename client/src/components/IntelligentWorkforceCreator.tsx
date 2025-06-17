@@ -148,9 +148,9 @@ export default function IntelligentWorkforceCreator() {
           setUserAccessLevel(null);
         }
       } catch (error) {
-        // For demo purposes, simulate founder access
-        setHasAccess(true);
-        setUserAccessLevel('founder');
+        console.error('Failed to check access:', error);
+        setHasAccess(false);
+        setUserAccessLevel(null);
       }
     };
     
@@ -458,7 +458,7 @@ export default function IntelligentWorkforceCreator() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
-                  onClick={() => window.location.href = '/ai-employee-request'}
+                  onClick={() => window.location.href = '/ai-access-request'}
                   className="bg-blue-600 hover:bg-blue-700"
                 >
                   <Plus className="h-4 w-4 mr-2" />

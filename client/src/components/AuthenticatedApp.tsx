@@ -34,6 +34,7 @@ import IntelligentWorkforceCreator from "@/components/IntelligentWorkforceCreato
 import ExtensiveFrontPage from "@/components/ExtensiveFrontPage";
 import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
 import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
+import AIAccessRequestForm from "@/components/AIAccessRequestForm";
 
 interface UserData {
   id: string;
@@ -166,6 +167,7 @@ function NormalUserRouter() {
         <Route path="/cyber-ai" component={ComprehensiveCyberAI} />
         <Route path="/suraksha" component={SuRakshaSecurityPlatform} />
         <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
+        <Route path="/ai-access-request" component={AIAccessRequestForm} />
         <Route component={NotFound} />
       </Switch>
     </div>

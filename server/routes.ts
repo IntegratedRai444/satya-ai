@@ -4397,10 +4397,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Check user AI access permissions
   app.get('/api/user-ai-access', async (req, res) => {
     try {
-      // In a real implementation, this would check the user's session and database
-      // For demo purposes, simulate access based on headers or session
-      const userAgent = req.get('User-Agent') || '';
-      const isFounder = req.query.founder === 'true' || userAgent.includes('Founder');
+      // Check for founder access via query parameter or special header
+      const isFounder = req.query.founder === 'true' || 
+                       req.get('X-Founder-Access') === 'true' ||
+                       req.get('Authorization')?.includes('founder');
+      
+      // Check for demo access via query parameter
+      const isDemoAccess = req.query.demo === 'true';
       
       if (isFounder) {
         res.json({
@@ -4410,9 +4413,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           features: ['all'],
           grantedDate: '2024-01-01T00:00:00Z'
         });
+      } else if (isDemoAccess) {
+        res.json({
+          hasAccess: true,
+          accessLevel: 'premium',
+          aiWorkerLimit: 25,
+          features: ['basic', 'advanced'],
+          grantedDate: new Date().toISOString()
+        });
       } else {
-        // Check if user has requested and been approved for access
-        // For demo, simulate no access to show the access request interface
+        // Show access request interface for unauthorized users
         res.json({
           hasAccess: false,
           accessLevel: null,
@@ -4422,6 +4432,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Failed to check user access:', error);
       res.status(500).json({ error: 'Failed to verify access permissions' });
+    }
+  });
+
+  // Handle AI access requests
+  app.post('/api/request-ai-access', async (req, res) => {
+    try {
+      const {
+        companyName,
+        contactEmail,
+        businessType,
+        employeeCount,
+        requestedTier,
+        useCase,
+        securityRequirements,
+        timelineNeeds,
+        budgetRange,
+        additionalInfo
+      } = req.body;
+
+      // In a real implementation, this would save to database and trigger approval workflow
+      const requestId = `REQ_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Simulate saving the request
+      const accessRequest = {
+        id: requestId,
+        companyName,
+        contactEmail,
+        businessType,
+        employeeCount,
+        requestedTier,
+        useCase,
+        securityRequirements,
+        timelineNeeds,
+        budgetRange,
+        additionalInfo,
+        status: 'pending',
+        submittedAt: new Date().toISOString(),
+        estimatedResponse: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString() // 48 hours
+      };
+
+      // Send confirmation response
+      res.json({
+        success: true,
+        requestId,
+        message: 'Access request submitted successfully',
+        request: accessRequest,
+        nextSteps: [
+          'Security clearance verification',
+          'Technical requirements assessment',
+          'Access tier confirmation',
+          'Account activation notification'
+        ]
+      });
+    } catch (error) {
+      console.error('Failed to process access request:', error);
+      res.status(500).json({ error: 'Failed to submit access request' });
     }
   });
 
