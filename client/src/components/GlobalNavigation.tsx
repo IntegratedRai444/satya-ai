@@ -72,10 +72,16 @@ export function GlobalNavigation() {
       description: 'Real-time threat intelligence'
     },
     {
-      path: '/advanced-security',
+      path: '/enhanced-security',
+      label: 'Security Portal',
+      icon: Shield,
+      description: 'Enhanced security tools and scanners'
+    },
+    {
+      path: '/cybersecurity-academy',
       label: 'Intelligence',
       icon: Brain,
-      description: 'Advanced AI security features'
+      description: 'Cybersecurity learning academy'
     },
     {
       path: '/intelligent-workforce',

@@ -35,6 +35,8 @@ import ExtensiveFrontPage from "@/components/ExtensiveFrontPage";
 import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
 import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 import AIAccessRequestForm from "@/components/AIAccessRequestForm";
+import CyberSecurityAcademy from "@/components/CyberSecurityAcademy";
+import EnhancedSecurityPortal from "@/components/EnhancedSecurityPortal";
 
 interface UserData {
   id: string;
@@ -168,6 +170,8 @@ function NormalUserRouter() {
         <Route path="/suraksha" component={SuRakshaSecurityPlatform} />
         <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
         <Route path="/ai-access-request" component={AIAccessRequestForm} />
+        <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
+        <Route path="/enhanced-security" component={EnhancedSecurityPortal} />
         <Route component={NotFound} />
       </Switch>
     </div>
