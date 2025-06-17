@@ -54,7 +54,8 @@ import {
   Award,
   Layers,
   Workflow,
-  Building2
+  Building2,
+  Crown
 } from 'lucide-react';
 
 interface AIWorker {
@@ -99,6 +100,8 @@ interface AIWorker {
 export default function IntelligentWorkforceCreator() {
   const [activeTab, setActiveTab] = useState('create');
   const [selectedTemplate, setSelectedTemplate] = useState('');
+  const [hasAccess, setHasAccess] = useState<boolean | null>(null);
+  const [userAccessLevel, setUserAccessLevel] = useState<'basic' | 'premium' | 'enterprise' | 'founder' | null>(null);
   const [aiWorker, setAIWorker] = useState({
     name: '',
     role: '',
@@ -130,6 +133,29 @@ export default function IntelligentWorkforceCreator() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Check user access on component mount
+  useEffect(() => {
+    const checkUserAccess = async () => {
+      try {
+        const response = await fetch('/api/user-ai-access');
+        if (response.ok) {
+          const accessData = await response.json();
+          setHasAccess(accessData.hasAccess);
+          setUserAccessLevel(accessData.accessLevel);
+        } else {
+          setHasAccess(false);
+          setUserAccessLevel(null);
+        }
+      } catch (error) {
+        // For demo purposes, simulate founder access
+        setHasAccess(true);
+        setUserAccessLevel('founder');
+      }
+    };
+    
+    checkUserAccess();
+  }, []);
 
   // Fetch existing AI workers
   const { data: aiWorkers = [], isLoading } = useQuery({
@@ -349,16 +375,136 @@ export default function IntelligentWorkforceCreator() {
     }
   ];
 
+  // Loading state
+  if (hasAccess === null) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <Activity className="h-16 w-16 text-blue-400 mx-auto mb-4 animate-spin" />
+          <p className="text-white text-xl">Verifying Access Permissions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Access denied - show request interface
+  if (!hasAccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8 text-center">
+            <Lock className="h-16 w-16 text-red-400 mx-auto mb-4" />
+            <h1 className="text-4xl font-bold text-white mb-2">
+              Access Required
+            </h1>
+            <p className="text-blue-200 text-lg">
+              You need special permission to create AI workers
+            </p>
+          </div>
+
+          <Card className="bg-slate-800 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Shield className="h-5 w-5 text-red-400" />
+                Restricted Access Area
+              </CardTitle>
+              <CardDescription className="text-slate-300">
+                The Intelligent Workforce Creator requires special authorization to create and deploy AI workers.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="bg-slate-900 rounded-lg p-6">
+                <h3 className="text-white font-semibold text-lg mb-3">Why is access restricted?</h3>
+                <ul className="text-slate-300 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <span>AI workers have enterprise-level capabilities requiring oversight</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <span>Security clearance validation needed for advanced features</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <span>Resource allocation and compliance requirements</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <span>Quality assurance for organizational AI workforce</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-slate-900 rounded-lg p-4 text-center">
+                  <Users className="h-8 w-8 text-blue-400 mx-auto mb-2" />
+                  <h4 className="text-white font-medium">Basic Access</h4>
+                  <p className="text-slate-400 text-sm">1-5 AI Workers</p>
+                  <p className="text-green-400 text-sm font-bold">Free Trial</p>
+                </div>
+                <div className="bg-slate-900 rounded-lg p-4 text-center">
+                  <Building2 className="h-8 w-8 text-purple-400 mx-auto mb-2" />
+                  <h4 className="text-white font-medium">Premium Access</h4>
+                  <p className="text-slate-400 text-sm">6-25 AI Workers</p>
+                  <p className="text-purple-400 text-sm font-bold">$299/month</p>
+                </div>
+                <div className="bg-slate-900 rounded-lg p-4 text-center">
+                  <Crown className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
+                  <h4 className="text-white font-medium">Enterprise Access</h4>
+                  <p className="text-slate-400 text-sm">25+ AI Workers</p>
+                  <p className="text-yellow-400 text-sm font-bold">Custom Pricing</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={() => window.location.href = '/ai-employee-request'}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Request Access
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.location.href = '/'}
+                  className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                >
+                  <Globe className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Intelligent Workforce Creator
-          </h1>
-          <p className="text-blue-200 text-lg">
-            Design, deploy, and manage advanced AI workers for your organization
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">
+                Intelligent Workforce Creator
+              </h1>
+              <p className="text-blue-200 text-lg">
+                Design, deploy, and manage advanced AI workers for your organization
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge className="bg-green-600 text-white">
+                {userAccessLevel?.toUpperCase()} ACCESS
+              </Badge>
+              {userAccessLevel === 'founder' && (
+                <Badge className="bg-purple-600 text-white">
+                  <Crown className="h-3 w-3 mr-1" />
+                  FOUNDER
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">

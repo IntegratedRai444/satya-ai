@@ -4394,6 +4394,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Check user AI access permissions
+  app.get('/api/user-ai-access', async (req, res) => {
+    try {
+      // In a real implementation, this would check the user's session and database
+      // For demo purposes, simulate access based on headers or session
+      const userAgent = req.get('User-Agent') || '';
+      const isFounder = req.query.founder === 'true' || userAgent.includes('Founder');
+      
+      if (isFounder) {
+        res.json({
+          hasAccess: true,
+          accessLevel: 'founder',
+          aiWorkerLimit: 1000,
+          features: ['all'],
+          grantedDate: '2024-01-01T00:00:00Z'
+        });
+      } else {
+        // Check if user has requested and been approved for access
+        // For demo, simulate no access to show the access request interface
+        res.json({
+          hasAccess: false,
+          accessLevel: null,
+          message: 'Access request required for AI worker creation'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to check user access:', error);
+      res.status(500).json({ error: 'Failed to verify access permissions' });
+    }
+  });
+
   // Advanced Webcam Analysis with Quantum Processing
   app.post('/api/analyze-webcam', async (req, res) => {
     try {
