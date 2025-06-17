@@ -442,7 +442,21 @@ Format as JSON:
     try {
       // Extract base64 data from data URL
       const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
-      const mimeType = imageData.match(/data:image\/([a-z]+);base64,/)?.[0].replace('data:', '').replace(';base64,', '') || 'image/jpeg';
+      const mimeMatch = imageData.match(/data:image\/([a-z]+);base64,/);
+      let mimeType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" = 'image/jpeg';
+      
+      if (mimeMatch) {
+        const detectedType = mimeMatch[1];
+        if (detectedType === 'jpeg' || detectedType === 'jpg') {
+          mimeType = 'image/jpeg';
+        } else if (detectedType === 'png') {
+          mimeType = 'image/png';
+        } else if (detectedType === 'gif') {
+          mimeType = 'image/gif';
+        } else if (detectedType === 'webp') {
+          mimeType = 'image/webp';
+        }
+      }
       
       const response = await anthropic.messages.create({
         model: "claude-sonnet-4-20250514",
