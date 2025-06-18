@@ -37,6 +37,7 @@ import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 import AIAccessRequestForm from "@/components/AIAccessRequestForm";
 import CyberSecurityAcademy from "@/components/CyberSecurityAcademy";
 import UnifiedSecurityPortal from "@/components/UnifiedSecurityPortal";
+import SecurityLayerManager from "@/components/SecurityLayerManager";
 
 interface UserData {
   id: string;
@@ -173,6 +174,7 @@ function NormalUserRouter() {
         <Route path="/ai-access-request" component={AIAccessRequestForm} />
         <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
         <Route path="/unified-security" component={UnifiedSecurityPortal} />
+        <Route path="/security-layers" component={SecurityLayerManager} />
         <Route component={NotFound} />
       </Switch>
     </div>

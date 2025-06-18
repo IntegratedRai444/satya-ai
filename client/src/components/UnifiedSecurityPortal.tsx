@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import LiveThreatIntelligenceTimeline from './LiveThreatIntelligenceTimeline';
+import { SecurityLayer } from '@shared/securityLayers';
 import { 
   Bot, 
   Shield, 

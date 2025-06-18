@@ -12,6 +12,8 @@ import { newsService } from "./newsService";
 import { realNewsService } from "./realNewsService";
 import { aiAgentService } from "./aiAgentService";
 import { threatIntelligenceService } from "./threatIntelligenceService";
+import { securityLayerService } from "./securityLayerService";
+import { SecurityLayer } from "@shared/securityLayers";
 import { 
   insertThreatSchema, 
   insertIncidentSchema, 
@@ -2619,6 +2621,190 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Failed to generate threat intelligence summary:", error);
       res.status(500).json({ 
         error: "Failed to generate threat intelligence summary", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Security Layer Management API Routes
+  app.get("/api/security-layers/user/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const userAccess = await securityLayerService.getUserSecurityLayer(userId);
+      
+      if (!userAccess) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const dailyLimit = await securityLayerService.checkDailyLimit(userId);
+      const availableUpgrades = await securityLayerService.getAvailableUpgrades(userId);
+
+      res.json({
+        userAccess,
+        dailyLimit,
+        availableUpgrades
+      });
+    } catch (error) {
+      console.error("Failed to get user security layer:", error);
+      res.status(500).json({ 
+        error: "Failed to get user security layer", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/security-layers/authenticate-founder", async (req, res) => {
+    try {
+      const { password } = req.body;
+      
+      if (!password) {
+        return res.status(400).json({ error: "Password is required" });
+      }
+
+      const isValid = await securityLayerService.authenticateFounderAccess(password);
+      
+      if (isValid) {
+        res.json({ authenticated: true, accessLevel: 4 });
+      } else {
+        res.status(401).json({ authenticated: false, error: "Invalid founder credentials" });
+      }
+    } catch (error) {
+      console.error("Founder authentication failed:", error);
+      res.status(500).json({ 
+        error: "Authentication failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/security-layers/upgrade", async (req, res) => {
+    try {
+      const { userId, targetLayer, grantedBy } = req.body;
+      
+      if (!userId || !targetLayer) {
+        return res.status(400).json({ error: "UserId and targetLayer are required" });
+      }
+
+      const success = await securityLayerService.updateUserSecurityLayer(
+        userId, 
+        targetLayer as SecurityLayer, 
+        grantedBy
+      );
+
+      if (success) {
+        res.json({ success: true, message: "Security layer updated successfully" });
+      } else {
+        res.status(400).json({ success: false, error: "Failed to update security layer" });
+      }
+    } catch (error) {
+      console.error("Failed to upgrade security layer:", error);
+      res.status(500).json({ 
+        error: "Failed to upgrade security layer", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/dashboard/:layer", async (req, res) => {
+    try {
+      const { layer } = req.params;
+      
+      if (!['layer1', 'layer2', 'layer3', 'layer4'].includes(layer)) {
+        return res.status(400).json({ error: "Invalid security layer" });
+      }
+
+      const dashboard = await securityLayerService.getLayerDashboard(layer as SecurityLayer);
+      res.json(dashboard);
+    } catch (error) {
+      console.error("Failed to get layer dashboard:", error);
+      res.status(500).json({ 
+        error: "Failed to get layer dashboard", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/overview", async (req, res) => {
+    try {
+      const overview = await securityLayerService.getAllLayersOverview();
+      res.json(overview);
+    } catch (error) {
+      console.error("Failed to get layers overview:", error);
+      res.status(500).json({ 
+        error: "Failed to get layers overview", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/security-layers/check-feature", async (req, res) => {
+    try {
+      const { userId, feature } = req.body;
+      
+      if (!userId || !feature) {
+        return res.status(400).json({ error: "UserId and feature are required" });
+      }
+
+      const hasAccess = await securityLayerService.checkFeatureAccess(userId, feature);
+      res.json({ hasAccess, feature });
+    } catch (error) {
+      console.error("Failed to check feature access:", error);
+      res.status(500).json({ 
+        error: "Failed to check feature access", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/security-layers/use-analysis", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({ error: "UserId is required" });
+      }
+
+      const dailyLimit = await securityLayerService.checkDailyLimit(userId);
+      
+      if (!dailyLimit.allowed) {
+        return res.status(429).json({ 
+          error: "Daily analysis limit exceeded", 
+          remaining: dailyLimit.remaining 
+        });
+      }
+
+      await securityLayerService.incrementDailyUsage(userId);
+      
+      const newLimit = await securityLayerService.checkDailyLimit(userId);
+      res.json({ 
+        success: true, 
+        remaining: newLimit.remaining,
+        message: "Analysis quota used successfully"
+      });
+    } catch (error) {
+      console.error("Failed to use analysis quota:", error);
+      res.status(500).json({ 
+        error: "Failed to use analysis quota", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/api-limits/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { type = 'hourly' } = req.query;
+      
+      const apiAccess = await securityLayerService.validateApiAccess(
+        userId, 
+        type as 'hourly' | 'daily'
+      );
+      
+      res.json(apiAccess);
+    } catch (error) {
+      console.error("Failed to get API limits:", error);
+      res.status(500).json({ 
+        error: "Failed to get API limits", 
         details: error instanceof Error ? error.message : "Unknown error"
       });
     }
