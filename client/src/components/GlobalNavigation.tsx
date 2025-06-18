@@ -107,6 +107,12 @@ export function GlobalNavigation() {
       label: 'Security Layers',
       icon: Layers,
       description: '4-tier security access control system'
+    },
+    {
+      path: '/access-requests',
+      label: 'Access Requests',
+      icon: User,
+      description: 'Request and manage security layer access'
     }
   ];
 
