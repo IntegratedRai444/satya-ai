@@ -44,8 +44,8 @@ export function GlobalNavigation() {
       description: 'Real-time cybersecurity intelligence and alerts'
     },
     {
-      path: '/access-requests',
-      label: 'Access Requests',
+      path: '/request-access',
+      label: 'Request Access',
       icon: User,
       description: 'Request higher security layer access'
     },
