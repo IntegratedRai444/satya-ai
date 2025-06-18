@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import DeepfakeDetectionCards from '@/components/DeepfakeDetectionCards';
 import {
   Home,
   Search,
@@ -285,6 +286,11 @@ const SatyaAIExactDashboard = () => {
         {/* Glowing Background Elements */}
         <div className="absolute top-10 right-10 w-64 h-64 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-10 left-10 w-48 h-48 bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 rounded-full blur-2xl"></div>
+      </div>
+
+      {/* Deepfake Detection Cards Section */}
+      <div className="mt-12">
+        <DeepfakeDetectionCards />
       </div>
 
       {/* Authenticity Score */}
