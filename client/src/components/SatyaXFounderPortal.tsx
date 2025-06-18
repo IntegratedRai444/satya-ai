@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { AIAgentGenerator } from './AIAgentGenerator';
 import { 
   Crown,
   Bot,
@@ -316,6 +317,10 @@ export default function SatyaXFounderPortal({ userData, onLogout }: FounderPorta
             <TabsTrigger value="agents" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
               <Bot className="w-4 h-4 mr-2" />
               Agent Control
+            </TabsTrigger>
+            <TabsTrigger value="ai-generator" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
+              <Brain className="w-4 h-4 mr-2" />
+              AI Agent Generator
             </TabsTrigger>
             <TabsTrigger value="telemetry" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
               <Monitor className="w-4 h-4 mr-2" />
@@ -737,6 +742,11 @@ export default function SatyaXFounderPortal({ userData, onLogout }: FounderPorta
               isFounder: true,
               username: 'rishabhkapoor'
             }} />
+          </TabsContent>
+
+          {/* AI Agent Generator */}
+          <TabsContent value="ai-generator" className="space-y-6">
+            <AIAgentGenerator />
           </TabsContent>
 
           {/* AI Employee Access Management */}
