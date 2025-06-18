@@ -432,14 +432,14 @@ export function AIAgentGenerator() {
                     <div>
                       <Label className="text-white text-sm">Base Capabilities</Label>
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {template.base_capabilities.slice(0, 3).map((capability, index) => (
+                        {(template.base_capabilities || []).slice(0, 3).map((capability, index) => (
                           <Badge key={index} variant="secondary" className="bg-cyan-900 text-cyan-100 text-xs">
                             {capability}
                           </Badge>
                         ))}
-                        {template.base_capabilities.length > 3 && (
+                        {(template.base_capabilities || []).length > 3 && (
                           <Badge variant="secondary" className="bg-slate-700 text-slate-300 text-xs">
-                            +{template.base_capabilities.length - 3} more
+                            +{(template.base_capabilities || []).length - 3} more
                           </Badge>
                         )}
                       </div>

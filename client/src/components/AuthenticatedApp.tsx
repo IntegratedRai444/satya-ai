@@ -200,7 +200,7 @@ function NormalUserRouter() {
         <Route path="/threat-map" component={InteractiveThreatMap} />
         <Route path="/soundscape" component={SecurityAlertSoundscape} />
         <Route path="/ai-coach" component={AISecurityPersonaCoach} />
-        <Route path="/3d-enterprise" component={EnterprisePortal3D} />
+        <Route path="/enterprise-portal" component={EnterprisePortal3D} />
         <Route component={NotFound} />
       </Switch>
     </div>

@@ -69,7 +69,7 @@ export function GlobalNavigation() {
 
   const advancedFeatures = [
     {
-      path: '/3d-enterprise',
+      path: '/enterprise-portal',
       label: '3D Enterprise Portal',
       icon: Building2,
       description: 'Advanced enterprise security command center'
