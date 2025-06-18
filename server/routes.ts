@@ -5987,6 +5987,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Report Generation API Routes
+  app.post("/api/generate-report", async (req, res) => {
+    try {
+      const { analysisResult, format } = req.body;
+
+      if (!analysisResult) {
+        return res.status(400).json({ error: "Analysis result is required" });
+      }
+
+      if (!format || !['pdf', 'docx'].includes(format)) {
+        return res.status(400).json({ error: "Format must be 'pdf' or 'docx'" });
+      }
+
+      let reportBuffer;
+      let contentType;
+      let fileExtension;
+
+      if (format === 'pdf') {
+        reportBuffer = await reportGenerationService.generatePDFReport(analysisResult);
+        contentType = 'application/pdf';
+        fileExtension = 'pdf';
+      } else {
+        reportBuffer = await reportGenerationService.generateDOCXReport(analysisResult);
+        contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        fileExtension = 'docx';
+      }
+
+      const fileName = `SatyaAI_Analysis_Report_${analysisResult.case_id}.${fileExtension}`;
+
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+      res.setHeader('Content-Length', reportBuffer.length);
+
+      res.send(reportBuffer);
+    } catch (error) {
+      console.error('Report generation error:', error);
+      res.status(500).json({ error: "Report generation failed" });
+    }
+  });
+
   const httpServer = createServer(app);
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
   
