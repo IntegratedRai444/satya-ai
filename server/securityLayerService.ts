@@ -1,4 +1,4 @@
-import { SecurityLayer, SecurityLayerConfig, UserSecurityAccess, SECURITY_LAYERS, getSecurityLayerConfig, hasFeatureAccess, canAccessLayer, getRemainingDailyAnalysis } from '@shared/securityLayers';
+import { SecurityLayer, SecurityLayerConfig, UserSecurityAccess, AccessRequest, SECURITY_LAYERS, getSecurityLayerConfig, hasFeatureAccess, canAccessLayer, getRemainingDailyAnalysis } from '@shared/securityLayers';
 
 interface UserAnalyticsData {
   userId: string;
@@ -23,6 +23,7 @@ export class SecurityLayerService {
   private userAccess: Map<string, UserSecurityAccess> = new Map();
   private userAnalytics: Map<string, UserAnalyticsData> = new Map();
   private dailyUsage: Map<string, number> = new Map();
+  private accessRequests: Map<string, AccessRequest> = new Map();
 
   constructor() {
     this.initializeDefaultUsers();
@@ -256,6 +257,121 @@ export class SecurityLayerService {
       remaining: remaining === -1 ? -1 : remaining,
       resetTime
     };
+  }
+
+  // Access Request Management Methods
+  async createAccessRequest(
+    userId: string,
+    userName: string,
+    requestedLayer: SecurityLayer,
+    reason: string,
+    businessJustification?: string
+  ): Promise<AccessRequest> {
+    const userAccess = await this.getUserSecurityLayer(userId);
+    if (!userAccess) throw new Error('User not found');
+
+    // Only allow requests for Layer 2 (Corporate) or Layer 3 (Developer)
+    if (!['layer2', 'layer3'].includes(requestedLayer)) {
+      throw new Error('Access requests are only allowed for Layer 2 (Corporate) or Layer 3 (Developer)');
+    }
+
+    // Prevent requesting same or lower layer
+    const currentConfig = getSecurityLayerConfig(userAccess.layer);
+    const requestedConfig = getSecurityLayerConfig(requestedLayer);
+    
+    if (requestedConfig.accessLevel <= currentConfig.accessLevel) {
+      throw new Error('Cannot request access to same or lower security layer');
+    }
+
+    const requestId = `req_${Date.now()}_${userId}`;
+    const accessRequest: AccessRequest = {
+      id: requestId,
+      userId,
+      userName,
+      currentLayer: userAccess.layer,
+      requestedLayer,
+      reason,
+      businessJustification,
+      requestedAt: new Date(),
+      status: 'pending'
+    };
+
+    this.accessRequests.set(requestId, accessRequest);
+    return accessRequest;
+  }
+
+  async getPendingAccessRequests(): Promise<AccessRequest[]> {
+    return Array.from(this.accessRequests.values())
+      .filter(request => request.status === 'pending')
+      .sort((a, b) => b.requestedAt.getTime() - a.requestedAt.getTime());
+  }
+
+  async getAllAccessRequests(): Promise<AccessRequest[]> {
+    return Array.from(this.accessRequests.values())
+      .sort((a, b) => b.requestedAt.getTime() - a.requestedAt.getTime());
+  }
+
+  async getAccessRequest(requestId: string): Promise<AccessRequest | null> {
+    return this.accessRequests.get(requestId) || null;
+  }
+
+  async getUserAccessRequests(userId: string): Promise<AccessRequest[]> {
+    return Array.from(this.accessRequests.values())
+      .filter(request => request.userId === userId)
+      .sort((a, b) => b.requestedAt.getTime() - a.requestedAt.getTime());
+  }
+
+  async reviewAccessRequest(
+    requestId: string,
+    reviewerId: string,
+    approved: boolean,
+    reviewNotes?: string
+  ): Promise<boolean> {
+    const request = this.accessRequests.get(requestId);
+    if (!request) throw new Error('Access request not found');
+
+    if (request.status !== 'pending') {
+      throw new Error('Access request has already been reviewed');
+    }
+
+    // Update request status
+    request.status = approved ? 'approved' : 'rejected';
+    request.reviewedBy = reviewerId;
+    request.reviewedAt = new Date();
+    request.reviewNotes = reviewNotes;
+
+    // If approved, update user's security layer
+    if (approved) {
+      await this.updateUserSecurityLayer(request.userId, request.requestedLayer, reviewerId);
+    }
+
+    this.accessRequests.set(requestId, request);
+    return true;
+  }
+
+  async getAccessRequestStats(): Promise<{
+    total: number;
+    pending: number;
+    approved: number;
+    rejected: number;
+    byLayer: Record<SecurityLayer, number>;
+  }> {
+    const requests = Array.from(this.accessRequests.values());
+    
+    const stats = {
+      total: requests.length,
+      pending: requests.filter(r => r.status === 'pending').length,
+      approved: requests.filter(r => r.status === 'approved').length,
+      rejected: requests.filter(r => r.status === 'rejected').length,
+      byLayer: {
+        layer1: 0,
+        layer2: requests.filter(r => r.requestedLayer === 'layer2').length,
+        layer3: requests.filter(r => r.requestedLayer === 'layer3').length,
+        layer4: 0
+      } as Record<SecurityLayer, number>
+    };
+
+    return stats;
   }
 }
 

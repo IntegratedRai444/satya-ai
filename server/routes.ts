@@ -2810,6 +2810,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Access Request Management API Routes
+  app.post("/api/security-layers/request-access", async (req, res) => {
+    try {
+      const { userId, userName, requestedLayer, reason, businessJustification } = req.body;
+      
+      if (!userId || !userName || !requestedLayer || !reason) {
+        return res.status(400).json({ 
+          error: "UserId, userName, requestedLayer, and reason are required" 
+        });
+      }
+
+      const accessRequest = await securityLayerService.createAccessRequest(
+        userId, 
+        userName, 
+        requestedLayer as SecurityLayer, 
+        reason, 
+        businessJustification
+      );
+
+      res.json({ 
+        success: true, 
+        requestId: accessRequest.id,
+        message: "Access request submitted successfully. Awaiting founder approval."
+      });
+    } catch (error) {
+      console.error("Failed to create access request:", error);
+      res.status(400).json({ 
+        error: "Failed to create access request", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/access-requests/pending", async (req, res) => {
+    try {
+      const pendingRequests = await securityLayerService.getPendingAccessRequests();
+      res.json(pendingRequests);
+    } catch (error) {
+      console.error("Failed to get pending access requests:", error);
+      res.status(500).json({ 
+        error: "Failed to get pending access requests", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/access-requests/all", async (req, res) => {
+    try {
+      const allRequests = await securityLayerService.getAllAccessRequests();
+      res.json(allRequests);
+    } catch (error) {
+      console.error("Failed to get access requests:", error);
+      res.status(500).json({ 
+        error: "Failed to get access requests", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/access-requests/user/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const userRequests = await securityLayerService.getUserAccessRequests(userId);
+      res.json(userRequests);
+    } catch (error) {
+      console.error("Failed to get user access requests:", error);
+      res.status(500).json({ 
+        error: "Failed to get user access requests", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/security-layers/review-request", async (req, res) => {
+    try {
+      const { requestId, reviewerId, approved, reviewNotes } = req.body;
+      
+      if (!requestId || !reviewerId || typeof approved !== 'boolean') {
+        return res.status(400).json({ 
+          error: "RequestId, reviewerId, and approved status are required" 
+        });
+      }
+
+      const success = await securityLayerService.reviewAccessRequest(
+        requestId, 
+        reviewerId, 
+        approved, 
+        reviewNotes
+      );
+
+      if (success) {
+        res.json({ 
+          success: true, 
+          message: approved ? "Access request approved" : "Access request rejected"
+        });
+      } else {
+        res.status(400).json({ success: false, error: "Failed to review access request" });
+      }
+    } catch (error) {
+      console.error("Failed to review access request:", error);
+      res.status(400).json({ 
+        error: "Failed to review access request", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/security-layers/access-requests/stats", async (req, res) => {
+    try {
+      const stats = await securityLayerService.getAccessRequestStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Failed to get access request stats:", error);
+      res.status(500).json({ 
+        error: "Failed to get access request stats", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // Startup Security Audit API Routes
   app.post("/api/security/scan", async (req, res) => {
     try {

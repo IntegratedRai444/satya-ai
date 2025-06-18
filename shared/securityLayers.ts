@@ -234,6 +234,21 @@ export interface UserSecurityAccess {
   restrictions: string[];
 }
 
+export interface AccessRequest {
+  id: string;
+  userId: string;
+  userName: string;
+  currentLayer: SecurityLayer;
+  requestedLayer: SecurityLayer;
+  reason: string;
+  businessJustification?: string;
+  requestedAt: Date;
+  status: 'pending' | 'approved' | 'rejected';
+  reviewedBy?: string;
+  reviewedAt?: Date;
+  reviewNotes?: string;
+}
+
 export const getSecurityLayerConfig = (layer: SecurityLayer): SecurityLayerConfig => {
   return SECURITY_LAYERS[layer];
 };

@@ -105,7 +105,7 @@ export function GlobalNavigation() {
     {
       path: '/security-layers',
       label: 'Security Layers',
-      icon: Lock,
+      icon: Layers,
       description: '4-tier security access control system'
     }
   ];
