@@ -51,6 +51,7 @@ import { InteractiveThreatMap } from "@/components/InteractiveThreatMap";
 import { SecurityAlertSoundscape } from "@/components/SecurityAlertSoundscape";
 import { AISecurityPersonaCoach } from "@/components/AISecurityPersonaCoach";
 import { EnterprisePortal3D } from "@/components/EnterprisePortal3D";
+import { UltraPowerfulDetectionSystem } from "@/components/UltraPowerfulDetectionSystem";
 
 interface UserData {
   id: string;
@@ -201,6 +202,7 @@ function NormalUserRouter() {
         <Route path="/soundscape" component={SecurityAlertSoundscape} />
         <Route path="/ai-coach" component={AISecurityPersonaCoach} />
         <Route path="/enterprise-portal" component={EnterprisePortal3D} />
+        <Route path="/ultra-detection" component={UltraPowerfulDetectionSystem} />
         <Route component={NotFound} />
       </Switch>
     </div>

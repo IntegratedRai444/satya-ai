@@ -17,6 +17,7 @@ import { threatIntelligenceService } from "./threatIntelligenceService";
 import { securityLayerService } from "./securityLayerService";
 import { blockchainSecurityService } from "./blockchainSecurityService";
 import { reportGenerationService } from "./reportGenerationService";
+import { ultraDetectionService } from "./ultraDetectionService";
 import { SecurityLayer } from "@shared/securityLayers";
 import { 
   insertThreatSchema, 

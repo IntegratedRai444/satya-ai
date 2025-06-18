@@ -42,10 +42,10 @@ export function GlobalNavigation() {
       description: 'Main analytics and security overview'
     },
     {
-      path: '/analysis',
-      label: 'Image Analysis',
+      path: '/ultra-detection',
+      label: 'Ultra Detection',
       icon: Camera,
-      description: 'Advanced image deepfake detection'
+      description: 'Most powerful AI deepfake detection system'
     },
     {
       path: '/3d-enterprise',
