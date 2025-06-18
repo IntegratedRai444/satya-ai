@@ -7124,5 +7124,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Agent Generator API endpoints (Python integration)
+  app.post("/api/ai-agents/generate", async (req, res) => {
+    try {
+      const { type, requirements } = req.body;
+      
+      const response = await fetch('http://localhost:5001/api/ai-agents/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type,
+          requirements: requirements || {}
+        })
+      });
+      
+      const result = await response.json();
+      res.json(result);
+    } catch (error) {
+      console.error("AI Agent generation error:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: "Failed to generate AI agent",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.get("/api/ai-agents/templates", async (req, res) => {
+    try {
+      const response = await fetch('http://localhost:5001/api/ai-agents/templates');
+      const result = await response.json();
+      res.json(result);
+    } catch (error) {
+      console.error("Templates fetch error:", error);
+      res.status(500).json({ 
+        error: "Failed to fetch agent templates",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/ai-agents/deploy", async (req, res) => {
+    try {
+      const { agent } = req.body;
+      
+      const response = await fetch('http://localhost:5001/api/ai-agents/deploy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ agent })
+      });
+      
+      const result = await response.json();
+      res.json(result);
+    } catch (error) {
+      console.error("Agent deployment error:", error);
+      res.status(500).json({ 
+        success: false,
+        error: "Failed to deploy AI agent",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/ai-agents/batch-generate", async (req, res) => {
+    try {
+      const { specifications } = req.body;
+      
+      const response = await fetch('http://localhost:5001/api/ai-agents/batch-generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ specifications })
+      });
+      
+      const result = await response.json();
+      res.json(result);
+    } catch (error) {
+      console.error("Batch generation error:", error);
+      res.status(500).json({ 
+        success: false,
+        error: "Failed to generate AI agents batch",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   return httpServer;
 }
