@@ -18,6 +18,7 @@ import { securityLayerService } from "./securityLayerService";
 import { blockchainSecurityService } from "./blockchainSecurityService";
 import { reportGenerationService } from "./reportGenerationService";
 import { ultraDetectionService } from "./ultraDetectionService";
+import { legitimacyAnalyzerService } from "./legitimacyAnalyzerService";
 import { SecurityLayer } from "@shared/securityLayers";
 import { 
   insertThreatSchema, 
@@ -2108,6 +2109,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('Ultra detection failed:', error);
       res.status(500).json({ error: "Ultra detection analysis failed: " + error.message });
+    }
+  });
+
+  // Legitimacy & Threat Analyzer endpoint
+  app.post("/api/legitimacy-analyzer", async (req, res) => {
+    try {
+      const { type, input } = req.body;
+      
+      if (!type || !input) {
+        return res.status(400).json({ error: "Type and input are required" });
+      }
+
+      let result;
+      
+      switch (type) {
+        case 'url':
+          result = await legitimacyAnalyzerService.analyzeUrl(input);
+          break;
+        case 'phone':
+          result = await legitimacyAnalyzerService.analyzePhone(input);
+          break;
+        case 'email':
+          result = await legitimacyAnalyzerService.analyzeEmail(input);
+          break;
+        case 'app':
+          result = await legitimacyAnalyzerService.analyzeApp(input);
+          break;
+        case 'text':
+          result = await legitimacyAnalyzerService.analyzeText(input);
+          break;
+        case 'news':
+          result = await legitimacyAnalyzerService.analyzeNews(input);
+          break;
+        default:
+          return res.status(400).json({ error: "Invalid analysis type" });
+      }
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error('Legitimacy analysis failed:', error);
+      res.status(500).json({ error: "Analysis failed: " + error.message });
     }
   });
 

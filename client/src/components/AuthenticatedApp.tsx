@@ -15,7 +15,7 @@ import RealTimeNewsDashboard from "@/components/RealTimeNewsDashboard";
 import CompleteFrontPage from "@/components/CompleteFrontPage";
 import GlobalNavigation from "@/components/GlobalNavigation";
 import IdentityForensicsLab from "@/components/IdentityForensicsLab";
-import MisinformationDetector from "@/components/MisinformationDetector";
+import { LegitimacyThreatAnalyzer } from "@/components/LegitimacyThreatAnalyzer";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -178,7 +178,7 @@ function NormalUserRouter() {
         <Route path="/behavior" component={BehaviorTrustDashboard} />
         <Route path="/news" component={RealTimeNewsDashboard} />
         <Route path="/identity-forensics" component={IdentityForensicsLab} />
-        <Route path="/misinformation" component={MisinformationDetector} />
+        <Route path="/legitimacy-analyzer" component={LegitimacyThreatAnalyzer} />
         <Route path="/cybercrime-law" component={CybercrimeLawCenter} />
         <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
         <Route path="/startup-audit" component={StartupSecurityAudit} />
