@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const SecurityLayerSchema = z.enum(['layer1', 'layer2', 'layer3', 'layer4']);
+export const SecurityLayerSchema = z.enum(['layer1', 'layer2', 'layer3', 'layer4', 'temp_founder']);
 export type SecurityLayer = z.infer<typeof SecurityLayerSchema>;
 
 export interface SecurityLayerConfig {
@@ -218,6 +218,51 @@ export const SECURITY_LAYERS: Record<SecurityLayer, SecurityLayerConfig> = {
       analysisDays: 365,
       reportDays: 1095, // 3 years
       logDays: 365
+    },
+    supportLevel: 'dedicated'
+  },
+  temp_founder: {
+    id: 'temp_founder',
+    name: 'Temporary Founder Access',
+    description: 'Limited-time founder privileges granted by main founder',
+    userType: 'Temporary Administrators',
+    accessLevel: 3.5, // Between Layer 3 and Layer 4
+    maxAnalysisPerDay: 500,
+    features: [
+      'Security layer management',
+      'User access control',
+      'Advanced monitoring',
+      'System configuration',
+      'Security policy management',
+      'Audit trail access',
+      'Incident response tools',
+      'Advanced reporting',
+      'Team management',
+      'Limited AI model access',
+      'Advanced threat analysis',
+      'Compliance monitoring',
+      'Emergency response tools'
+    ],
+    restrictions: [
+      'Cannot grant permanent founder access',
+      'Cannot modify core system architecture',
+      'Limited to 30-day access periods',
+      'Cannot access founder financial data',
+      'Requires renewal by main founder'
+    ],
+    pricing: {
+      tier: 'enterprise',
+      monthlyPrice: 0 // Granted by main founder only
+    },
+    apiLimits: {
+      requestsPerHour: 300,
+      requestsPerDay: 2000,
+      fileUploadSizeMB: 1000
+    },
+    dataRetention: {
+      analysisDays: 365,
+      reportDays: 365,
+      logDays: 180
     },
     supportLevel: 'dedicated'
   }
