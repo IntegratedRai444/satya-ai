@@ -29,97 +29,31 @@ export function GlobalNavigation() {
       path: '/',
       label: 'Dashboard',
       icon: Home,
-      description: 'Main threat analysis dashboard'
-    },
-    {
-      path: '/analysis',
-      label: 'Media Analysis',
-      icon: Brain,
-      description: 'Unified AI-powered media forensics'
-    },
-    {
-      path: '/ai-employee-request',
-      label: 'Request AI Access',
-      icon: Bot,
-      description: 'Apply for AI employee creation access'
-    },
-    {
-      path: '/enterprise',
-      label: '3D Portal',
-      icon: Building2,
-      description: 'Holographic enterprise portal'
-    },
-    {
-      path: '/enterprise-saas',
-      label: 'SaaS Platform',
-      icon: Settings,
-      description: 'Enterprise security management'
-    },
-    {
-      path: '/security',
-      label: 'Security',
-      icon: Shield,
-      description: 'Advanced biometric features'
-    },
-    {
-      path: '/behavior',
-      label: 'Behavior',
-      icon: Activity,
-      description: 'Trust monitoring dashboard'
-    },
-    {
-      path: '/news',
-      label: 'Live Intel',
-      icon: Globe,
-      description: 'Real-time threat intelligence'
-    },
-    {
-      path: '/enhanced-security',
-      label: 'Security Portal',
-      icon: Shield,
-      description: 'Enhanced security tools and scanners'
-    },
-    {
-      path: '/cybersecurity-academy',
-      label: 'Intelligence',
-      icon: Brain,
-      description: 'Cybersecurity learning academy'
-    },
-    {
-      path: '/intelligent-workforce',
-      label: 'Workforce Creator',
-      icon: Bot,
-      description: 'Design and manage intelligent AI workers'
-    },
-    {
-      path: '/cybernexus',
-      label: 'Command Center',
-      icon: Settings,
-      description: 'CyberNexus 3D Operations Hub'
+      description: 'Main control center and analytics overview'
     },
     {
       path: '/unified-security',
       label: 'Security Portal',
       icon: Shield,
-      description: 'Unified AI security analysis & learning platform'
+      description: 'AI security analysis, threat detection & learning'
     },
     {
-      path: '/security-layers',
-      label: 'Security Layers',
-      icon: Layers,
-      description: '4-tier security access control system'
+      path: '/news',
+      label: 'Threat Intelligence',
+      icon: Brain,
+      description: 'Real-time cybersecurity intelligence and alerts'
     },
     {
       path: '/access-requests',
       label: 'Access Requests',
       icon: User,
-      description: 'Request and manage security layer access'
+      description: 'Request higher security layer access'
     },
     {
       path: '/founder-control',
       label: 'Founder Control',
       icon: Crown,
-      description: 'Founder-only access control and system management'
+      description: 'Founder-only system management (Rishabh Kapoor)'
     }
   ];
 

@@ -36,7 +36,7 @@ import UnifiedAnalysis from "@/pages/UnifiedAnalysis";
 import AIEmployeeRequestForm from "@/components/AIEmployeeRequestForm";
 import AIAccessRequestForm from "@/components/AIAccessRequestForm";
 import CyberSecurityAcademy from "@/components/CyberSecurityAcademy";
-import UnifiedSecurityPortal from "@/components/UnifiedSecurityPortal";
+import StreamlinedSecurityPortal from "@/components/StreamlinedSecurityPortal";
 import SecurityLayerManager from "@/components/SecurityLayerManager";
 import AccessRequestManager from "@/components/AccessRequestManager";
 import FounderAccessControl from "@/components/FounderAccessControl";
@@ -175,7 +175,7 @@ function NormalUserRouter() {
         <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
         <Route path="/ai-access-request" component={AIAccessRequestForm} />
         <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
-        <Route path="/unified-security" component={UnifiedSecurityPortal} />
+        <Route path="/unified-security" component={StreamlinedSecurityPortal} />
         <Route path="/security-layers" component={SecurityLayerManager} />
         <Route path="/access-requests" component={AccessRequestManager} />
         <Route path="/founder-control" component={FounderAccessControl} />
