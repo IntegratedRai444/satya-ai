@@ -2091,6 +2091,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Ultra-powerful detection system with Anthropic AI
+  app.post("/api/ultra-detect", upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      const result = await ultraDetectionService.analyzeUltraAdvanced(
+        req.file.buffer, 
+        req.file.originalname, 
+        req.file.mimetype
+      );
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error('Ultra detection failed:', error);
+      res.status(500).json({ error: "Ultra detection analysis failed: " + error.message });
+    }
+  });
+
   // Real-time news API endpoints with authentic data
   app.get("/api/real-news/latest", async (req, res) => {
     try {
