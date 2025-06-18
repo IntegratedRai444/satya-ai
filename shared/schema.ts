@@ -318,3 +318,132 @@ export type SecurityIncident = typeof securityIncidents.$inferSelect;
 export type InsertSecurityIncident = z.infer<typeof insertSecurityIncidentSchema>;
 export type EnterpriseMetrics = typeof enterpriseMetrics.$inferSelect;
 export type InsertEnterpriseMetrics = z.infer<typeof insertEnterpriseMetricsSchema>;
+
+// Session storage table for authentication
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// Enhanced user management system
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().notNull(),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
+  username: varchar("username").unique(),
+  role: varchar("role").default("user"), // user, admin, founder
+  accessLevel: integer("access_level").default(1), // 1-5 security layers
+  isActive: boolean("is_active").default(true),
+  lastLogin: timestamp("last_login"),
+  permissions: jsonb("permissions"),
+  companyId: varchar("company_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// AI Agent management and tracking
+export const aiAgents = pgTable("ai_agents", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name").notNull(),
+  type: varchar("type").notNull(), // security_analyst, ai_engineer, etc
+  role: varchar("role").notNull(),
+  specialization: varchar("specialization"),
+  status: varchar("status").default("active"), // active, inactive, deployed
+  version: varchar("version").default("1.0.0"),
+  capabilities: jsonb("capabilities"),
+  profile: jsonb("profile"),
+  deployment: jsonb("deployment"),
+  performance: jsonb("performance"),
+  learning: jsonb("learning"),
+  createdBy: varchar("created_by"),
+  companyId: varchar("company_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Security analysis results and reports
+export const analysisResults = pgTable("analysis_results", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  caseId: varchar("case_id").unique().notNull(),
+  userId: varchar("user_id"),
+  fileName: varchar("file_name"),
+  fileType: varchar("file_type"),
+  fileSize: integer("file_size"),
+  analysisType: varchar("analysis_type"), // image, video, audio
+  isAuthentic: boolean("is_authentic"),
+  authenticity: varchar("authenticity"),
+  confidence: integer("confidence"),
+  confidencePercentage: integer("confidence_percentage"),
+  processingTime: varchar("processing_time"),
+  keyFindings: jsonb("key_findings"),
+  detailedAnalysis: jsonb("detailed_analysis"),
+  advancedMetrics: jsonb("advanced_metrics"),
+  threatIntelligence: jsonb("threat_intelligence"),
+  forensicScore: integer("forensic_score"),
+  riskLevel: varchar("risk_level"),
+  recommendation: text("recommendation"),
+  blockchainVerification: jsonb("blockchain_verification"),
+  complianceStatus: jsonb("compliance_status"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Access requests and permissions
+export const accessRequests = pgTable("access_requests", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: varchar("user_id").notNull(),
+  requestedLayer: integer("requested_layer"),
+  currentLayer: integer("current_layer"),
+  requestType: varchar("request_type"), // layer_access, feature_access
+  justification: text("justification"),
+  status: varchar("status").default("pending"), // pending, approved, denied
+  reviewedBy: varchar("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+  expiresAt: timestamp("expires_at"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Audit logs for compliance
+export const auditLogs = pgTable("audit_logs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: varchar("user_id"),
+  action: varchar("action").notNull(),
+  resource: varchar("resource"),
+  resourceId: varchar("resource_id"),
+  details: jsonb("details"),
+  ipAddress: varchar("ip_address"),
+  userAgent: text("user_agent"),
+  companyId: varchar("company_id"),
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+// Additional Zod schemas for new tables
+export const insertUserSchema = createInsertSchema(users);
+export const insertAIAgentSchema = createInsertSchema(aiAgents);
+export const insertAnalysisResultSchema = createInsertSchema(analysisResults);
+export const insertAccessRequestSchema = createInsertSchema(accessRequests);
+export const insertAuditLogSchema = createInsertSchema(auditLogs);
+
+// Additional type exports
+export type User = typeof users.$inferSelect;
+export type UpsertUser = typeof users.$inferInsert;
+export type InsertUser = z.infer<typeof insertUserSchema>;
+
+export type AIAgent = typeof aiAgents.$inferSelect;
+export type InsertAIAgent = z.infer<typeof insertAIAgentSchema>;
+
+export type AnalysisResult = typeof analysisResults.$inferSelect;
+export type InsertAnalysisResult = z.infer<typeof insertAnalysisResultSchema>;
+
+export type AccessRequest = typeof accessRequests.$inferSelect;
+export type InsertAccessRequest = z.infer<typeof insertAccessRequestSchema>;
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
