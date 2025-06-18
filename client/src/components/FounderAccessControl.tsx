@@ -26,6 +26,7 @@ import {
   XCircle,
   User
 } from 'lucide-react';
+import FounderAccessManagement from './FounderAccessManagement';
 
 interface FounderAuth {
   isAuthenticated: boolean;
@@ -301,10 +302,14 @@ export default function FounderAccessControl() {
         </div>
 
         <Tabs defaultValue="user-management" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-800 border-slate-700">
+          <TabsList className="grid w-full grid-cols-5 bg-slate-800 border-slate-700">
             <TabsTrigger value="user-management" className="data-[state=active]:bg-orange-600">
               <Users className="h-4 w-4 mr-2" />
               User Management
+            </TabsTrigger>
+            <TabsTrigger value="access-management" className="data-[state=active]:bg-yellow-600">
+              <UserPlus className="h-4 w-4 mr-2" />
+              Access Management
             </TabsTrigger>
             <TabsTrigger value="access-requests" className="data-[state=active]:bg-blue-600">
               <Eye className="h-4 w-4 mr-2" />
@@ -394,6 +399,11 @@ export default function FounderAccessControl() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Access Management Tab */}
+          <TabsContent value="access-management" className="space-y-6">
+            <FounderAccessManagement />
           </TabsContent>
 
           {/* Access Requests Tab */}

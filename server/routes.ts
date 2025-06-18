@@ -6027,6 +6027,232 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Founder Access Management API Routes
+  app.get("/api/founder/access-requests", async (req, res) => {
+    try {
+      // Mock data for access requests - in production, this would come from database
+      const accessRequests = [
+        {
+          id: "req_001",
+          userId: "user_001",
+          userName: "John Developer",
+          email: "john@techcorp.com",
+          requestedAccessLevel: "developer",
+          currentAccessLevel: "community",
+          reason: "Need access to security analysis tools for enterprise project",
+          businessJustification: "Working on critical infrastructure security assessment for Fortune 500 client",
+          requestDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          status: "pending"
+        },
+        {
+          id: "req_002",
+          userId: "user_002",
+          userName: "Sarah Manager",
+          email: "sarah@bizenterprise.com",
+          requestedAccessLevel: "company",
+          currentAccessLevel: "developer",
+          reason: "Company-wide security implementation and team management",
+          businessJustification: "Managing security for 500+ employee organization, need advanced features",
+          requestDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          status: "pending"
+        }
+      ];
+      res.json(accessRequests);
+    } catch (error) {
+      console.error('Error fetching access requests:', error);
+      res.status(500).json({ error: "Failed to fetch access requests" });
+    }
+  });
+
+  app.get("/api/founder/active-users", async (req, res) => {
+    try {
+      // Mock data for active users - in production, this would come from database
+      const activeUsers = [
+        {
+          id: "user_001",
+          userId: "user_001",
+          userName: "John Developer",
+          email: "john@techcorp.com",
+          accessLevel: "developer",
+          grantedBy: "Rishabh Kapoor",
+          grantedDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          expiryDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+          status: "active",
+          lastActivity: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          permissions: ["media_analysis", "threat_detection", "blockchain_access"]
+        },
+        {
+          id: "user_002",
+          userId: "user_002",
+          userName: "Sarah Manager",
+          email: "sarah@bizenterprise.com",
+          accessLevel: "company",
+          grantedBy: "Rishabh Kapoor",
+          grantedDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+          status: "active",
+          lastActivity: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+          permissions: ["all_analysis", "team_management", "enterprise_features", "blockchain_access"]
+        },
+        {
+          id: "user_003",
+          userId: "user_003",
+          userName: "Alex Founder",
+          email: "alex@startuptech.com",
+          accessLevel: "founder",
+          grantedBy: "Rishabh Kapoor",
+          grantedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          status: "active",
+          lastActivity: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+          permissions: ["full_access", "user_management", "system_admin", "founder_privileges"]
+        }
+      ];
+      res.json(activeUsers);
+    } catch (error) {
+      console.error('Error fetching active users:', error);
+      res.status(500).json({ error: "Failed to fetch active users" });
+    }
+  });
+
+  app.get("/api/founder/system-stats", async (req, res) => {
+    try {
+      const stats = {
+        totalUsers: 847,
+        pendingRequests: 12,
+        activeAccess: 156,
+        companyAccess: 23,
+        developerAccess: 89,
+        founderAccess: 3,
+        lastActivity: new Date().toISOString()
+      };
+      res.json(stats);
+    } catch (error) {
+      console.error('Error fetching system stats:', error);
+      res.status(500).json({ error: "Failed to fetch system stats" });
+    }
+  });
+
+  app.post("/api/founder/grant-access", async (req, res) => {
+    try {
+      const { userName, email, accessLevel, duration, reason, grantedBy } = req.body;
+
+      if (!userName || !email || !accessLevel) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // In production, this would create a user record in the database
+      const newUser = {
+        id: `user_${Date.now()}`,
+        userId: `user_${Date.now()}`,
+        userName,
+        email,
+        accessLevel,
+        grantedBy: grantedBy || "Rishabh Kapoor",
+        grantedDate: new Date().toISOString(),
+        expiryDate: duration !== '999999' ? new Date(Date.now() + parseInt(duration) * 24 * 60 * 60 * 1000).toISOString() : null,
+        status: "active",
+        lastActivity: new Date().toISOString(),
+        permissions: getPermissionsByAccessLevel(accessLevel),
+        reason
+      };
+
+      res.json({ 
+        success: true, 
+        message: `${accessLevel.charAt(0).toUpperCase() + accessLevel.slice(1)} access granted to ${userName}`,
+        user: newUser 
+      });
+    } catch (error) {
+      console.error('Error granting access:', error);
+      res.status(500).json({ error: "Failed to grant access" });
+    }
+  });
+
+  app.post("/api/founder/review-request", async (req, res) => {
+    try {
+      const { requestId, approved, reviewNotes } = req.body;
+
+      if (!requestId || typeof approved !== 'boolean') {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // In production, this would update the request status in the database
+      const response = {
+        success: true,
+        message: approved ? "Request approved successfully" : "Request rejected",
+        requestId,
+        approved,
+        reviewNotes,
+        reviewDate: new Date().toISOString(),
+        reviewedBy: "Rishabh Kapoor"
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Error reviewing request:', error);
+      res.status(500).json({ error: "Failed to review request" });
+    }
+  });
+
+  app.post("/api/founder/revoke-access", async (req, res) => {
+    try {
+      const { userId, reason } = req.body;
+
+      if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+
+      // In production, this would update the user status in the database
+      const response = {
+        success: true,
+        message: "User access revoked successfully",
+        userId,
+        reason: reason || "Access revoked by founder",
+        revokedBy: "Rishabh Kapoor",
+        revokedDate: new Date().toISOString()
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error('Error revoking access:', error);
+      res.status(500).json({ error: "Failed to revoke access" });
+    }
+  });
+
+  // Helper function to get permissions by access level
+  function getPermissionsByAccessLevel(accessLevel: string): string[] {
+    switch (accessLevel) {
+      case 'developer':
+        return [
+          'media_analysis',
+          'threat_detection',
+          'blockchain_access',
+          'api_access',
+          'basic_reporting'
+        ];
+      case 'company':
+        return [
+          'all_analysis',
+          'team_management',
+          'enterprise_features',
+          'blockchain_access',
+          'advanced_reporting',
+          'user_management',
+          'compliance_tools'
+        ];
+      case 'founder':
+        return [
+          'full_access',
+          'user_management',
+          'system_admin',
+          'founder_privileges',
+          'access_control',
+          'audit_logs',
+          'security_configuration'
+        ];
+      default:
+        return ['basic_access'];
+    }
+  }
+
   const httpServer = createServer(app);
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
   
