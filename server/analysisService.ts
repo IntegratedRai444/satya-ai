@@ -47,7 +47,7 @@ export class AnalysisService {
     return 'image/jpeg'; // Default fallback
   }
 
-  async analyzeImage(fileData: Buffer): Promise<AnalysisResult> {
+  async analyzeImage(fileData: Buffer, fileName: string = 'unknown.jpg', userId: string = ''): Promise<AnalysisResult> {
     const processingStart = Date.now();
     const caseId = `IMG-${Math.floor(Math.random() * 900000) + 100000}-${Math.floor(Math.random() * 90000) + 10000}`;
     

@@ -40,6 +40,7 @@ import StreamlinedSecurityPortal from "@/components/StreamlinedSecurityPortal";
 import SecurityLayerManager from "@/components/SecurityLayerManager";
 import AccessRequestManager from "@/components/AccessRequestManager";
 import FounderAccessControl from "@/components/FounderAccessControl";
+import RealTimeAnalysis from "@/components/RealTimeAnalysis";
 
 interface UserData {
   id: string;
