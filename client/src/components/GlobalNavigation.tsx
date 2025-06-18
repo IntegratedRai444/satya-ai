@@ -101,6 +101,12 @@ export function GlobalNavigation() {
       label: 'Security Portal',
       icon: Shield,
       description: 'Unified AI security analysis & learning platform'
+    },
+    {
+      path: '/security-layers',
+      label: 'Security Layers',
+      icon: Lock,
+      description: '4-tier security access control system'
     }
   ];
 
