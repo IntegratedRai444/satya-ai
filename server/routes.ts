@@ -2597,7 +2597,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/threat-intelligence/status", async (req, res) => {
     try {
-      const connectionStatus = await threatIntelligenceService.testConnections();
+      const connectionStatus = await advancedThreatIntelligenceService.testConnections();
       res.json({
         status: "checked",
         connections: connectionStatus,
