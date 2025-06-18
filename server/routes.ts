@@ -2817,6 +2817,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User Access Request API
+  app.get("/api/security-layers/user-access", async (req, res) => {
+    try {
+      // Get current user's access level - simulating user context
+      const userAccess = {
+        userId: 'current-user',
+        currentLayer: 1, // Default to layer 1
+        grantedAt: new Date().toISOString(),
+        permissions: ['public-access'],
+        status: 'active'
+      };
+
+      res.json(userAccess);
+    } catch (error) {
+      console.error("User access check failed:", error);
+      res.status(500).json({ 
+        error: "User access check failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/security-layers/request-access", async (req, res) => {
+    try {
+      const {
+        requestedLayer,
+        businessJustification,
+        organizationName,
+        roleTitle,
+        expectedUsage,
+        contactEmail,
+        phoneNumber,
+        urgencyLevel,
+        additionalNotes
+      } = req.body;
+
+      // Validate required fields
+      if (!requestedLayer || !businessJustification || !organizationName || !roleTitle || !contactEmail || !expectedUsage) {
+        return res.status(400).json({ 
+          error: "Missing required fields",
+          required: ["requestedLayer", "businessJustification", "organizationName", "roleTitle", "contactEmail", "expectedUsage"]
+        });
+      }
+
+      // Create access request record
+      const accessRequest = {
+        id: `REQ-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        userId: 'current-user', // Would be from auth context
+        requestedLayer,
+        businessJustification,
+        organizationName,
+        roleTitle,
+        expectedUsage,
+        contactEmail,
+        phoneNumber: phoneNumber || '',
+        urgencyLevel: urgencyLevel || 'medium',
+        additionalNotes: additionalNotes || '',
+        status: 'pending',
+        submittedAt: new Date().toISOString(),
+        reviewedAt: null,
+        reviewedBy: null,
+        comments: null
+      };
+
+      // Store the request (in a real app, this would go to database)
+      console.log('New access request submitted:', accessRequest);
+
+      // Send confirmation response
+      res.json({
+        success: true,
+        requestId: accessRequest.id,
+        message: 'Access request submitted successfully',
+        estimatedProcessingTime: '24-48 hours',
+        nextSteps: [
+          'Your request will be reviewed by the founder',
+          'You will receive an email notification once processed',
+          'Additional verification may be required for higher security layers'
+        ]
+      });
+
+    } catch (error) {
+      console.error("Access request submission failed:", error);
+      res.status(500).json({ 
+        error: "Access request submission failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // Security Layer Management API Routes
   app.get("/api/security-layers/user/:userId", async (req, res) => {
     try {

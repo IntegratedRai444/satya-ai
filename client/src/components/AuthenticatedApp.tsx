@@ -42,6 +42,7 @@ import AccessRequestManager from "@/components/AccessRequestManager";
 import FounderAccessControl from "@/components/FounderAccessControl";
 import RealTimeAnalysis from "@/components/RealTimeAnalysis";
 import ComprehensiveThreatIntelligence from "@/components/ComprehensiveThreatIntelligence";
+import LayerAccessRequest from "@/components/LayerAccessRequest";
 
 interface UserData {
   id: string;
@@ -183,6 +184,7 @@ function NormalUserRouter() {
         <Route path="/founder-control" component={FounderAccessControl} />
         <Route path="/real-time-analysis" component={RealTimeAnalysis} />
         <Route path="/comprehensive-threat-intelligence" component={ComprehensiveThreatIntelligence} />
+        <Route path="/request-access" component={LayerAccessRequest} />
         <Route component={NotFound} />
       </Switch>
     </div>
