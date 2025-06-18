@@ -45,6 +45,12 @@ import ComprehensiveThreatIntelligence from "@/components/ComprehensiveThreatInt
 import LayerAccessRequest from "@/components/LayerAccessRequest";
 import FounderNotificationCenter from "@/components/FounderNotificationCenter";
 import AdvancedAnalysisInterface from "@/components/AdvancedAnalysisInterface";
+import { AdvancedThreatPrediction } from "@/components/AdvancedThreatPrediction";
+import { RealTimeCollaboration } from "@/components/RealTimeCollaboration";
+import { InteractiveThreatMap } from "@/components/InteractiveThreatMap";
+import { SecurityAlertSoundscape } from "@/components/SecurityAlertSoundscape";
+import { AISecurityPersonaCoach } from "@/components/AISecurityPersonaCoach";
+import { EnterprisePortal3D } from "@/components/EnterprisePortal3D";
 
 interface UserData {
   id: string;
@@ -189,6 +195,12 @@ function NormalUserRouter() {
         <Route path="/request-access" component={LayerAccessRequest} />
         <Route path="/founder-notifications" component={FounderNotificationCenter} />
         <Route path="/advanced-analysis" component={AdvancedAnalysisInterface} />
+        <Route path="/threat-prediction" component={AdvancedThreatPrediction} />
+        <Route path="/collaboration" component={RealTimeCollaboration} />
+        <Route path="/threat-map" component={InteractiveThreatMap} />
+        <Route path="/soundscape" component={SecurityAlertSoundscape} />
+        <Route path="/ai-coach" component={AISecurityPersonaCoach} />
+        <Route path="/3d-enterprise" component={EnterprisePortal3D} />
         <Route component={NotFound} />
       </Switch>
     </div>

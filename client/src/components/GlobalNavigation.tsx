@@ -15,7 +15,17 @@ import {
   LogOut,
   User,
   Layers,
-  Crown
+  Crown,
+  BarChart3,
+  Camera,
+  Video,
+  Mic,
+  Target,
+  Users,
+  MapPin,
+  Music,
+  GraduationCap,
+  Network
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -24,37 +34,111 @@ export function GlobalNavigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const navigationItems = [
+  const detectionTools = [
     {
       path: '/',
       label: 'Dashboard',
-      icon: Home,
-      description: 'Main control center and analytics overview'
+      icon: BarChart3,
+      description: 'Main analytics and security overview'
+    },
+    {
+      path: '/analysis',
+      label: 'Image Analysis',
+      icon: Camera,
+      description: 'Advanced image deepfake detection'
+    },
+    {
+      path: '/3d-enterprise',
+      label: 'Video Analysis',
+      icon: Video,
+      description: 'Video authenticity verification'
+    },
+    {
+      path: '/soundscape',
+      label: 'Audio Analysis',
+      icon: Mic,
+      description: 'Voice cloning and audio manipulation detection'
+    },
+    {
+      path: '/advanced-analysis',
+      label: 'Webcam Live',
+      icon: Eye,
+      description: 'Real-time webcam deepfake detection'
+    }
+  ];
+
+  const advancedFeatures = [
+    {
+      path: '/3d-enterprise',
+      label: '3D Enterprise Portal',
+      icon: Building2,
+      description: 'Advanced enterprise security command center'
     },
     {
       path: '/unified-security',
-      label: 'Security Portal',
+      label: 'Security Features',
       icon: Shield,
-      description: 'AI security analysis, threat detection & learning'
+      description: 'Comprehensive security analysis tools'
+    },
+    {
+      path: '/behavior',
+      label: 'Behavior Analysis',
+      icon: Activity,
+      description: 'Behavioral pattern analysis and trust scoring'
+    },
+    {
+      path: '/threat-prediction',
+      label: 'Threat Intelligence',
+      icon: Brain,
+      description: 'AI-powered threat prediction and analysis'
+    },
+    {
+      path: '/identity-forensics',
+      label: 'Identity Forensics',
+      icon: Target,
+      description: 'Digital identity verification and forensics'
+    },
+    {
+      path: '/misinformation',
+      label: 'Misinformation',
+      icon: Globe,
+      description: 'Misinformation detection and content verification'
+    },
+    {
+      path: '/cybercrime-law',
+      label: 'Cybercrime Law',
+      icon: Crown,
+      description: 'Legal frameworks and cybercrime database'
     },
     {
       path: '/news',
       label: 'Threat Intelligence',
-      icon: Brain,
-      description: 'Real-time cybersecurity intelligence and alerts'
+      icon: Zap,
+      description: 'Real-time cyber intelligence feeds'
     },
     {
-      path: '/request-access',
-      label: 'Request Access',
+      path: '/startup-audit',
+      label: 'Startup Audit',
+      icon: Settings,
+      description: 'Security audit tools for startups'
+    },
+    {
+      path: '/ai-coach',
+      label: 'Cyber AI Hub',
+      icon: Bot,
+      description: 'AI-powered security persona coach'
+    },
+    {
+      path: '/suraksha',
+      label: 'SuRaksha Auth',
       icon: User,
-      description: 'Request higher security layer access'
-    },
-    {
-      path: '/founder-control',
-      label: 'Founder Control',
-      icon: Crown,
-      description: 'Founder-only system management (Rishabh Kapoor)'
+      description: 'Advanced authentication platform'
     }
+  ];
+
+  const navigationItems = [
+    ...detectionTools,
+    ...advancedFeatures
   ];
 
   const isActive = (path: string) => {
