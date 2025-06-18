@@ -221,7 +221,7 @@ export function InteractiveThreatMap() {
     return true;
   });
 
-  const threatTypes = [...new Set(threats.map(t => t.threatType))];
+  const threatTypes = Array.from(new Set(threats.map(t => t.threatType)));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
