@@ -27,6 +27,7 @@ import DeepLearningCenter from "@/components/DeepLearningCenter";
 import CyberSecurityUniverse from "@/components/CyberSecurityUniverse";
 import ThreatSimulationCenter from "@/components/ThreatSimulationCenter";
 import CompactCyberDashboard from "@/components/CompactCyberDashboard";
+import DeepfakeDetectionCards from "@/components/DeepfakeDetectionCards";
 
 export default function Dashboard() {
   const { startRealTimeUpdates, stopRealTimeUpdates } = useRealTimeData();
@@ -129,6 +130,7 @@ export default function Dashboard() {
           </div>
 
           <TabsContent value="overview" className="space-y-6">
+            <DeepfakeDetectionCards />
             <CompactCyberDashboard />
           </TabsContent>
 
