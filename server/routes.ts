@@ -14,6 +14,7 @@ import { aiAgentService } from "./aiAgentService";
 import { threatIntelligenceService } from "./threatIntelligenceService";
 import { securityLayerService } from "./securityLayerService";
 import { blockchainSecurityService } from "./blockchainSecurityService";
+import { reportGenerationService } from "./reportGenerationService";
 import { SecurityLayer } from "@shared/securityLayers";
 import { 
   insertThreatSchema, 

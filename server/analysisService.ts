@@ -18,6 +18,17 @@ export interface AnalysisResult {
   forensic_score: number;
   risk_level: string;
   recommendation: string;
+  user_id: string;
+  file_name: string;
+  file_size: number;
+  file_type: string;
+  analysis_type: 'image' | 'video' | 'audio';
+  blockchain_validation?: {
+    hash: string;
+    timestamp: string;
+    consensus_reached: boolean;
+    validator_count: number;
+  };
 }
 
 export class AnalysisService {

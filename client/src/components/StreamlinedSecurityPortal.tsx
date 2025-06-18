@@ -28,7 +28,11 @@ import {
   GraduationCap,
   Search,
   Network,
-  Server
+  Server,
+  Download,
+  FileText,
+  User,
+  Clock
 } from 'lucide-react';
 import BlockchainSecurityNetwork from './BlockchainSecurityNetwork';
 
@@ -36,6 +40,14 @@ interface AnalysisResult {
   is_authentic: boolean;
   confidence_percentage: number;
   key_findings: string[];
+  user_id: string;
+  case_id: string;
+  analysis_date: string;
+  processing_time: string;
+  forensic_score: number;
+  risk_level: string;
+  recommendation: string;
+  detailed_analysis?: any;
 }
 
 export default function StreamlinedSecurityPortal() {
@@ -48,13 +60,18 @@ export default function StreamlinedSecurityPortal() {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('type', type);
+      
+      // Generate random user ID
+      const userId = `USER-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      formData.append('userId', userId);
+      
       return apiRequest('POST', '/api/analyze/media', formData);
     },
     onSuccess: (data: any) => {
       setAnalysisResult(data);
       toast({
         title: "Analysis Complete",
-        description: `Media analysis completed with ${data.confidence_percentage}% confidence`,
+        description: `Analysis completed for User ID: ${data.user_id}. Confidence: ${data.confidence_percentage}%`,
       });
     },
     onError: (error: any) => {
@@ -65,6 +82,71 @@ export default function StreamlinedSecurityPortal() {
       });
     },
   });
+
+  const generatePDFReport = async () => {
+    if (!analysisResult) return;
+
+    try {
+      const response = await apiRequest('POST', '/api/generate-report', {
+        analysisResult,
+        format: 'pdf'
+      });
+
+      // Create download link
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `SatyaAI_Analysis_Report_${analysisResult.case_id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Report Generated",
+        description: "PDF report has been downloaded successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Report Generation Failed",
+        description: "Failed to generate PDF report",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const generateDocReport = async () => {
+    if (!analysisResult) return;
+
+    try {
+      const response = await apiRequest('POST', '/api/generate-report', {
+        analysisResult,
+        format: 'docx'
+      });
+
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `SatyaAI_Analysis_Report_${analysisResult.case_id}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Report Generated",
+        description: "Word document report has been downloaded successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Report Generation Failed",
+        description: "Failed to generate Word document report",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const file = event.target.files?.[0];
@@ -142,8 +224,8 @@ export default function StreamlinedSecurityPortal() {
                         <div className="flex items-center gap-3 mb-3">
                           <Eye className="h-6 w-6 text-blue-400" />
                           <div>
-                            <div className="text-white font-semibold">Image Scanner</div>
-                            <div className="text-slate-400 text-sm">Basic deepfake detection</div>
+                            <div className="text-white font-semibold">Image Analysis</div>
+                            <div className="text-slate-400 text-sm">Advanced deepfake detection with PDF report</div>
                           </div>
                         </div>
                         <Input
@@ -158,29 +240,34 @@ export default function StreamlinedSecurityPortal() {
                     <Card className="bg-slate-900 border-slate-600">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <Shield className="h-6 w-6 text-green-400" />
+                          <Play className="h-6 w-6 text-green-400" />
                           <div>
-                            <div className="text-white font-semibold">Basic Security Check</div>
-                            <div className="text-slate-400 text-sm">Essential threat scan</div>
+                            <div className="text-white font-semibold">Video Analysis</div>
+                            <div className="text-slate-400 text-sm">Motion forensics with full report</div>
                           </div>
                         </div>
-                        <Button className="w-full bg-green-600 hover:bg-green-700">
-                          Run Security Scan
-                        </Button>
+                        <Input
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => handleFileUpload(e, 'video')}
+                          className="bg-slate-700 border-slate-600 text-white"
+                        />
                       </CardContent>
                     </Card>
 
                     <Card className="bg-slate-900 border-slate-600">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <Search className="h-6 w-6 text-purple-400" />
+                          <MessageCircle className="h-6 w-6 text-orange-400" />
                           <div>
-                            <div className="text-white font-semibold">URL Scanner</div>
-                            <div className="text-slate-400 text-sm">Phishing detection</div>
+                            <div className="text-white font-semibold">Audio Analysis</div>
+                            <div className="text-slate-400 text-sm">Voice cloning detection + report</div>
                           </div>
                         </div>
                         <Input
-                          placeholder="Enter URL to scan..."
+                          type="file"
+                          accept="audio/*"
+                          onChange={(e) => handleFileUpload(e, 'audio')}
                           className="bg-slate-700 border-slate-600 text-white"
                         />
                       </CardContent>
@@ -341,28 +428,133 @@ export default function StreamlinedSecurityPortal() {
                 {analysisResult && (
                   <Card className="bg-slate-900 border-blue-600">
                     <CardHeader>
-                      <CardTitle className="text-white">Analysis Results</CardTitle>
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <FileText className="h-5 w-5" />
+                        Comprehensive Analysis Report
+                      </CardTitle>
+                      <CardDescription className="text-slate-300">
+                        Complete forensic analysis with downloadable reports
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-300">Authenticity Status:</span>
-                          <Badge className={analysisResult.is_authentic ? 'bg-green-600' : 'bg-red-600'}>
-                            {analysisResult.is_authentic ? 'Authentic' : 'Potentially Manipulated'}
-                          </Badge>
+                      <div className="space-y-6">
+                        {/* User & Case Information */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-800 p-4 rounded-lg">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <User className="h-4 w-4 text-blue-400" />
+                              <span className="text-slate-400 text-sm">User ID</span>
+                            </div>
+                            <span className="text-white font-mono">{analysisResult.user_id}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <FileText className="h-4 w-4 text-green-400" />
+                              <span className="text-slate-400 text-sm">Case ID</span>
+                            </div>
+                            <span className="text-white font-mono">{analysisResult.case_id}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Clock className="h-4 w-4 text-orange-400" />
+                              <span className="text-slate-400 text-sm">Analysis Date</span>
+                            </div>
+                            <span className="text-white text-sm">{new Date(analysisResult.analysis_date).toLocaleString()}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Zap className="h-4 w-4 text-purple-400" />
+                              <span className="text-slate-400 text-sm">Processing Time</span>
+                            </div>
+                            <span className="text-white text-sm">{analysisResult.processing_time}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-slate-300">Confidence:</span>
-                          <span className="text-white font-semibold">{analysisResult.confidence_percentage}%</span>
+
+                        {/* Core Analysis Results */}
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-slate-300">Authenticity Status:</span>
+                            <Badge className={analysisResult.is_authentic ? 'bg-green-600' : 'bg-red-600'}>
+                              {analysisResult.is_authentic ? 'Authentic' : 'Potentially Manipulated'}
+                            </Badge>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-300">Confidence:</span>
+                                <span className="text-white font-semibold">{analysisResult.confidence_percentage}%</span>
+                              </div>
+                              <Progress value={analysisResult.confidence_percentage} className="w-full" />
+                            </div>
+                            
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-300">Forensic Score:</span>
+                                <span className="text-white font-semibold">{analysisResult.forensic_score}/100</span>
+                              </div>
+                              <Progress value={analysisResult.forensic_score} className="w-full" />
+                            </div>
+                            
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-slate-300">Risk Level:</span>
+                                <Badge className={
+                                  analysisResult.risk_level === 'HIGH' ? 'bg-red-600' :
+                                  analysisResult.risk_level === 'MEDIUM' ? 'bg-yellow-600' :
+                                  'bg-green-600'
+                                }>
+                                  {analysisResult.risk_level}
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <Progress value={analysisResult.confidence_percentage} className="w-full" />
+
+                        {/* Key Findings */}
                         <div className="space-y-2">
-                          <span className="text-slate-300">Key Findings:</span>
-                          <ul className="list-disc list-inside text-slate-400 space-y-1">
+                          <span className="text-slate-300 font-semibold">Key Findings:</span>
+                          <ul className="list-disc list-inside text-slate-400 space-y-1 bg-slate-800 p-4 rounded-lg">
                             {analysisResult.key_findings.map((finding, index) => (
                               <li key={index}>{finding}</li>
                             ))}
                           </ul>
+                        </div>
+
+                        {/* Recommendation */}
+                        <div className="bg-blue-900/20 border border-blue-600 p-4 rounded-lg">
+                          <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
+                            <Shield className="h-4 w-4" />
+                            Security Recommendation
+                          </h4>
+                          <p className="text-slate-300 text-sm">{analysisResult.recommendation}</p>
+                        </div>
+
+                        {/* Report Generation */}
+                        <div className="border-t border-slate-700 pt-4">
+                          <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                            <Download className="h-4 w-4" />
+                            Generate Full Reports
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Button 
+                              onClick={generatePDFReport}
+                              className="bg-red-600 hover:bg-red-700 flex items-center gap-2"
+                            >
+                              <FileText className="h-4 w-4" />
+                              Download PDF Report
+                            </Button>
+                            <Button 
+                              onClick={generateDocReport}
+                              className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
+                            >
+                              <FileText className="h-4 w-4" />
+                              Download Word Document
+                            </Button>
+                          </div>
+                          <p className="text-slate-400 text-xs mt-2">
+                            Comprehensive reports include detailed analysis, forensic metadata, blockchain validation, and expert recommendations.
+                          </p>
                         </div>
                       </div>
                     </CardContent>
