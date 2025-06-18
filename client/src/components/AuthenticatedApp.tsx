@@ -16,6 +16,9 @@ import CompleteFrontPage from "@/components/CompleteFrontPage";
 import GlobalNavigation from "@/components/GlobalNavigation";
 import IdentityForensicsLab from "@/components/IdentityForensicsLab";
 import { LegitimacyThreatAnalyzer } from "@/components/LegitimacyThreatAnalyzer";
+import UnifiedAnalysisPortal from "@/components/UnifiedAnalysisPortal";
+import RequestAccessPortal from "@/components/RequestAccessPortal";
+import StreamlinedSecurityCenter from "@/components/StreamlinedSecurityCenter";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -178,6 +181,9 @@ function NormalUserRouter() {
         <Route path="/behavior" component={BehaviorTrustDashboard} />
         <Route path="/news" component={RealTimeNewsDashboard} />
         <Route path="/identity-forensics" component={IdentityForensicsLab} />
+        <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
+        <Route path="/request-access" component={RequestAccessPortal} />
+        <Route path="/security-features" component={StreamlinedSecurityCenter} />
         <Route path="/legitimacy-analyzer" component={LegitimacyThreatAnalyzer} />
         <Route path="/cybercrime-law" component={CybercrimeLawCenter} />
         <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
