@@ -250,7 +250,7 @@ export function LegitimacyThreatAnalyzer() {
           </div>
         </div>
 
-        {config.multiline ? (
+        {'multiline' in config && config.multiline ? (
           <Textarea
             value={config.value}
             onChange={(e) => config.onChange(e.target.value)}

@@ -99,10 +99,10 @@ export function GlobalNavigation() {
       description: 'Digital identity verification and forensics'
     },
     {
-      path: '/misinformation',
-      label: 'Misinformation',
-      icon: Globe,
-      description: 'Misinformation detection and content verification'
+      path: '/legitimacy-analyzer',
+      label: 'Legitimacy Analyzer',
+      icon: Target,
+      description: 'Comprehensive threat analysis for URLs, emails, phones, apps, text & news'
     },
     {
       path: '/cybercrime-law',
