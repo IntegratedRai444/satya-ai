@@ -14,7 +14,8 @@ import {
   Bot,
   LogOut,
   User,
-  Layers
+  Layers,
+  Crown
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -113,6 +114,12 @@ export function GlobalNavigation() {
       label: 'Access Requests',
       icon: User,
       description: 'Request and manage security layer access'
+    },
+    {
+      path: '/founder-control',
+      label: 'Founder Control',
+      icon: Crown,
+      description: 'Founder-only access control and system management'
     }
   ];
 

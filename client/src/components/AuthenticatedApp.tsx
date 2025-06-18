@@ -39,6 +39,7 @@ import CyberSecurityAcademy from "@/components/CyberSecurityAcademy";
 import UnifiedSecurityPortal from "@/components/UnifiedSecurityPortal";
 import SecurityLayerManager from "@/components/SecurityLayerManager";
 import AccessRequestManager from "@/components/AccessRequestManager";
+import FounderAccessControl from "@/components/FounderAccessControl";
 
 interface UserData {
   id: string;
@@ -177,6 +178,7 @@ function NormalUserRouter() {
         <Route path="/unified-security" component={UnifiedSecurityPortal} />
         <Route path="/security-layers" component={SecurityLayerManager} />
         <Route path="/access-requests" component={AccessRequestManager} />
+        <Route path="/founder-control" component={FounderAccessControl} />
         <Route component={NotFound} />
       </Switch>
     </div>
