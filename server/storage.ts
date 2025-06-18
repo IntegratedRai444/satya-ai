@@ -842,4 +842,268 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Import additional entities for Supabase integration
+import {
+  users,
+  aiAgents,
+  analysisResults,
+  accessRequests,
+  auditLogs,
+  type User,
+  type UpsertUser,
+  type AIAgent,
+  type InsertAIAgent,
+  type AnalysisResult,
+  type InsertAnalysisResult,
+  type AccessRequest,
+  type InsertAccessRequest,
+  type AuditLog,
+  type InsertAuditLog,
+} from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
+
+// Enhanced storage interface for Supabase
+export interface IStorageExtended extends IStorage {
+  // User management operations
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  
+  // AI Agent operations
+  createAIAgent(agent: InsertAIAgent): Promise<AIAgent>;
+  getAIAgent(id: string): Promise<AIAgent | undefined>;
+  listAIAgents(companyId?: string): Promise<AIAgent[]>;
+  updateAIAgent(id: string, updates: Partial<AIAgent>): Promise<AIAgent>;
+  deleteAIAgent(id: string): Promise<void>;
+  
+  // Analysis operations
+  createAnalysisResult(result: InsertAnalysisResult): Promise<AnalysisResult>;
+  getAnalysisResult(caseId: string): Promise<AnalysisResult | undefined>;
+  listAnalysisResults(userId?: string): Promise<AnalysisResult[]>;
+  
+  // Access management
+  createAccessRequest(request: InsertAccessRequest): Promise<AccessRequest>;
+  getAccessRequest(id: string): Promise<AccessRequest | undefined>;
+  listAccessRequests(userId?: string): Promise<AccessRequest[]>;
+  updateAccessRequest(id: string, updates: Partial<AccessRequest>): Promise<AccessRequest>;
+  
+  // Audit logging
+  createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
+  getAuditLogs(userId?: string, companyId?: string): Promise<AuditLog[]>;
+}
+
+// Database storage implementation with Supabase
+export class DatabaseStorage extends MemStorage implements IStorageExtended {
+  // User management operations
+  async getUser(id: string): Promise<User | undefined> {
+    try {
+      const [user] = await db.select().from(users).where(eq(users.id, id));
+      return user;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return undefined;
+    }
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    try {
+      const [user] = await db.select().from(users).where(eq(users.username, username));
+      return user;
+    } catch (error) {
+      console.error('Error getting user by username:', error);
+      return undefined;
+    }
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    try {
+      const [user] = await db
+        .insert(users)
+        .values(userData)
+        .onConflictDoUpdate({
+          target: users.id,
+          set: {
+            ...userData,
+            updatedAt: new Date(),
+          },
+        })
+        .returning();
+      return user;
+    } catch (error) {
+      console.error('Error upserting user:', error);
+      throw error;
+    }
+  }
+
+  // AI Agent operations
+  async createAIAgent(agentData: InsertAIAgent): Promise<AIAgent> {
+    try {
+      const [agent] = await db.insert(aiAgents).values(agentData).returning();
+      return agent;
+    } catch (error) {
+      console.error('Error creating AI agent:', error);
+      throw error;
+    }
+  }
+
+  async getAIAgent(id: string): Promise<AIAgent | undefined> {
+    try {
+      const [agent] = await db.select().from(aiAgents).where(eq(aiAgents.id, id));
+      return agent;
+    } catch (error) {
+      console.error('Error getting AI agent:', error);
+      return undefined;
+    }
+  }
+
+  async listAIAgents(companyId?: string): Promise<AIAgent[]> {
+    try {
+      const query = db.select().from(aiAgents);
+      if (companyId) {
+        return await query.where(eq(aiAgents.companyId, companyId)).orderBy(desc(aiAgents.createdAt));
+      }
+      return await query.orderBy(desc(aiAgents.createdAt));
+    } catch (error) {
+      console.error('Error listing AI agents:', error);
+      return [];
+    }
+  }
+
+  async updateAIAgent(id: string, updates: Partial<AIAgent>): Promise<AIAgent> {
+    try {
+      const [agent] = await db
+        .update(aiAgents)
+        .set({ ...updates, updatedAt: new Date() })
+        .where(eq(aiAgents.id, id))
+        .returning();
+      return agent;
+    } catch (error) {
+      console.error('Error updating AI agent:', error);
+      throw error;
+    }
+  }
+
+  async deleteAIAgent(id: string): Promise<void> {
+    try {
+      await db.delete(aiAgents).where(eq(aiAgents.id, id));
+    } catch (error) {
+      console.error('Error deleting AI agent:', error);
+      throw error;
+    }
+  }
+
+  // Analysis operations
+  async createAnalysisResult(resultData: InsertAnalysisResult): Promise<AnalysisResult> {
+    try {
+      const [result] = await db.insert(analysisResults).values(resultData).returning();
+      return result;
+    } catch (error) {
+      console.error('Error creating analysis result:', error);
+      throw error;
+    }
+  }
+
+  async getAnalysisResult(caseId: string): Promise<AnalysisResult | undefined> {
+    try {
+      const [result] = await db.select().from(analysisResults).where(eq(analysisResults.caseId, caseId));
+      return result;
+    } catch (error) {
+      console.error('Error getting analysis result:', error);
+      return undefined;
+    }
+  }
+
+  async listAnalysisResults(userId?: string): Promise<AnalysisResult[]> {
+    try {
+      const query = db.select().from(analysisResults);
+      if (userId) {
+        return await query.where(eq(analysisResults.userId, userId)).orderBy(desc(analysisResults.createdAt));
+      }
+      return await query.orderBy(desc(analysisResults.createdAt));
+    } catch (error) {
+      console.error('Error listing analysis results:', error);
+      return [];
+    }
+  }
+
+  // Access management
+  async createAccessRequest(requestData: InsertAccessRequest): Promise<AccessRequest> {
+    try {
+      const [request] = await db.insert(accessRequests).values(requestData).returning();
+      return request;
+    } catch (error) {
+      console.error('Error creating access request:', error);
+      throw error;
+    }
+  }
+
+  async getAccessRequest(id: string): Promise<AccessRequest | undefined> {
+    try {
+      const [request] = await db.select().from(accessRequests).where(eq(accessRequests.id, id));
+      return request;
+    } catch (error) {
+      console.error('Error getting access request:', error);
+      return undefined;
+    }
+  }
+
+  async listAccessRequests(userId?: string): Promise<AccessRequest[]> {
+    try {
+      const query = db.select().from(accessRequests);
+      if (userId) {
+        return await query.where(eq(accessRequests.userId, userId)).orderBy(desc(accessRequests.createdAt));
+      }
+      return await query.orderBy(desc(accessRequests.createdAt));
+    } catch (error) {
+      console.error('Error listing access requests:', error);
+      return [];
+    }
+  }
+
+  async updateAccessRequest(id: string, updates: Partial<AccessRequest>): Promise<AccessRequest> {
+    try {
+      const [request] = await db
+        .update(accessRequests)
+        .set(updates)
+        .where(eq(accessRequests.id, id))
+        .returning();
+      return request;
+    } catch (error) {
+      console.error('Error updating access request:', error);
+      throw error;
+    }
+  }
+
+  // Audit logging
+  async createAuditLog(logData: InsertAuditLog): Promise<AuditLog> {
+    try {
+      const [log] = await db.insert(auditLogs).values(logData).returning();
+      return log;
+    } catch (error) {
+      console.error('Error creating audit log:', error);
+      throw error;
+    }
+  }
+
+  async getAuditLogs(userId?: string, companyId?: string): Promise<AuditLog[]> {
+    try {
+      let query = db.select().from(auditLogs);
+      
+      if (userId && companyId) {
+        query = query.where(eq(auditLogs.userId, userId));
+      } else if (userId) {
+        query = query.where(eq(auditLogs.userId, userId));
+      } else if (companyId) {
+        query = query.where(eq(auditLogs.companyId, companyId));
+      }
+      
+      return await query.orderBy(desc(auditLogs.timestamp));
+    } catch (error) {
+      console.error('Error getting audit logs:', error);
+      return [];
+    }
+  }
+}
+
+export const storage = new DatabaseStorage();
