@@ -6,6 +6,7 @@ import { storage } from "./storage";
 import { aiSecurityService } from "./aiService";
 import { analysisService } from "./analysisService";
 import { advancedAnalysisService } from "./advancedAnalysisService";
+import { fixedAnalysisService } from "./fixedAnalysisService";
 import { quantumBehavioralService } from "./quantumBehavioralService";
 import { realTimeThreatDetectionService } from "./realTimeThreatDetectionService";
 import { newsService } from "./newsService";
@@ -2623,6 +2624,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Failed to generate threat intelligence summary:", error);
       res.status(500).json({ 
         error: "Failed to generate threat intelligence summary", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Real-Time Media Analysis API for Webcam
+  app.post("/api/analyze/media", upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      const analysisType = req.body.type || 'image';
+      const userId = req.body.userId || `USER-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      const fileName = req.file.originalname || 'unknown';
+
+      let result;
+      switch (analysisType) {
+        case 'image':
+          result = await fixedAnalysisService.analyzeImage(req.file.buffer, fileName, userId);
+          break;
+        case 'video':
+          result = await fixedAnalysisService.analyzeVideo(req.file.buffer, fileName, userId);
+          break;
+        case 'audio':
+          result = await fixedAnalysisService.analyzeAudio(req.file.buffer, fileName, userId);
+          break;
+        default:
+          result = await fixedAnalysisService.analyzeImage(req.file.buffer, fileName, userId);
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error("Media analysis failed:", error);
+      res.status(500).json({ 
+        error: "Media analysis failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Generate Analysis Report
+  app.post("/api/generate-report", async (req, res) => {
+    try {
+      const { analysisResult, format } = req.body;
+
+      if (!analysisResult) {
+        return res.status(400).json({ error: "Analysis result is required" });
+      }
+
+      const reportBuffer = await reportGenerationService.generateReport(analysisResult, format || 'pdf');
+      
+      const filename = `SatyaAI_Analysis_Report_${analysisResult.case_id}.${format || 'pdf'}`;
+      const contentType = format === 'docx' ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf';
+
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.send(reportBuffer);
+    } catch (error) {
+      console.error("Report generation failed:", error);
+      res.status(500).json({ 
+        error: "Report generation failed", 
         details: error instanceof Error ? error.message : "Unknown error"
       });
     }

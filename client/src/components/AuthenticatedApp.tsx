@@ -180,6 +180,7 @@ function NormalUserRouter() {
         <Route path="/security-layers" component={SecurityLayerManager} />
         <Route path="/access-requests" component={AccessRequestManager} />
         <Route path="/founder-control" component={FounderAccessControl} />
+        <Route path="/real-time-analysis" component={RealTimeAnalysis} />
         <Route component={NotFound} />
       </Switch>
     </div>
