@@ -75,6 +75,24 @@ export function AIAgentGenerator() {
       const data = await response.json();
       setTemplates(data.templates || {});
     } catch (error) {
+      console.error('Failed to fetch templates:', error);
+      // Set default templates if API fails
+      setTemplates({
+        security_analyst: {
+          name: 'CyberGuard Analyst',
+          role: 'Security Operations Analyst',
+          specialization: 'Threat Detection and Analysis',
+          base_capabilities: ['Real-time threat monitoring', 'SIEM data analysis'],
+          required_skills: ['Network security protocols', 'Malware analysis']
+        },
+        ai_engineer: {
+          name: 'SatyaAI Engineer', 
+          role: 'AI/ML Security Engineer',
+          specialization: 'AI-powered Security Solutions',
+          base_capabilities: ['ML model development', 'Anomaly detection'],
+          required_skills: ['Machine learning frameworks', 'Deep learning']
+        }
+      });
       toast({
         title: "Error",
         description: "Failed to load agent templates",
