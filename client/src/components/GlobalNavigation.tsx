@@ -25,7 +25,12 @@ import {
   MapPin,
   Music,
   GraduationCap,
-  Network
+  Network,
+  Scan,
+  Fingerprint,
+  Key,
+  CheckCircle,
+  FileText
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -34,7 +39,8 @@ export function GlobalNavigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const detectionTools = [
+  // Main Navigation - Maximum 10 Portals
+  const mainPortals = [
     {
       path: '/',
       label: 'Dashboard',
@@ -42,104 +48,92 @@ export function GlobalNavigation() {
       description: 'Main analytics and security overview'
     },
     {
-      path: '/ultra-detection',
-      label: 'Ultra Detection',
-      icon: Camera,
-      description: 'Most powerful AI deepfake detection system'
+      path: '/unified-analysis',
+      label: 'Analysis Portal',
+      icon: Scan,
+      description: 'Unified analysis for images, videos, audio, URLs, emails, phones & text'
     },
-    {
-      path: '/3d-enterprise',
-      label: 'Video Analysis',
-      icon: Video,
-      description: 'Video authenticity verification'
-    },
-    {
-      path: '/soundscape',
-      label: 'Audio Analysis',
-      icon: Mic,
-      description: 'Voice cloning and audio manipulation detection'
-    },
-    {
-      path: '/advanced-analysis',
-      label: 'Webcam Live',
-      icon: Eye,
-      description: 'Real-time webcam deepfake detection'
-    }
-  ];
-
-  const advancedFeatures = [
     {
       path: '/enterprise-portal',
-      label: '3D Enterprise Portal',
+      label: 'Enterprise Hub',
       icon: Building2,
       description: 'Advanced enterprise security command center'
     },
     {
-      path: '/unified-security',
-      label: 'Security Features',
-      icon: Shield,
-      description: 'Comprehensive security analysis tools'
-    },
-    {
-      path: '/behavior',
-      label: 'Behavior Analysis',
-      icon: Activity,
-      description: 'Behavioral pattern analysis and trust scoring'
-    },
-    {
-      path: '/threat-prediction',
+      path: '/threat-intelligence',
       label: 'Threat Intelligence',
       icon: Brain,
-      description: 'AI-powered threat prediction and analysis'
+      description: 'AI-powered threat prediction and real-time intelligence'
     },
     {
       path: '/identity-forensics',
       label: 'Identity Forensics',
-      icon: Target,
-      description: 'Digital identity verification and forensics'
+      icon: Fingerprint,
+      description: 'Digital identity verification and forensic analysis'
     },
     {
-      path: '/legitimacy-analyzer',
-      label: 'Legitimacy Analyzer',
-      icon: Target,
-      description: 'Comprehensive threat analysis for URLs, emails, phones, apps, text & news'
+      path: '/behavior',
+      label: 'Behavior Trust',
+      icon: Activity,
+      description: 'Behavioral pattern analysis and trust scoring'
+    },
+    {
+      path: '/security-features',
+      label: 'Security Center',
+      icon: Shield,
+      description: 'Comprehensive security tools and features'
     },
     {
       path: '/cybercrime-law',
-      label: 'Cybercrime Law',
+      label: 'Legal Center',
       icon: Crown,
       description: 'Legal frameworks and cybercrime database'
     },
     {
-      path: '/news',
-      label: 'Threat Intelligence',
-      icon: Zap,
-      description: 'Real-time cyber intelligence feeds'
-    },
-    {
-      path: '/startup-audit',
-      label: 'Startup Audit',
-      icon: Settings,
-      description: 'Security audit tools for startups'
+      path: '/request-access',
+      label: 'Access Control',
+      icon: Key,
+      description: 'Request and manage access levels'
     },
     {
       path: '/ai-coach',
-      label: 'Cyber AI Hub',
+      label: 'AI Coach',
       icon: Bot,
-      description: 'AI-powered security persona coach'
-    },
-    {
-      path: '/suraksha',
-      label: 'SuRaksha Auth',
-      icon: User,
-      description: 'Advanced authentication platform'
+      description: 'AI-powered security guidance and training'
     }
   ];
 
-  const navigationItems = [
-    ...detectionTools,
-    ...advancedFeatures
+  // Side Navigation - Detailed Features
+  const sideFeatures = [
+    {
+      category: 'Detection & Analysis',
+      items: [
+        { path: '/ultra-detection', label: 'Ultra Detection', icon: Camera, description: 'Advanced deepfake detection' },
+        { path: '/3d-enterprise', label: 'Video Analysis', icon: Video, description: 'Video authenticity verification' },
+        { path: '/soundscape', label: 'Audio Analysis', icon: Mic, description: 'Voice cloning detection' },
+        { path: '/advanced-analysis', label: 'Webcam Live', icon: Eye, description: 'Real-time webcam analysis' },
+        { path: '/legitimacy-analyzer', label: 'Legitimacy Check', icon: Target, description: 'URL, email, phone verification' }
+      ]
+    },
+    {
+      category: 'Intelligence & Monitoring',
+      items: [
+        { path: '/news', label: 'Threat Feeds', icon: Zap, description: 'Real-time cyber intelligence' },
+        { path: '/startup-audit', label: 'Security Audit', icon: Settings, description: 'Comprehensive security assessment' },
+        { path: '/compliance', label: 'Compliance', icon: CheckCircle, description: 'Regulatory compliance monitoring' }
+      ]
+    },
+    {
+      category: 'Enterprise & Management',
+      items: [
+        { path: '/user-management', label: 'User Management', icon: Users, description: 'User access and permissions' },
+        { path: '/audit-logs', label: 'Audit Logs', icon: FileText, description: 'System activity monitoring' },
+        { path: '/api-access', label: 'API Access', icon: Network, description: 'API keys and integration' }
+      ]
+    }
   ];
+
+  const navigationItems = mainPortals;
 
   const isActive = (path: string) => {
     return location === path;
