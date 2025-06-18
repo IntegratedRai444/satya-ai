@@ -2897,10 +2897,260 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ]
       });
 
+      // Create notification for founder
+      const notification = {
+        id: `NOTIF-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        type: 'access_request',
+        title: `New Access Request from ${organizationName}`,
+        message: `${roleTitle} from ${organizationName} has requested ${getLayerName(requestedLayer)} access. Urgency: ${urgencyLevel.toUpperCase()}`,
+        priority: urgencyLevel === 'critical' ? 'critical' : urgencyLevel === 'high' ? 'high' : 'medium',
+        isRead: false,
+        createdAt: new Date().toISOString(),
+        actionRequired: true,
+        data: {
+          requestId: accessRequest.id,
+          userId: 'current-user',
+          userName: `${roleTitle} (${contactEmail})`,
+          organizationName,
+          currentLayer: 1, // Default current layer
+          requestedLayer,
+          urgencyLevel,
+          businessJustification
+        }
+      };
+
+      // Store notification (in a real app, this would go to database)
+      console.log('New founder notification created:', notification);
+
     } catch (error) {
       console.error("Access request submission failed:", error);
       res.status(500).json({ 
         error: "Access request submission failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Helper function for layer names
+  function getLayerName(layerId: number): string {
+    const layers = ['Public', 'Professional', 'Developer', 'Enterprise', 'Founder'];
+    return layers[layerId - 1] || 'Unknown';
+  }
+
+  // Founder Notification API Endpoints
+  app.get("/api/founder/notifications", async (req, res) => {
+    try {
+      // Simulate founder notifications database
+      const mockNotifications = [
+        {
+          id: 'NOTIF-001',
+          type: 'access_request',
+          title: 'New Developer Access Request',
+          message: 'Senior Developer from TechCorp Inc. has requested Developer access. Urgency: HIGH',
+          priority: 'high',
+          isRead: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
+          actionRequired: true,
+          data: {
+            requestId: 'REQ-001',
+            userId: 'user-dev-001',
+            userName: 'Senior Developer (dev@techcorp.com)',
+            organizationName: 'TechCorp Inc.',
+            currentLayer: 2,
+            requestedLayer: 3,
+            urgencyLevel: 'high',
+            businessJustification: 'Need API access for custom security integration with our existing infrastructure.'
+          }
+        },
+        {
+          id: 'NOTIF-002',
+          type: 'access_request',
+          title: 'Enterprise Access Request',
+          message: 'Security Manager from SecureBank has requested Enterprise access. Urgency: CRITICAL',
+          priority: 'critical',
+          isRead: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(), // 45 minutes ago
+          actionRequired: true,
+          data: {
+            requestId: 'REQ-002',
+            userId: 'user-bank-001',
+            userName: 'Security Manager (security@securebank.com)',
+            organizationName: 'SecureBank Financial',
+            currentLayer: 3,
+            requestedLayer: 4,
+            urgencyLevel: 'critical',
+            businessJustification: 'Urgent need for full threat intelligence capabilities due to recent security incidents in banking sector.'
+          }
+        },
+        {
+          id: 'NOTIF-003',
+          type: 'security_alert',
+          title: 'High-Priority Security Alert',
+          message: 'Multiple failed authentication attempts detected from suspicious IP addresses',
+          priority: 'high',
+          isRead: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+          actionRequired: false,
+          data: {
+            suspiciousIPs: ['192.168.1.100', '10.0.0.50'],
+            attemptCount: 25,
+            targetAccounts: ['admin', 'founder']
+          }
+        },
+        {
+          id: 'NOTIF-004',
+          type: 'user_activity',
+          title: 'New User Registration',
+          message: 'CyberSec Analyst from DefenseOrg has registered for Public access',
+          priority: 'low',
+          isRead: true,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(), // 4 hours ago
+          actionRequired: false,
+          data: {
+            userId: 'user-defense-001',
+            userName: 'CyberSec Analyst',
+            organizationName: 'DefenseOrg',
+            registeredLayer: 1
+          }
+        },
+        {
+          id: 'NOTIF-005',
+          type: 'system_update',
+          title: 'System Maintenance Complete',
+          message: 'Scheduled maintenance for threat intelligence feeds has been completed successfully',
+          priority: 'low',
+          isRead: false,
+          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(), // 6 hours ago
+          actionRequired: false,
+          data: {
+            maintenanceType: 'threat_feeds',
+            duration: '2 hours',
+            affectedSystems: ['MISP', 'OpenCTI', 'Internal Analysis']
+          }
+        }
+      ];
+
+      res.json(mockNotifications);
+    } catch (error) {
+      console.error("Fetch notifications failed:", error);
+      res.status(500).json({ 
+        error: "Fetch notifications failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.patch("/api/founder/notifications/:id/read", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Simulate marking notification as read
+      console.log(`Marking notification ${id} as read`);
+      
+      res.json({ 
+        success: true, 
+        message: 'Notification marked as read',
+        notificationId: id
+      });
+    } catch (error) {
+      console.error("Mark notification as read failed:", error);
+      res.status(500).json({ 
+        error: "Mark notification as read failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.delete("/api/founder/notifications/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      // Simulate deleting notification
+      console.log(`Deleting notification ${id}`);
+      
+      res.json({ 
+        success: true, 
+        message: 'Notification deleted',
+        notificationId: id
+      });
+    } catch (error) {
+      console.error("Delete notification failed:", error);
+      res.status(500).json({ 
+        error: "Delete notification failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/founder/access-requests/approve", async (req, res) => {
+    try {
+      const { requestId, comments } = req.body;
+      
+      if (!requestId) {
+        return res.status(400).json({ error: "Request ID is required" });
+      }
+
+      // Simulate approving access request
+      const approvalResult = {
+        requestId,
+        status: 'approved',
+        approvedBy: 'founder',
+        approvedAt: new Date().toISOString(),
+        comments: comments || 'Access request approved by founder',
+        notification: {
+          id: `NOTIF-APPROVAL-${Date.now()}`,
+          type: 'access_approved',
+          title: 'Access Request Approved',
+          message: 'Your security layer access request has been approved',
+          priority: 'medium',
+          recipientUserId: 'requesting-user'
+        }
+      };
+
+      console.log('Access request approved:', approvalResult);
+      
+      res.json(approvalResult);
+    } catch (error) {
+      console.error("Approve access request failed:", error);
+      res.status(500).json({ 
+        error: "Approve access request failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  app.post("/api/founder/access-requests/reject", async (req, res) => {
+    try {
+      const { requestId, reason } = req.body;
+      
+      if (!requestId || !reason) {
+        return res.status(400).json({ error: "Request ID and reason are required" });
+      }
+
+      // Simulate rejecting access request
+      const rejectionResult = {
+        requestId,
+        status: 'rejected',
+        rejectedBy: 'founder',
+        rejectedAt: new Date().toISOString(),
+        reason,
+        notification: {
+          id: `NOTIF-REJECTION-${Date.now()}`,
+          type: 'access_rejected',
+          title: 'Access Request Rejected',
+          message: `Your security layer access request has been rejected. Reason: ${reason}`,
+          priority: 'medium',
+          recipientUserId: 'requesting-user'
+        }
+      };
+
+      console.log('Access request rejected:', rejectionResult);
+      
+      res.json(rejectionResult);
+    } catch (error) {
+      console.error("Reject access request failed:", error);
+      res.status(500).json({ 
+        error: "Reject access request failed", 
         details: error instanceof Error ? error.message : "Unknown error"
       });
     }
