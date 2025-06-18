@@ -118,7 +118,7 @@ export function GlobalNavigation() {
     {
       category: 'Intelligence & Monitoring',
       items: [
-        { path: '/news', label: 'Threat Feeds', icon: Zap, description: 'Real-time cyber intelligence' },
+        { path: '/news', label: 'Real-time Feeds', icon: Zap, description: 'Live cyber intelligence and news feeds' },
         { path: '/startup-audit', label: 'Security Audit', icon: Settings, description: 'Comprehensive security assessment' },
         { path: '/compliance', label: 'Compliance', icon: CheckCircle, description: 'Regulatory compliance monitoring' }
       ]
