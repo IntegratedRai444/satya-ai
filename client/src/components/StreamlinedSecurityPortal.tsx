@@ -26,8 +26,11 @@ import {
   Target,
   Activity,
   GraduationCap,
-  Search
+  Search,
+  Network,
+  Server
 } from 'lucide-react';
+import BlockchainSecurityNetwork from './BlockchainSecurityNetwork';
 
 interface AnalysisResult {
   is_authentic: boolean;

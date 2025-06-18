@@ -13,6 +13,7 @@ import { realNewsService } from "./realNewsService";
 import { aiAgentService } from "./aiAgentService";
 import { threatIntelligenceService } from "./threatIntelligenceService";
 import { securityLayerService } from "./securityLayerService";
+import { blockchainSecurityService } from "./blockchainSecurityService";
 import { SecurityLayer } from "@shared/securityLayers";
 import { 
   insertThreatSchema, 
@@ -5903,6 +5904,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // WebSocket setup for real-time updates
+  // Blockchain Security Network Routes
+  app.get("/api/blockchain/network-status", async (req, res) => {
+    try {
+      const status = await blockchainSecurityService.getNetworkStatus();
+      res.json(status);
+    } catch (error) {
+      console.error('Error fetching network status:', error);
+      res.status(500).json({ message: "Failed to fetch network status" });
+    }
+  });
+
+  app.get("/api/blockchain/nodes", async (req, res) => {
+    try {
+      const nodes = await blockchainSecurityService.getAllNodes();
+      res.json(nodes);
+    } catch (error) {
+      console.error('Error fetching nodes:', error);
+      res.status(500).json({ message: "Failed to fetch nodes" });
+    }
+  });
+
+  app.get("/api/blockchain/nodes/:nodeId", async (req, res) => {
+    try {
+      const { nodeId } = req.params;
+      const node = await blockchainSecurityService.getNodeDetails(nodeId);
+      if (!node) {
+        return res.status(404).json({ message: "Node not found" });
+      }
+      res.json(node);
+    } catch (error) {
+      console.error('Error fetching node details:', error);
+      res.status(500).json({ message: "Failed to fetch node details" });
+    }
+  });
+
+  app.get("/api/blockchain/nodes-by-region", async (req, res) => {
+    try {
+      const nodesByRegion = await blockchainSecurityService.getNodesByRegion();
+      res.json(nodesByRegion);
+    } catch (error) {
+      console.error('Error fetching nodes by region:', error);
+      res.status(500).json({ message: "Failed to fetch nodes by region" });
+    }
+  });
+
+  app.get("/api/blockchain/info", async (req, res) => {
+    try {
+      const info = await blockchainSecurityService.getBlockchainInfo();
+      res.json(info);
+    } catch (error) {
+      console.error('Error fetching blockchain info:', error);
+      res.status(500).json({ message: "Failed to fetch blockchain info" });
+    }
+  });
+
+  app.post("/api/blockchain/validate-security-event", async (req, res) => {
+    try {
+      const eventData = req.body;
+      const result = await blockchainSecurityService.validateSecurityEvent(eventData);
+      res.json(result);
+    } catch (error) {
+      console.error('Error validating security event:', error);
+      res.status(500).json({ message: "Failed to validate security event" });
+    }
+  });
+
+  app.post("/api/blockchain/add-transaction", async (req, res) => {
+    try {
+      const { type, payload, source, priority } = req.body;
+      const transactionId = await blockchainSecurityService.addSecurityTransaction({
+        type,
+        payload,
+        source,
+        priority
+      });
+      res.json({ transactionId, message: "Transaction added to blockchain" });
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+      res.status(500).json({ message: "Failed to add transaction" });
+    }
+  });
+
   const httpServer = createServer(app);
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
   
