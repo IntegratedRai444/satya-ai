@@ -94,10 +94,14 @@ export default function StreamlinedSecurityPortal() {
         </div>
 
         <Tabs defaultValue="analysis" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-800 border-slate-700">
+          <TabsList className="grid w-full grid-cols-5 bg-slate-800 border-slate-700">
             <TabsTrigger value="analysis" className="data-[state=active]:bg-blue-600">
               <Shield className="h-4 w-4 mr-2" />
               Security Analysis
+            </TabsTrigger>
+            <TabsTrigger value="blockchain" className="data-[state=active]:bg-cyan-600">
+              <Network className="h-4 w-4 mr-2" />
+              Blockchain Network
             </TabsTrigger>
             <TabsTrigger value="intelligence" className="data-[state=active]:bg-green-600">
               <Brain className="h-4 w-4 mr-2" />
@@ -283,6 +287,22 @@ export default function StreamlinedSecurityPortal() {
                     <Card className="bg-slate-900 border-purple-600 opacity-60">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3 mb-3">
+                          <Network className="h-6 w-6 text-purple-400" />
+                          <div>
+                            <div className="text-white font-semibold">Blockchain Security</div>
+                            <div className="text-slate-400 text-sm">120-node distributed validation</div>
+                          </div>
+                        </div>
+                        <Button className="w-full bg-purple-600 hover:bg-purple-700" disabled>
+                          <Lock className="h-4 w-4 mr-2" />
+                          Upgrade Required
+                        </Button>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-slate-900 border-purple-600 opacity-60">
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-3 mb-3">
                           <Target className="h-6 w-6 text-purple-400" />
                           <div>
                             <div className="text-white font-semibold">Advanced Configuration</div>
@@ -350,6 +370,65 @@ export default function StreamlinedSecurityPortal() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Blockchain Security Network Tab */}
+          <TabsContent value="blockchain" className="space-y-6">
+            {hasAccess('layer3') ? (
+              <BlockchainSecurityNetwork />
+            ) : (
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Network className="h-5 w-5 text-cyan-400" />
+                    Blockchain Security Network
+                  </CardTitle>
+                  <CardDescription className="text-slate-300">
+                    Distributed 120-node consensus network for security validation
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-12">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                      <div className="bg-slate-900 p-6 rounded-lg">
+                        <Server className="h-12 w-12 text-cyan-400 mx-auto mb-4" />
+                        <h3 className="text-white font-semibold mb-2">120+ Nodes</h3>
+                        <p className="text-slate-400 text-sm">
+                          Global distribution across AWS, Azure, GCP regions
+                        </p>
+                      </div>
+                      
+                      <div className="bg-slate-900 p-6 rounded-lg">
+                        <Shield className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                        <h3 className="text-white font-semibold mb-2">Consensus Security</h3>
+                        <p className="text-slate-400 text-sm">
+                          Multi-validator consensus for threat validation
+                        </p>
+                      </div>
+                      
+                      <div className="bg-slate-900 p-6 rounded-lg">
+                        <Activity className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                        <h3 className="text-white font-semibold mb-2">Real-time Monitoring</h3>
+                        <p className="text-slate-400 text-sm">
+                          Live network health and threat detection
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="border border-purple-600 rounded-lg p-6 bg-purple-900/10">
+                      <Lock className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                      <h3 className="text-white font-semibold mb-2">Layer 3 Access Required</h3>
+                      <p className="text-slate-400 mb-4">
+                        Blockchain security network requires Developer Arsenal access ($499/month)
+                      </p>
+                      <Button className="bg-purple-600 hover:bg-purple-700">
+                        Request Layer 3 Access
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Threat Intelligence Tab */}
