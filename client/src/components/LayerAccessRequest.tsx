@@ -70,9 +70,29 @@ const SECURITY_LAYERS: SecurityLayer[] = [
   },
   {
     id: 3,
+    name: "Developer Access",
+    description: "Advanced development tools with API access and integration capabilities",
+    features: [
+      "Full REST API access with authentication tokens",
+      "Custom integration development tools",
+      "Webhook and real-time notification systems",
+      "Advanced scripting and automation capabilities",
+      "Custom dashboard and widget development",
+      "Third-party security tool integrations",
+      "Development sandbox environment",
+      "Technical documentation and SDKs",
+      "Priority developer support"
+    ],
+    icon: Brain,
+    color: "cyan",
+    priceRange: "Developer Tier"
+  },
+  {
+    id: 4,
     name: "Enterprise Access",
     description: "Comprehensive threat intelligence with team collaboration features",
     features: [
+      "All Developer features included",
       "Full MISP & OpenCTI integration",
       "Machine learning threat predictions",
       "Real-time team collaboration tools",
@@ -87,7 +107,7 @@ const SECURITY_LAYERS: SecurityLayer[] = [
     priceRange: "Enterprise Tier"
   },
   {
-    id: 4,
+    id: 5,
     name: "Founder Access",
     description: "Complete system control with user management capabilities",
     features: [
@@ -209,6 +229,7 @@ export default function LayerAccessRequest() {
     switch (color) {
       case 'green': return 'bg-green-600';
       case 'blue': return 'bg-blue-600';
+      case 'cyan': return 'bg-cyan-600';
       case 'purple': return 'bg-purple-600';
       case 'gold': return 'bg-yellow-600';
       default: return 'bg-gray-600';

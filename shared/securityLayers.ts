@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const SecurityLayerSchema = z.enum(['layer1', 'layer2', 'layer3', 'layer4', 'temp_founder']);
+export const SecurityLayerSchema = z.enum(['layer1', 'layer2', 'layer3', 'layer4', 'layer5', 'temp_founder']);
 export type SecurityLayer = z.infer<typeof SecurityLayerSchema>;
 
 export interface SecurityLayerConfig {
@@ -121,43 +121,82 @@ export const SECURITY_LAYERS: Record<SecurityLayer, SecurityLayerConfig> = {
   layer3: {
     id: 'layer3',
     name: 'Developer Arsenal',
-    description: 'Full development toolkit with customization access',
+    description: 'Advanced development tools with API access and integration capabilities',
     userType: 'Developers & Technical Teams',
     accessLevel: 3,
+    maxAnalysisPerDay: 500,
+    features: [
+      'Full REST API access with authentication tokens',
+      'Custom integration development tools',
+      'Webhook and real-time notification systems',
+      'Advanced scripting and automation capabilities',
+      'Custom dashboard and widget development',
+      'Third-party security tool integrations',
+      'Development sandbox environment',
+      'Technical documentation and SDKs',
+      'Priority developer support',
+      'Source code analysis tools',
+      'Custom rule engines',
+      'Advanced debugging tools',
+      'Plugin development framework'
+    ],
+    restrictions: [
+      'Limited to 500 scans per day',
+      'No enterprise collaboration features',
+      'Developer support only'
+    ],
+    pricing: {
+      tier: 'professional',
+      monthlyPrice: 299,
+      yearlyPrice: 2999
+    },
+    apiLimits: {
+      requestsPerHour: 150,
+      requestsPerDay: 500,
+      fileUploadSizeMB: 250
+    },
+    dataRetention: {
+      analysisDays: 60,
+      reportDays: 180,
+      logDays: 60
+    },
+    supportLevel: 'priority'
+  },
+  layer4: {
+    id: 'layer4',
+    name: 'Enterprise Command',
+    description: 'Comprehensive threat intelligence with team collaboration features',
+    userType: 'Enterprise Organizations',
+    accessLevel: 4,
     maxAnalysisPerDay: 1000,
     features: [
-      'Full API access',
-      'Custom model training',
-      'Advanced customization tools',
-      'Source code analysis',
-      'Custom integrations',
-      'Webhook support',
-      'Custom rule engines',
-      'Advanced scripting',
-      'White-label solutions',
-      'Custom dashboards',
-      'Advanced analytics',
-      'Machine learning tools',
-      'Sandbox environments',
-      'Custom algorithms',
-      'Full data export',
-      'Custom notifications',
-      'Advanced automation',
-      'Plugin development',
-      'Custom workflows'
+      'All Developer features included',
+      'Full MISP & OpenCTI integration',
+      'Machine learning threat predictions',
+      'Real-time team collaboration tools',
+      'Advanced export capabilities (PDF, DOCX, JSON, STIX)',
+      'Custom threat intelligence dashboards',
+      'Interactive security awareness games',
+      'Personalized security recommendations',
+      'One-click security health reports',
+      'Advanced analytics and reporting',
+      'Multi-tenant management',
+      'Custom workflows and automation',
+      'Enterprise SSO integration',
+      'Advanced compliance tools'
     ],
     restrictions: [
       'Limited to 1000 scans per day',
-      'No founder-level features',
-      'Priority support only'
+      'No founder-level administration',
+      'Enterprise support only'
     ],
     pricing: {
       tier: 'enterprise',
-      monthlyPrice: 499,
-      yearlyPrice: 4999
+      monthlyPrice: 999,
+      yearlyPrice: 9999
     },
     apiLimits: {
-      requestsPerHour: 200,
+      requestsPerHour: 300,
       requestsPerDay: 1000,
       fileUploadSizeMB: 500
     },
@@ -168,12 +207,12 @@ export const SECURITY_LAYERS: Record<SecurityLayer, SecurityLayerConfig> = {
     },
     supportLevel: 'priority'
   },
-  layer4: {
-    id: 'layer4',
+  layer5: {
+    id: 'layer5',
     name: 'Founder Nexus',
     description: 'Ultimate system control with founder-level privileges',
     userType: 'Founders & System Administrators',
-    accessLevel: 4,
+    accessLevel: 5,
     maxAnalysisPerDay: -1, // Unlimited
     features: [
       'Unlimited system access',
