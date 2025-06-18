@@ -7,6 +7,7 @@ import { aiSecurityService } from "./aiService";
 import { analysisService } from "./analysisService";
 import { advancedAnalysisService } from "./advancedAnalysisService";
 import { fixedAnalysisService } from "./fixedAnalysisService";
+import { advancedThreatIntelligenceService } from "./advancedThreatIntelligenceService";
 import { quantumBehavioralService } from "./quantumBehavioralService";
 import { realTimeThreatDetectionService } from "./realTimeThreatDetectionService";
 import { newsService } from "./newsService";
@@ -2674,7 +2675,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Analysis result is required" });
       }
 
-      const reportBuffer = await reportGenerationService.generateReport(analysisResult, format || 'pdf');
+      const reportBuffer = await reportGenerationService.generatePDFReport(analysisResult);
       
       const filename = `SatyaAI_Analysis_Report_${analysisResult.case_id}.${format || 'pdf'}`;
       const contentType = format === 'docx' ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf';
@@ -2686,6 +2687,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Report generation failed:", error);
       res.status(500).json({ 
         error: "Report generation failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Comprehensive Threat Intelligence API
+  app.get("/api/threat-intelligence/comprehensive", async (req, res) => {
+    try {
+      const query = req.query.query as string;
+      const result = await advancedThreatIntelligenceService.generateComprehensiveThreatAnalysis(query);
+      res.json(result);
+    } catch (error) {
+      console.error("Comprehensive threat intelligence failed:", error);
+      res.status(500).json({ 
+        error: "Comprehensive threat intelligence failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // MISP Integration API
+  app.get("/api/threat-intelligence/misp", async (req, res) => {
+    try {
+      const result = await advancedThreatIntelligenceService.getMISPIntegration();
+      res.json(result);
+    } catch (error) {
+      console.error("MISP integration failed:", error);
+      res.status(500).json({ 
+        error: "MISP integration failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // OpenCTI Integration API
+  app.get("/api/threat-intelligence/opencti", async (req, res) => {
+    try {
+      const result = await advancedThreatIntelligenceService.getOpenCTIIntegration();
+      res.json(result);
+    } catch (error) {
+      console.error("OpenCTI integration failed:", error);
+      res.status(500).json({ 
+        error: "OpenCTI integration failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Threat Intelligence Export API
+  app.post("/api/threat-intelligence/export", async (req, res) => {
+    try {
+      const { format, data } = req.body;
+
+      if (!data) {
+        return res.status(400).json({ error: "Threat intelligence data is required" });
+      }
+
+      // Generate comprehensive threat intelligence report
+      const reportBuffer = await reportGenerationService.generatePDFReport({
+        case_id: data.exportData?.reportId || 'TI-EXPORT',
+        analysis_date: new Date().toISOString(),
+        user_id: 'THREAT-INTEL-USER',
+        file_name: 'threat_intelligence_export',
+        file_size: 0,
+        file_type: 'application/json',
+        analysis_type: 'threat-intelligence' as any,
+        is_authentic: true,
+        authenticity: 'THREAT INTELLIGENCE EXPORT',
+        confidence: 100,
+        confidence_percentage: 100,
+        processing_time: '0ms',
+        key_findings: [
+          `Threat Level: ${data.threatLevel}`,
+          `Security Score: ${data.threatScore}/100`,
+          `Active Threats: ${data.quickSnapshot?.activeThreats || 0}`,
+          `Network Health: ${data.quickSnapshot?.networkHealth || 0}%`
+        ],
+        detailed_analysis: {
+          threat_predictions: data.predictions,
+          real_time_threats: data.realTimeThreats,
+          mitre_mapping: data.mitreMapping,
+          collaboration_data: data.collaborationData,
+          security_health: data.securityHealth,
+          personalized_recommendations: data.personalizedEngine
+        },
+        forensic_score: data.threatScore,
+        risk_level: data.threatLevel,
+        recommendation: data.recommendations?.immediate?.join('; ') || 'Comprehensive threat analysis completed'
+      });
+      
+      const filename = `ThreatIntelligence_Report_${new Date().toISOString().split('T')[0]}.${format.toLowerCase()}`;
+      const contentType = format === 'DOCX' ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'application/pdf';
+
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.send(reportBuffer);
+    } catch (error) {
+      console.error("Threat intelligence export failed:", error);
+      res.status(500).json({ 
+        error: "Threat intelligence export failed", 
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Team Collaboration API
+  app.post("/api/threat-intelligence/collaborate", async (req, res) => {
+    try {
+      const { type, content } = req.body;
+
+      // Simulate team collaboration features
+      const collaborationResult = {
+        success: true,
+        type,
+        timestamp: new Date().toISOString(),
+        sharedWith: ['Security Team', 'SOC Analysts', 'Incident Response'],
+        alertId: `ALERT-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        status: 'shared'
+      };
+
+      res.json(collaborationResult);
+    } catch (error) {
+      console.error("Collaboration failed:", error);
+      res.status(500).json({ 
+        error: "Collaboration failed", 
         details: error instanceof Error ? error.message : "Unknown error"
       });
     }
