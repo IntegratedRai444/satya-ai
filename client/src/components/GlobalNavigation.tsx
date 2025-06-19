@@ -91,28 +91,28 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
       description: 'Enterprise zero-trust security framework'
     },
     {
-      path: '/enterprise-portal',
-      label: 'Enterprise Hub',
-      icon: Building2,
-      description: 'Full enterprise command center'
+      path: '/machine-learning-prediction',
+      label: 'ML Threat Prediction',
+      icon: Activity,
+      description: 'Machine learning models for advanced threat prediction'
     },
     {
-      path: '/threat-intelligence',
-      label: 'Threat Intelligence',
+      path: '/real-time-collaboration',
+      label: 'Real-time Collaboration',
+      icon: Users,
+      description: 'Real-time collaboration features for security teams'
+    },
+    {
+      path: '/animated-threat-timeline',
+      label: 'Threat Timeline',
+      icon: Activity,
+      description: 'Animated threat timeline with interactive storytelling'
+    },
+    {
+      path: '/micro-animations',
+      label: 'Threat Indicators',
       icon: Eye,
-      description: 'Advanced threat intelligence platform'
-    },
-    {
-      path: '/identity-forensics',
-      label: 'Identity Forensics',
-      icon: Fingerprint,
-      description: 'Digital forensics and identity verification'
-    },
-    {
-      path: '/request-access',
-      label: 'Access Control',
-      icon: Key,
-      description: 'User access management and permissions'
+      description: 'Micro-animations for threat status indicators'
     }
   ];
 
@@ -149,16 +149,22 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
       description: 'Security awareness and training programs'
     },
     {
-      path: '/business-insights',
-      label: 'Business Insights',
-      icon: Eye,
-      description: 'Market intelligence and competitive analysis'
+      path: '/contextual-help',
+      label: 'Security Assistant',
+      icon: Bot,
+      description: 'Contextual help tooltips with playful security mascot'
     },
     {
-      path: '/risk-assessment',
-      label: 'Risk Assessment',
-      icon: Target,
-      description: 'Business risk evaluation and mitigation'
+      path: '/security-mood',
+      label: 'Security Mood',
+      icon: Activity,
+      description: 'One-click security mood generator'
+    },
+    {
+      path: '/whisper-mode',
+      label: 'Whisper Mode',
+      icon: Eye,
+      description: 'Low-intensity UI for sensitive environments'
     },
     {
       path: '/vendor-security',

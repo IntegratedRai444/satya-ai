@@ -26,6 +26,9 @@ import AIThreatHuntingSystem from "@/components/AIThreatHuntingSystem";
 import DeveloperDashboard from "@/components/DeveloperDashboard";
 import CompanyDashboard from "@/components/CompanyDashboard";
 import AccessControlWrapper from "@/components/AccessControlWrapper";
+import MachineLearningThreatPrediction from "@/components/MachineLearningThreatPrediction";
+import AnimatedThreatTimeline from "@/components/AnimatedThreatTimeline";
+import SecurityMoodGenerator from "@/components/SecurityMoodGenerator";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -158,6 +161,10 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
             <Route path="/unified" component={UnifiedCyberPlatform} />
             <Route path="/complete-hub" component={CompleteCyberIntelligenceHub} />
             <Route path="/cybernexus" component={CyberNexusCommandCenter} />
+            <Route path="/machine-learning-prediction" component={MachineLearningThreatPrediction} />
+            <Route path="/real-time-collaboration" component={RealTimeCollaboration} />
+            <Route path="/animated-threat-timeline" component={AnimatedThreatTimeline} />
+            <Route path="/micro-animations" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Threat Status Indicators - Micro-animations</div>} />
           </>
         )}
         
@@ -168,8 +175,9 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
             <Route path="/compliance-center" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Compliance Center - Business Feature</div>} />
             <Route path="/business-reports" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Business Reports - Executive Dashboard</div>} />
             <Route path="/employee-training" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Employee Training Portal - HR Management</div>} />
-            <Route path="/business-insights" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Business Insights - Market Intelligence</div>} />
-            <Route path="/risk-assessment" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Risk Assessment - Business Risk Management</div>} />
+            <Route path="/contextual-help" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Security Assistant - Contextual help tooltips with playful security mascot</div>} />
+            <Route path="/security-mood" component={SecurityMoodGenerator} />
+            <Route path="/whisper-mode" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Whisper Mode - Low-intensity UI for sensitive environments</div>} />
             <Route path="/vendor-security" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Vendor Security Management - Third-party Risk</div>} />
           </>
         )}
