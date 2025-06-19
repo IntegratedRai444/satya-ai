@@ -1,440 +1,318 @@
 import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Shield, 
-  Brain, 
-  Eye, 
-  Zap, 
-  Lock, 
-  Fingerprint,
-  KeyRound,
-  Crown,
-  Sparkles,
-  AlertTriangle,
-  CheckCircle
+// Removed react-query dependency to avoid QueryClient requirement
+import {
+  Shield,
+  Lock,
+  User,
+  Eye,
+  EyeOff,
+  Mail,
+  Key,
+  Building2,
+  Settings,
+  Zap,
+  Brain,
+  Globe,
+  Target
 } from 'lucide-react';
 
-interface LoginProps {
-  onLogin: (userType: 'founder' | 'normal', userData: any) => void;
+interface LoginCredentials {
+  email: string;
+  password: string;
 }
 
-export default function LoginPage({ onLogin }: LoginProps) {
-  const [mode, setMode] = useState<'login' | 'register'>('login');
-  const [credentials, setCredentials] = useState({
-    username: '',
+interface AuthenticatedUser {
+  id: string;
+  email: string;
+  accessLevel: 'developer' | 'company' | 'basic';
+  permissions: string[];
+  status: 'active';
+}
+
+// Authorized users database
+const AUTHORIZED_USERS = [
+  {
+    id: 'dev-001',
+    email: 'rishabhkapoor@atomicmail.io',
+    password: 'Rai444',
+    accessLevel: 'developer' as const,
+    permissions: [
+      'Full System Access',
+      'Developer Tools', 
+      'Admin Panel',
+      'All Features',
+      'Code Access',
+      'API Management',
+      'System Configuration',
+      'User Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'comp-001', 
+    email: 'rishabhkap0444@gmail.com',
+    password: 'Rishabhkapoor@0444',
+    accessLevel: 'company' as const,
+    permissions: [
+      'Company Dashboard',
+      'Team Reports', 
+      'Analytics',
+      'User Management',
+      'Compliance Reports',
+      'Security Overview',
+      'Team Management'
+    ],
+    status: 'active' as const
+  }
+];
+
+interface LoginPageProps {
+  onLogin: (user: AuthenticatedUser) => void;
+}
+
+export default function LoginPage({ onLogin }: LoginPageProps) {
+  const [credentials, setCredentials] = useState<LoginCredentials>({
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [loginAttempts, setLoginAttempts] = useState(0);
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAuthentication = async (loginData: LoginCredentials) => {
     setIsLoading(true);
-
-    if (mode === 'register') {
-      await handleRegister();
-    } else {
-      await handleLogin();
-    }
-
-    setIsLoading(false);
-  };
-
-  const handleRegister = async () => {
-    // Validate registration fields
-    if (!credentials.username || !credentials.email || !credentials.password || !credentials.confirmPassword) {
-      toast({
-        title: "Registration Failed",
-        description: "Please fill in all required fields.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (credentials.password !== credentials.confirmPassword) {
-      toast({
-        title: "Registration Failed",
-        description: "Passwords do not match.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (credentials.password.length < 8) {
-      toast({
-        title: "Registration Failed",
-        description: "Password must be at least 8 characters long.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Simulate registration delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // Store user in localStorage (in production, this would be a proper API call)
-    const userData = {
-      id: `user_${Date.now()}`,
-      username: credentials.username,
-      email: credentials.email,
-      password: credentials.password, // In production, this would be hashed
-      createdAt: new Date().toISOString()
-    };
-
-    const existingUsers = JSON.parse(localStorage.getItem('satyaai_users') || '[]');
     
-    // Check if user already exists
-    if (existingUsers.some((user: any) => user.username === credentials.username || user.email === credentials.email)) {
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Authenticate against authorized users
+      const user = AUTHORIZED_USERS.find(
+        u => u.email === loginData.email && u.password === loginData.password
+      );
+      
+      if (!user) {
+        throw new Error('Invalid credentials. Please check your email and password.');
+      }
+      
+      if (user.status !== 'active') {
+        throw new Error('Account is not active. Please contact administrator.');
+      }
+
+      const authenticatedUser = {
+        id: user.id,
+        email: user.email,
+        accessLevel: user.accessLevel,
+        permissions: user.permissions,
+        status: user.status
+      };
+
       toast({
-        title: "Registration Failed",
-        description: "Username or email already exists.",
+        title: "Login Successful",
+        description: `Welcome! You have ${user.accessLevel} access level.`
+      });
+      
+      onLogin(authenticatedUser);
+    } catch (error: any) {
+      toast({
+        title: "Login Failed",
+        description: error.message,
         variant: "destructive"
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    existingUsers.push(userData);
-    localStorage.setItem('satyaai_users', JSON.stringify(existingUsers));
-
-    toast({
-      title: "Registration Successful",
-      description: "Account created successfully. You can now login.",
-      variant: "default"
-    });
-
-    // Switch to login mode
-    setMode('login');
-    setCredentials({ username: '', email: '', password: '', confirmPassword: '' });
   };
 
-  const handleLogin = async () => {
-    // Simulate authentication delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Check founder credentials (with reset password option)
-    if (credentials.username === 'Rishabh kapoor' && (credentials.password === 'Rishabhkapoor@0444' || credentials.password === 'Rai444')) {
-      // Founder access
-      const founderData = {
-        id: 'founder_001',
-        name: 'Rishabh Kapoor',
-        role: 'Founder & CEO',
-        accessLevel: 'ROOT_ADMIN',
-        permissions: [
-          'AGENT_CONTROL',
-          'TELEMETRY_MASTER',
-          'RED_TEAM_SIM',
-          'VAULT_ACCESS',
-          'AUTO_PATCH',
-          'CLOAKING_CONTROL'
-        ],
-        avatar: '👑',
-        specialAccess: true,
-        lastLogin: new Date().toISOString()
-      };
-
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!credentials.email || !credentials.password) {
       toast({
-        title: "Founder Access Granted",
-        description: "Welcome back, Rishabh. Full SatyaX control activated.",
-        variant: "default"
+        title: "Missing Information",
+        description: "Please enter both email and password",
+        variant: "destructive"
       });
-
-      onLogin('founder', founderData);
       return;
     }
 
-    // Check registered users
-    const existingUsers = JSON.parse(localStorage.getItem('satyaai_users') || '[]');
-    const user = existingUsers.find((u: any) => 
-      (u.username === credentials.username || u.email === credentials.username) && 
-      u.password === credentials.password
-    );
+    handleAuthentication(credentials);
+  };
 
-    if (user) {
-      // Registered user access
-      const normalUserData = {
-        id: user.id,
-        name: user.username,
-        email: user.email,
-        role: 'Security Analyst',
-        accessLevel: 'STANDARD',
-        permissions: [
-          'DASHBOARD_VIEW',
-          'THREAT_ANALYSIS',
-          'REPORT_GENERATION',
-          'BASIC_CONTROLS'
-        ],
-        avatar: '👤',
-        specialAccess: false,
-        lastLogin: new Date().toISOString()
-      };
+  const getAccessLevelIcon = (level: string) => {
+    switch (level) {
+      case 'developer': return <Settings className="w-4 h-4 text-green-400" />;
+      case 'company': return <Building2 className="w-4 h-4 text-cyan-400" />;
+      default: return <User className="w-4 h-4 text-blue-400" />;
+    }
+  };
 
-      toast({
-        title: "Access Granted",
-        description: `Welcome back, ${user.username}!`,
-        variant: "default"
-      });
-
-      onLogin('normal', normalUserData);
-    } else if (credentials.username && credentials.password) {
-      // Demo access for any other credentials
-      const demoUserData = {
-        id: `demo_${Date.now()}`,
-        name: credentials.username,
-        role: 'Demo User',
-        accessLevel: 'DEMO',
-        permissions: [
-          'DASHBOARD_VIEW',
-          'BASIC_CONTROLS'
-        ],
-        avatar: '🎯',
-        specialAccess: false,
-        lastLogin: new Date().toISOString()
-      };
-
-      toast({
-        title: "Demo Access Granted",
-        description: `Welcome to SatyaAI Demo, ${credentials.username}`,
-        variant: "default"
-      });
-
-      onLogin('normal', demoUserData);
-    } else {
-      // Failed login
-      setLoginAttempts(prev => prev + 1);
-      toast({
-        title: "Authentication Failed",
-        description: "Invalid credentials. Please try again.",
-        variant: "destructive"
-      });
+  const getAccessLevelColor = (level: string) => {
+    switch (level) {
+      case 'developer': return 'text-green-400 border-green-400';
+      case 'company': return 'text-cyan-400 border-cyan-400';
+      default: return 'text-blue-400 border-blue-400';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black flex items-center justify-center p-6">
-      {/* Animated Background */}
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900" />
+      
+      {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl top-20 left-20 animate-pulse"></div>
-        <div className="absolute w-80 h-80 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl bottom-20 right-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute w-64 h-64 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-full blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-600/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="p-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl">
-              <Shield className="w-12 h-12 text-cyan-400" />
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl">
+              <Shield className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-white">SatyaAI</h1>
-              <p className="text-cyan-400 font-medium">Cyber Intelligence Platform</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                SatyaAI
+              </h1>
+              <p className="text-slate-400 text-sm">Cyber Intelligence Platform</p>
             </div>
           </div>
-          
-          <Badge className="bg-purple-500/20 text-purple-200 border border-purple-500/40 px-4 py-2 mb-4">
-            <Crown className="w-4 h-4 mr-2" />
-            Secure Access Portal
-          </Badge>
+          <p className="text-slate-300">
+            Secure access to advanced cybersecurity intelligence and analysis tools
+          </p>
         </div>
 
-        {/* Login Card */}
-        <Card className="bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 shadow-2xl">
-          <CardHeader className="text-center pb-6">
-            <CardTitle className="text-2xl font-bold text-white flex items-center justify-center gap-2">
-              <KeyRound className="w-6 h-6 text-cyan-400" />
-              {mode === 'register' ? 'Create Account' : 'Secure Authentication'}
+        {/* Login Form */}
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-center justify-center">
+              <Lock className="w-5 h-5 text-blue-400" />
+              Secure Login
             </CardTitle>
-            <CardDescription className="text-gray-300">
-              {mode === 'register' 
-                ? 'Create your SatyaAI account to access advanced cybersecurity features'
-                : 'Enter your credentials to access the cybersecurity dashboard'
-              }
-            </CardDescription>
           </CardHeader>
-          
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="username" className="text-gray-300 font-medium">
-                    {mode === 'register' ? 'Username' : 'Username or Email'}
-                  </Label>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-slate-300">Email Address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
-                    id="username"
-                    type="text"
-                    value={credentials.username}
-                    onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
-                    placeholder={mode === 'register' ? "Choose a username" : "Enter username or email"}
-                    className="bg-gray-800 border-gray-700 text-white focus:border-cyan-500 focus:ring-cyan-500 mt-2"
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={credentials.email}
+                    onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
+                    className="pl-10 bg-slate-800 border-slate-700 focus:border-blue-500"
                     required
                   />
                 </div>
+              </div>
 
-                {mode === 'register' && (
-                  <div>
-                    <Label htmlFor="email" className="text-gray-300 font-medium">Email Address</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={credentials.email}
-                      onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
-                      placeholder="Enter your email address"
-                      className="bg-gray-800 border-gray-700 text-white focus:border-cyan-500 focus:ring-cyan-500 mt-2"
-                      required
-                    />
-                  </div>
-                )}
-                
-                <div>
-                  <Label htmlFor="password" className="text-gray-300 font-medium">Password</Label>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-slate-300">Password</Label>
+                <div className="relative">
+                  <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
                     value={credentials.password}
                     onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
-                    placeholder={mode === 'register' ? "Create a strong password (min 8 chars)" : "Enter your password"}
-                    className="bg-gray-800 border-gray-700 text-white focus:border-cyan-500 focus:ring-cyan-500 mt-2"
+                    className="pl-10 pr-10 bg-slate-800 border-slate-700 focus:border-blue-500"
                     required
                   />
-                </div>
-
-                {mode === 'register' && (
-                  <div>
-                    <Label htmlFor="confirmPassword" className="text-gray-300 font-medium">Confirm Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={credentials.confirmPassword}
-                      onChange={(e) => setCredentials(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                      placeholder="Confirm your password"
-                      className="bg-gray-800 border-gray-700 text-white focus:border-cyan-500 focus:ring-cyan-500 mt-2"
-                      required
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Security Features */}
-              <div className="grid grid-cols-2 gap-4 py-4">
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Fingerprint className="w-4 h-4 text-green-400" />
-                  <span>Biometric Ready</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Eye className="w-4 h-4 text-blue-400" />
-                  <span>Behavioral Auth</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Brain className="w-4 h-4 text-purple-400" />
-                  <span>AI Verified</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Lock className="w-4 h-4 text-cyan-400" />
-                  <span>Zero Trust</span>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-300"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
-
-              {/* Login Attempts Warning */}
-              {loginAttempts > 0 && (
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-400" />
-                    <span className="text-red-400 text-sm">
-                      {loginAttempts} failed attempt{loginAttempts > 1 ? 's' : ''} detected
-                    </span>
-                  </div>
-                </div>
-              )}
 
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white py-3 font-semibold text-lg transition-all duration-300 transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3"
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
-                    <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-                    <span>{mode === 'register' ? 'Creating Account...' : 'Authenticating...'}</span>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Authenticating...
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <Zap className="w-5 h-5" />
-                    <span>{mode === 'register' ? 'Create Account' : 'Secure Login'}</span>
+                    <Shield className="w-4 h-4" />
+                    Secure Login
                   </div>
                 )}
               </Button>
-
-              {/* Mode Toggle */}
-              <div className="text-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMode(mode === 'login' ? 'register' : 'login');
-                    setCredentials({ username: '', email: '', password: '', confirmPassword: '' });
-                    setLoginAttempts(0);
-                  }}
-                  className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
-                >
-                  {mode === 'login' 
-                    ? "Don't have an account? Create one here" 
-                    : "Already have an account? Sign in here"
-                  }
-                </button>
-              </div>
             </form>
+          </CardContent>
+        </Card>
 
-            {/* Additional Info */}
-            <div className="mt-6 pt-6 border-t border-gray-700/50">
-              <div className="text-center text-sm text-gray-400">
-                <p className="mb-2">Powered by Advanced AI Security</p>
-                <div className="flex items-center justify-center gap-4">
-                  <div className="flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3 text-green-400" />
-                    <span className="text-xs">256-bit Encryption</span>
+        {/* Authorized Access Levels */}
+        <Card className="mt-6 bg-slate-900/80 backdrop-blur-sm border-slate-800">
+          <CardHeader>
+            <CardTitle className="text-center text-sm text-slate-400">
+              Authorized Access Levels
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {AUTHORIZED_USERS.map((user) => (
+                <div key={user.id} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    {getAccessLevelIcon(user.accessLevel)}
+                    <div>
+                      <p className="text-sm font-medium text-slate-300">{user.accessLevel.toUpperCase()}</p>
+                      <p className="text-xs text-slate-500">{user.email}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3 text-green-400" />
-                    <span className="text-xs">Multi-Factor Auth</span>
-                  </div>
+                  <Badge variant="outline" className={getAccessLevelColor(user.accessLevel)}>
+                    {user.status.toUpperCase()}
+                  </Badge>
                 </div>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
 
-        {/* Demo Credentials */}
-        <div className="mt-6 bg-gray-900/50 backdrop-blur-xl border border-gray-700/50 rounded-xl p-4">
-          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-yellow-400" />
-            Demo Access Levels
-          </h3>
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-300">Founder Access:</span>
-              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
-                <Crown className="w-3 h-3 mr-1" />
-                Root Admin
-              </Badge>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-gray-300">Standard Access:</span>
-              <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">
-                Security Analyst
-              </Badge>
-            </div>
-            <p className="text-gray-400 text-xs mt-3">
-              Use any credentials for standard access, or founder credentials for full control
-            </p>
+        {/* Platform Features */}
+        <div className="mt-6 grid grid-cols-2 gap-4 text-center">
+          <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-800">
+            <Brain className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+            <p className="text-xs text-slate-400">AI-Powered Analysis</p>
           </div>
+          <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-800">
+            <Target className="w-6 h-6 text-red-400 mx-auto mb-2" />
+            <p className="text-xs text-slate-400">Threat Intelligence</p>
+          </div>
+          <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-800">
+            <Zap className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
+            <p className="text-xs text-slate-400">Real-time Detection</p>
+          </div>
+          <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-800">
+            <Globe className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+            <p className="text-xs text-slate-400">Global Security</p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-xs text-slate-500">
+            Powered by SatyaAI • Advanced Cybersecurity Intelligence Platform
+          </p>
         </div>
       </div>
     </div>

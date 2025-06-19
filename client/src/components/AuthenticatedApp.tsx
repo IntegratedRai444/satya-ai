@@ -71,67 +71,33 @@ interface UserData {
   lastLogin: string;
 }
 
-export default function AuthenticatedApp() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userType, setUserType] = useState<'founder' | 'normal' | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
+interface AuthenticatedUser {
+  id: string;
+  email: string;
+  accessLevel: 'developer' | 'company' | 'basic';
+  permissions: string[];
+  status: 'active';
+}
 
-  const handleLogin = (type: 'founder' | 'normal', data: UserData) => {
-    setIsAuthenticated(true);
-    setUserType(type);
-    setUserData(data);
-    
-    // Store session in localStorage for persistence
-    localStorage.setItem('satyaai_session', JSON.stringify({
-      isAuthenticated: true,
-      userType: type,
-      userData: data,
-      timestamp: Date.now()
-    }));
+interface AuthenticatedAppProps {
+  user: AuthenticatedUser;
+  onLogout: () => void;
+}
+
+export default function AuthenticatedApp({ user, onLogout }: AuthenticatedAppProps) {
+  const [isAuthenticated] = useState(true);
+  const [userType] = useState<'founder' | 'normal'>('normal');
+  const userData: UserData = {
+    email: user.email,
+    accessLevel: user.accessLevel,
+    permissions: user.permissions,
+    specialAccess: user.accessLevel === 'developer',
+    lastLogin: new Date().toISOString()
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    setUserType(null);
-    setUserData(null);
-    localStorage.removeItem('satyaai_session');
+    onLogout();
   };
-
-  // Check for existing session on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('satyaai_session');
-    if (stored) {
-      try {
-        const session = JSON.parse(stored);
-        const hoursPassed = (Date.now() - session.timestamp) / (1000 * 60 * 60);
-        
-        // Session expires after 24 hours
-        if (hoursPassed < 24 && session.isAuthenticated) {
-          setIsAuthenticated(true);
-          setUserType(session.userType);
-          setUserData(session.userData);
-        } else {
-          localStorage.removeItem('satyaai_session');
-        }
-      } catch {
-        localStorage.removeItem('satyaai_session');
-      }
-    }
-  }, []);
-
-  // Show login page if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <div className="dark">
-            <Toaster />
-            <LoginPage onLogin={handleLogin} />
-          </div>
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
 
   // Show founder portal for special access
   if (userType === 'founder' && userData?.specialAccess) {
