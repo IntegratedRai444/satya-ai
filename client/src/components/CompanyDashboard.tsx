@@ -23,7 +23,7 @@ import {
 interface AuthenticatedUser {
   id: string;
   email: string;
-  accessLevel: 'developer' | 'company' | 'basic';
+  accessLevel: 'founder' | 'developer' | 'company' | 'basic';
   permissions: string[];
   status: 'active';
 }

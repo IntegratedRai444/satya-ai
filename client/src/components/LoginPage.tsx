@@ -30,13 +30,29 @@ interface LoginCredentials {
 interface AuthenticatedUser {
   id: string;
   email: string;
-  accessLevel: 'developer' | 'company' | 'basic';
+  accessLevel: 'founder' | 'developer' | 'company' | 'basic';
   permissions: string[];
   status: 'active';
 }
 
 // Authorized users database
 const AUTHORIZED_USERS = [
+  {
+    id: 'founder-001',
+    email: 'founder@satyaai.com',
+    password: 'FounderAccess2024',
+    accessLevel: 'founder' as const,
+    permissions: [
+      'Founder Control',
+      'All System Access',
+      'Complete Platform Control',
+      'User Management',
+      'System Configuration',
+      'All Features',
+      'Admin Override'
+    ],
+    status: 'active' as const
+  },
   {
     id: 'dev-001',
     email: 'rishabhkapoor@atomicmail.io',
@@ -67,6 +83,18 @@ const AUTHORIZED_USERS = [
       'Compliance Reports',
       'Security Overview',
       'Team Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'basic-001',
+    email: 'user@demo.com',
+    password: 'demo123',
+    accessLevel: 'basic' as const,
+    permissions: [
+      'Basic Analysis',
+      'Security Reports',
+      'Limited Access'
     ],
     status: 'active' as const
   }

@@ -80,7 +80,7 @@ interface UserData {
 interface AuthenticatedUser {
   id: string;
   email: string;
-  accessLevel: 'developer' | 'company' | 'basic';
+  accessLevel: 'founder' | 'developer' | 'company' | 'basic';
   permissions: string[];
   status: 'active';
 }
@@ -139,7 +139,9 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
       <Switch>
         <Route path="/" component={() => {
           // Dynamic dashboard based on user access level
-          if (user.accessLevel === 'developer') {
+          if (user.accessLevel === 'founder') {
+            return <FounderAccessControl />;
+          } else if (user.accessLevel === 'developer') {
             return <DeveloperDashboard user={user} />;
           } else if (user.accessLevel === 'company') {
             return <CompanyDashboard user={user} />;
@@ -218,6 +220,30 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
             <Route path="/unified-security" component={StreamlinedSecurityPortal} />
             <Route path="/security-layers" component={SecurityLayerManager} />
             <Route path="/access-requests" component={AccessRequestManager} />
+          </>
+        )}
+
+        {/* FOUNDER ACCESS - Complete Platform Control */}
+        {user.accessLevel === 'founder' && (
+          <>
+            <Route path="/founder-control" component={FounderAccessControl} />
+            <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
+            <Route path="/quantum-security" component={QuantumSecurityLab} />
+            <Route path="/ai-threat-hunting" component={AIThreatHuntingSystem} />
+            <Route path="/behavioral-intelligence" component={AdvancedBehavioralIntelligence} />
+            <Route path="/zero-trust" component={ZeroTrustArchitecture} />
+            <Route path="/machine-learning-prediction" component={MachineLearningThreatPrediction} />
+            <Route path="/animated-threat-timeline" component={AnimatedThreatTimeline} />
+            <Route path="/security-mood" component={SecurityMoodGenerator} />
+            <Route path="/real-time-analysis" component={RealTimeAnalysis} />
+            <Route path="/comprehensive-threat-intelligence" component={ComprehensiveThreatIntelligence} />
+            <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
+            <Route path="/startup-audit" component={StartupSecurityAudit} />
+            <Route path="/team-management" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Founder Team Management Portal</div>} />
+            <Route path="/compliance-center" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Founder Compliance Center</div>} />
+            <Route path="/real-time-collaboration" component={RealTimeCollaboration} />
+            <Route path="/threat-map" component={InteractiveThreatMap} />
+            <Route path="/threat-prediction" component={AdvancedThreatPrediction} />
           </>
         )}
 

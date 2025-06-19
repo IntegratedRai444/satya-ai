@@ -38,7 +38,7 @@ import { Button } from '@/components/ui/button';
 interface AuthenticatedUser {
   id: string;
   email: string;
-  accessLevel: 'developer' | 'company' | 'basic';
+  accessLevel: 'founder' | 'developer' | 'company' | 'basic';
   permissions: string[];
   status: 'active';
 }
@@ -202,11 +202,77 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
     }
   ];
 
+  // Founder Access - Complete Platform Control
+  const founderPortals = [
+    {
+      path: '/',
+      label: 'Founder Control',
+      icon: Crown,
+      description: 'Complete platform oversight and control'
+    },
+    {
+      path: '/unified-analysis',
+      label: 'Master Analysis',
+      icon: Scan,
+      description: 'Supreme analysis authority with all capabilities'
+    },
+    {
+      path: '/quantum-security',
+      label: 'Quantum Security',
+      icon: Zap,
+      description: 'Advanced quantum computing and cryptography'
+    },
+    {
+      path: '/ai-threat-hunting',
+      label: 'AI Threat Hunting',
+      icon: Target,
+      description: 'Master AI threat detection and response'
+    },
+    {
+      path: '/machine-learning-prediction',
+      label: 'ML Predictions',
+      icon: Brain,
+      description: 'Machine learning threat forecasting'
+    },
+    {
+      path: '/animated-threat-timeline',
+      label: 'Threat Timeline',
+      icon: Activity,
+      description: 'Interactive threat storytelling'
+    },
+    {
+      path: '/security-mood',
+      label: 'Security Mood',
+      icon: Activity,
+      description: 'Platform-wide security mood control'
+    },
+    {
+      path: '/real-time-analysis',
+      label: 'Real-time Analysis',
+      icon: Eye,
+      description: 'Live system monitoring and analysis'
+    },
+    {
+      path: '/comprehensive-threat-intelligence',
+      label: 'Threat Intelligence',
+      icon: Shield,
+      description: 'Complete threat intelligence oversight'
+    },
+    {
+      path: '/founder-control',
+      label: 'System Override',
+      icon: Settings,
+      description: 'Ultimate system control and configuration'
+    }
+  ];
+
   // Select portals based on user access level
   const getPortalsByAccessLevel = () => {
     if (!user) return basicPortals;
     
     switch (user.accessLevel) {
+      case 'founder':
+        return founderPortals;
       case 'developer':
         return developerPortals;
       case 'company':
