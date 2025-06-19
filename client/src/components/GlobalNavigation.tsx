@@ -237,6 +237,36 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
       label: 'Security Training',
       icon: GraduationCap,
       description: 'Basic security awareness training'
+    },
+    {
+      path: '/personal-security',
+      label: 'Personal Security',
+      icon: User,
+      description: 'Individual security assessment and tips'
+    },
+    {
+      path: '/security-calculator',
+      label: 'Security Calculator',
+      icon: BarChart3,
+      description: 'Calculate your security score and risks'
+    },
+    {
+      path: '/security-tips',
+      label: 'Daily Security Tips',
+      icon: Eye,
+      description: 'Practical daily security recommendations'
+    },
+    {
+      path: '/incident-reporter',
+      label: 'Incident Reporter',
+      icon: AlertTriangle,
+      description: 'Report security incidents easily'
+    },
+    {
+      path: '/ai-security-agent',
+      label: 'AI Security Agent',
+      icon: Bot,
+      description: 'Intelligent security assistant with detailed insights'
     }
   ];
 

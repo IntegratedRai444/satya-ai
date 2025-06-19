@@ -31,6 +31,9 @@ import AnimatedThreatTimeline from "@/components/AnimatedThreatTimeline";
 import SecurityMoodGenerator from "@/components/SecurityMoodGenerator";
 import DailySecurityReports from "@/components/DailySecurityReports";
 import MessageCenter from "@/components/MessageCenter";
+import AISecurityAgent from "@/components/AISecurityAgent";
+import PersonalSecurityAssessment from "@/components/PersonalSecurityAssessment";
+import SecurityCalculator from "@/components/SecurityCalculator";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -209,6 +212,11 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
             <Route path="/behavior" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Behavioral Analysis - User Pattern Recognition</div>} />
             <Route path="/news" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Real-time News Dashboard - Cybersecurity Updates</div>} />
             <Route path="/news-intelligence" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">News Intelligence - AI-powered Insights</div>} />
+            <Route path="/ai-security-agent" component={AISecurityAgent} />
+            <Route path="/personal-security" component={PersonalSecurityAssessment} />
+            <Route path="/security-calculator" component={SecurityCalculator} />
+            <Route path="/security-tips" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Daily Security Tips - Practical Recommendations</div>} />
+            <Route path="/incident-reporter" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Incident Reporter - Easy Security Reporting</div>} />
           </>
         )}
         {/* DEVELOPER-ONLY Advanced Features */}
