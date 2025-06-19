@@ -144,73 +144,127 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
             return <SatyaAIExactDashboard />;
           }
         }} />
-        <Route path="/analysis" component={UnifiedAnalysis} />
-        <Route path="/ai-employee-request" component={AIEmployeeRequestForm} />
-        <Route path="/3d-landing" component={CyberTech3DLanding} />
-        <Route path="/unified" component={UnifiedCyberPlatform} />
-        <Route path="/satyaai-exact" component={SatyaAIExactDesign} />
-        <Route path="/satyaai" component={SatyaAIDashboard} />
-        <Route path="/satyaai-3d" component={SatyaAI3DComplete} />
-        <Route path="/complete-hub" component={CompleteCyberIntelligenceHub} />
-        <Route path="/complete-front" component={CompleteFrontPage} />
-        <Route path="/extensive-front" component={CyberNexusCommandCenter} />
-        <Route path="/cybernexus" component={CyberNexusCommandCenter} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/enterprise" component={Holographic3DPortal} />
-        <Route path="/enterprise-saas" component={EnterpriseSaaS} />
-        <Route path="/security" component={AdvancedSecurityFeatures} />
-        <Route path="/advanced-security" component={AdvancedSecurityFeatures} />
-        <Route path="/behavior" component={BehaviorTrustDashboard} />
-        <Route path="/news" component={RealTimeNewsDashboard} />
-        <Route path="/identity-forensics" component={IdentityForensicsLab} />
-        <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
-        <Route path="/request-access" component={RequestAccessPortal} />
-        <Route path="/security-features" component={StreamlinedSecurityCenter} />
-        <Route path="/quantum-security" component={() => (
-          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['Full System Access']}>
-            <QuantumSecurityLab />
-          </AccessControlWrapper>
-        )} />
-        <Route path="/behavioral-intelligence" component={() => (
-          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['AI behavioral analysis']}>
-            <AdvancedBehavioralIntelligence />
-          </AccessControlWrapper>
-        )} />
-        <Route path="/zero-trust" component={() => (
-          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['Enterprise zero-trust security']}>
-            <ZeroTrustArchitecture />
-          </AccessControlWrapper>
-        )} />
-        <Route path="/ai-threat-hunting" component={() => (
-          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['Advanced AI-powered threat detection']}>
-            <AIThreatHuntingSystem />
-          </AccessControlWrapper>
-        )} />
-        <Route path="/legitimacy-analyzer" component={LegitimacyThreatAnalyzer} />
-        <Route path="/cybercrime-law" component={CybercrimeLawCenter} />
-        <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
-        <Route path="/startup-audit" component={StartupSecurityAudit} />
-        <Route path="/cyber-ai" component={ComprehensiveCyberAI} />
-        <Route path="/suraksha" component={SuRakshaSecurityPlatform} />
-        <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
-        <Route path="/ai-access-request" component={AIAccessRequestForm} />
-        <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
-        <Route path="/unified-security" component={StreamlinedSecurityPortal} />
-        <Route path="/security-layers" component={SecurityLayerManager} />
-        <Route path="/access-requests" component={AccessRequestManager} />
-        <Route path="/founder-control" component={FounderAccessControl} />
-        <Route path="/real-time-analysis" component={RealTimeAnalysis} />
-        <Route path="/comprehensive-threat-intelligence" component={ComprehensiveThreatIntelligence} />
-        <Route path="/request-access" component={LayerAccessRequest} />
-        <Route path="/founder-notifications" component={FounderNotificationCenter} />
-        <Route path="/advanced-analysis" component={AdvancedAnalysisInterface} />
-        <Route path="/threat-prediction" component={AdvancedThreatPrediction} />
-        <Route path="/collaboration" component={RealTimeCollaboration} />
-        <Route path="/threat-map" component={InteractiveThreatMap} />
-        <Route path="/soundscape" component={SecurityAlertSoundscape} />
-        <Route path="/ai-coach" component={AISecurityPersonaCoach} />
-        <Route path="/enterprise-portal" component={EnterprisePortal3D} />
-        <Route path="/ultra-detection" component={UltraPowerfulDetectionSystem} />
+        
+        {/* DEVELOPER ACCESS ONLY - Advanced Technical Tools */}
+        {user.accessLevel === 'developer' && (
+          <>
+            <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
+            <Route path="/request-access" component={RequestAccessPortal} />
+            <Route path="/identity-forensics" component={IdentityForensicsLab} />
+            <Route path="/security-features" component={StreamlinedSecurityCenter} />
+            <Route path="/enterprise" component={Holographic3DPortal} />
+            <Route path="/enterprise-saas" component={EnterpriseSaaS} />
+            <Route path="/advanced-security" component={AdvancedSecurityFeatures} />
+            <Route path="/unified" component={UnifiedCyberPlatform} />
+            <Route path="/complete-hub" component={CompleteCyberIntelligenceHub} />
+            <Route path="/cybernexus" component={CyberNexusCommandCenter} />
+          </>
+        )}
+        
+        {/* COMPANY ACCESS ONLY - Business Management Tools */}
+        {user.accessLevel === 'company' && (
+          <>
+            <Route path="/team-management" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Team Management Portal - Business Feature</div>} />
+            <Route path="/compliance-center" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Compliance Center - Business Feature</div>} />
+            <Route path="/business-reports" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Business Reports - Executive Dashboard</div>} />
+            <Route path="/employee-training" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Employee Training Portal - HR Management</div>} />
+            <Route path="/business-insights" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Business Insights - Market Intelligence</div>} />
+            <Route path="/risk-assessment" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Risk Assessment - Business Risk Management</div>} />
+            <Route path="/vendor-security" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Vendor Security Management - Third-party Risk</div>} />
+          </>
+        )}
+        
+        {/* BASIC ACCESS ONLY - Limited Analysis Tools */}
+        {user.accessLevel === 'basic' && (
+          <>
+            <Route path="/analysis" component={UnifiedAnalysis} />
+            <Route path="/ai-employee-request" component={AIEmployeeRequestForm} />
+            <Route path="/3d-landing" component={CyberTech3DLanding} />
+            <Route path="/satyaai-exact" component={SatyaAIExactDesign} />
+            <Route path="/satyaai" component={SatyaAIDashboard} />
+            <Route path="/satyaai-3d" component={SatyaAI3DComplete} />
+            <Route path="/complete-front" component={CompleteFrontPage} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/security" component={AdvancedSecurityFeatures} />
+            <Route path="/behavior" component={BehaviorTrustDashboard} />
+            <Route path="/news" component={RealTimeNewsDashboard} />
+          </>
+        )}
+        {/* DEVELOPER-ONLY Advanced Features */}
+        {user.accessLevel === 'developer' && (
+          <>
+            <Route path="/quantum-security" component={QuantumSecurityLab} />
+            <Route path="/behavioral-intelligence" component={AdvancedBehavioralIntelligence} />
+            <Route path="/zero-trust" component={ZeroTrustArchitecture} />
+            <Route path="/ai-threat-hunting" component={AIThreatHuntingSystem} />
+          </>
+        )}
+        {/* DEVELOPER-ONLY Additional Tools */}
+        {user.accessLevel === 'developer' && (
+          <>
+            <Route path="/legitimacy-analyzer" component={LegitimacyThreatAnalyzer} />
+            <Route path="/cybercrime-law" component={CybercrimeLawCenter} />
+            <Route path="/cyber-ai" component={ComprehensiveCyberAI} />
+            <Route path="/suraksha" component={SuRakshaSecurityPlatform} />
+            <Route path="/intelligent-workforce" component={IntelligentWorkforceCreator} />
+            <Route path="/unified-security" component={StreamlinedSecurityPortal} />
+            <Route path="/security-layers" component={SecurityLayerManager} />
+            <Route path="/access-requests" component={AccessRequestManager} />
+          </>
+        )}
+
+        {/* COMPANY-ONLY Additional Features */}
+        {user.accessLevel === 'company' && (
+          <>
+            <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
+            <Route path="/startup-audit" component={StartupSecurityAudit} />
+            <Route path="/ai-access-request" component={AIAccessRequestForm} />
+            <Route path="/cybersecurity-academy" component={CyberSecurityAcademy} />
+          </>
+        )}
+        {/* DEVELOPER-ONLY Founder and System Features */}
+        {user.accessLevel === 'developer' && (
+          <>
+            <Route path="/founder-control" component={FounderAccessControl} />
+            <Route path="/real-time-analysis" component={RealTimeAnalysis} />
+            <Route path="/comprehensive-threat-intelligence" component={ComprehensiveThreatIntelligence} />
+            <Route path="/layer-access-request" component={LayerAccessRequest} />
+          </>
+        )}
+        {/* DEVELOPER-ONLY Final System Features */}
+        {user.accessLevel === 'developer' && (
+          <>
+            <Route path="/founder-notifications" component={FounderNotificationCenter} />
+            <Route path="/advanced-analysis" component={AdvancedAnalysisInterface} />
+            <Route path="/threat-prediction" component={AdvancedThreatPrediction} />
+          </>
+        )}
+
+        {/* COMPANY-ONLY Collaboration Features */}
+        {user.accessLevel === 'company' && (
+          <>
+            <Route path="/collaboration" component={RealTimeCollaboration} />
+          </>
+        )}
+        {/* DEVELOPER-ONLY Advanced Interactive Features */}
+        {user.accessLevel === 'developer' && (
+          <>
+            <Route path="/threat-map" component={InteractiveThreatMap} />
+            <Route path="/soundscape" component={SecurityAlertSoundscape} />
+          </>
+        )}
+
+        {/* COMPANY-ONLY Business Features */}
+        {user.accessLevel === 'company' && (
+          <>
+            <Route path="/ai-coach" component={AISecurityPersonaCoach} />
+            <Route path="/enterprise-portal" component={EnterprisePortal3D} />
+          </>
+        )}
+        {/* DEVELOPER-ONLY Ultra Detection System */}
+        {user.accessLevel === 'developer' && (
+          <Route path="/ultra-detection" component={UltraPowerfulDetectionSystem} />
+        )}
         <Route component={NotFound} />
       </Switch>
     </div>

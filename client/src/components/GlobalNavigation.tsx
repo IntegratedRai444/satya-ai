@@ -116,7 +116,7 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
     }
   ];
 
-  // Company Access - Business and Team Management Tools
+  // Company Access - Business and Team Management Tools (No Overlap with Developer)
   const companyPortals = [
     {
       path: '/',
@@ -125,46 +125,46 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
       description: 'Business analytics and team overview'
     },
     {
-      path: '/unified-analysis',
-      label: 'Security Analysis',
-      icon: Scan,
-      description: 'Content analysis for business security'
+      path: '/team-management',
+      label: 'Team Management',
+      icon: Users,
+      description: 'Employee security and productivity management'
     },
     {
-      path: '/enterprise-portal',
-      label: 'Enterprise Hub',
-      icon: Crown,
-      description: 'Company security command center'
-    },
-    {
-      path: '/threat-intelligence',
-      label: 'Threat Reports',
-      icon: Brain,
-      description: 'Business threat intelligence reports'
-    },
-    {
-      path: '/behavior',
-      label: 'Team Analytics',
-      icon: Activity,
-      description: 'Team behavior and performance analytics'
-    },
-    {
-      path: '/compliance',
+      path: '/compliance-center',
       label: 'Compliance Center',
       icon: CheckCircle,
-      description: 'Regulatory compliance and auditing'
+      description: 'Regulatory compliance and audit management'
     },
     {
-      path: '/news',
-      label: 'Security News',
-      icon: Globe,
-      description: 'Industry security news and updates'
+      path: '/business-reports',
+      label: 'Business Reports',
+      icon: BarChart3,
+      description: 'Executive security and performance reports'
     },
     {
-      path: '/startup-audit',
-      label: 'Business Audit',
-      icon: FileText,
-      description: 'Comprehensive business security audits'
+      path: '/employee-training',
+      label: 'Employee Training',
+      icon: GraduationCap,
+      description: 'Security awareness and training programs'
+    },
+    {
+      path: '/business-insights',
+      label: 'Business Insights',
+      icon: Eye,
+      description: 'Market intelligence and competitive analysis'
+    },
+    {
+      path: '/risk-assessment',
+      label: 'Risk Assessment',
+      icon: Target,
+      description: 'Business risk evaluation and mitigation'
+    },
+    {
+      path: '/vendor-security',
+      label: 'Vendor Security',
+      icon: Network,
+      description: 'Third-party vendor security management'
     }
   ];
 
