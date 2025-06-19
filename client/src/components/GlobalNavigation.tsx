@@ -35,73 +35,183 @@ import {
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export function GlobalNavigation() {
+interface AuthenticatedUser {
+  id: string;
+  email: string;
+  accessLevel: 'developer' | 'company' | 'basic';
+  permissions: string[];
+  status: 'active';
+}
+
+interface GlobalNavigationProps {
+  user?: AuthenticatedUser;
+  onLogout?: () => void;
+}
+
+export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {}) {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Main Navigation - Maximum 10 Portals
-  const mainPortals = [
+  // Developer Access - Full Development Tools and System Access
+  const developerPortals = [
     {
       path: '/',
-      label: 'Dashboard',
-      icon: BarChart3,
-      description: 'Main analytics and security overview'
+      label: 'Developer Dashboard',
+      icon: Settings,
+      description: 'Full system control and development environment'
     },
     {
       path: '/unified-analysis',
       label: 'Analysis Portal',
       icon: Scan,
-      description: 'Unified analysis for images, videos, audio, URLs, emails, phones & text'
+      description: 'Complete analysis suite with all content types'
+    },
+    {
+      path: '/quantum-security',
+      label: 'Quantum Security Lab',
+      icon: Zap,
+      description: 'Advanced quantum computing and cryptography'
+    },
+    {
+      path: '/ai-threat-hunting',
+      label: 'AI Threat Hunting',
+      icon: Target,
+      description: 'Advanced AI-powered threat detection system'
+    },
+    {
+      path: '/behavioral-intelligence',
+      label: 'Behavioral Intelligence',
+      icon: Brain,
+      description: 'AI behavioral analysis and prediction'
+    },
+    {
+      path: '/zero-trust',
+      label: 'Zero Trust Architecture',
+      icon: Shield,
+      description: 'Enterprise zero-trust security framework'
     },
     {
       path: '/enterprise-portal',
       label: 'Enterprise Hub',
       icon: Building2,
-      description: 'Advanced enterprise security command center'
+      description: 'Full enterprise command center'
     },
     {
       path: '/threat-intelligence',
       label: 'Threat Intelligence',
-      icon: Brain,
-      description: 'AI-powered threat prediction and real-time intelligence'
+      icon: Eye,
+      description: 'Advanced threat intelligence platform'
     },
     {
       path: '/identity-forensics',
       label: 'Identity Forensics',
       icon: Fingerprint,
-      description: 'Digital identity verification and forensic analysis'
-    },
-    {
-      path: '/behavior',
-      label: 'Behavior Trust',
-      icon: Activity,
-      description: 'Behavioral pattern analysis and trust scoring'
-    },
-    {
-      path: '/security-features',
-      label: 'Security Center',
-      icon: Shield,
-      description: 'Comprehensive security tools and features'
-    },
-    {
-      path: '/cybercrime-law',
-      label: 'Legal Center',
-      icon: Crown,
-      description: 'Legal frameworks and cybercrime database'
+      description: 'Digital forensics and identity verification'
     },
     {
       path: '/request-access',
       label: 'Access Control',
       icon: Key,
-      description: 'Request and manage access levels'
-    },
-    {
-      path: '/ai-coach',
-      label: 'AI Coach',
-      icon: Bot,
-      description: 'AI-powered security guidance and training'
+      description: 'User access management and permissions'
     }
   ];
+
+  // Company Access - Business and Team Management Tools
+  const companyPortals = [
+    {
+      path: '/',
+      label: 'Company Dashboard',
+      icon: Building2,
+      description: 'Business analytics and team overview'
+    },
+    {
+      path: '/unified-analysis',
+      label: 'Security Analysis',
+      icon: Scan,
+      description: 'Content analysis for business security'
+    },
+    {
+      path: '/enterprise-portal',
+      label: 'Enterprise Hub',
+      icon: Crown,
+      description: 'Company security command center'
+    },
+    {
+      path: '/threat-intelligence',
+      label: 'Threat Reports',
+      icon: Brain,
+      description: 'Business threat intelligence reports'
+    },
+    {
+      path: '/behavior',
+      label: 'Team Analytics',
+      icon: Activity,
+      description: 'Team behavior and performance analytics'
+    },
+    {
+      path: '/compliance',
+      label: 'Compliance Center',
+      icon: CheckCircle,
+      description: 'Regulatory compliance and auditing'
+    },
+    {
+      path: '/news',
+      label: 'Security News',
+      icon: Globe,
+      description: 'Industry security news and updates'
+    },
+    {
+      path: '/startup-audit',
+      label: 'Business Audit',
+      icon: FileText,
+      description: 'Comprehensive business security audits'
+    }
+  ];
+
+  // Basic Access - Limited Tools for General Users
+  const basicPortals = [
+    {
+      path: '/',
+      label: 'Dashboard',
+      icon: BarChart3,
+      description: 'Basic security overview'
+    },
+    {
+      path: '/unified-analysis',
+      label: 'Basic Analysis',
+      icon: Scan,
+      description: 'Simple content analysis tools'
+    },
+    {
+      path: '/news',
+      label: 'Security News',
+      icon: Globe,
+      description: 'Security news and updates'
+    },
+    {
+      path: '/behavior',
+      label: 'Basic Reports',
+      icon: Activity,
+      description: 'Basic security reports'
+    }
+  ];
+
+  // Select portals based on user access level
+  const getPortalsByAccessLevel = () => {
+    if (!user) return basicPortals;
+    
+    switch (user.accessLevel) {
+      case 'developer':
+        return developerPortals;
+      case 'company':
+        return companyPortals;
+      case 'basic':
+      default:
+        return basicPortals;
+    }
+  };
+
+  const mainPortals = getPortalsByAccessLevel();
 
   // Side Navigation - Detailed Features
   const sideFeatures = [
@@ -148,8 +258,50 @@ export function GlobalNavigation() {
     return location === path;
   };
 
+  const getAccessLevelColor = (level: string) => {
+    switch (level) {
+      case 'developer': return 'text-green-400 border-green-400 bg-green-400/10';
+      case 'company': return 'text-cyan-400 border-cyan-400 bg-cyan-400/10';
+      case 'basic': return 'text-blue-400 border-blue-400 bg-blue-400/10';
+      default: return 'text-gray-400 border-gray-400 bg-gray-400/10';
+    }
+  };
+
   return (
     <>
+      {/* User Profile Header */}
+      {user && (
+        <div className="fixed top-0 right-0 z-50 p-4">
+          <div className="flex items-center gap-3 bg-slate-900/90 backdrop-blur-sm border border-slate-700 rounded-lg p-3">
+            <div className="flex items-center gap-2">
+              <div className={`p-1.5 rounded-full ${user.accessLevel === 'developer' ? 'bg-green-600' : user.accessLevel === 'company' ? 'bg-cyan-600' : 'bg-blue-600'}`}>
+                {user.accessLevel === 'developer' ? <Settings className="w-4 h-4" /> : 
+                 user.accessLevel === 'company' ? <Building2 className="w-4 h-4" /> : 
+                 <User className="w-4 h-4" />}
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">Logged in as</p>
+                <p className="text-sm font-medium text-white">{user.email}</p>
+              </div>
+            </div>
+            <div className={`px-2 py-1 rounded border text-xs font-medium ${getAccessLevelColor(user.accessLevel)}`}>
+              {user.accessLevel.toUpperCase()}
+            </div>
+            {onLogout && (
+              <Button
+                onClick={onLogout}
+                size="sm"
+                variant="outline"
+                className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+              >
+                <LogOut className="w-3 h-3 mr-1" />
+                Logout
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Mobile Menu Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}

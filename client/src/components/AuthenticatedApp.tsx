@@ -23,6 +23,9 @@ import QuantumSecurityLab from "@/components/QuantumSecurityLab";
 import AdvancedBehavioralIntelligence from "@/components/AdvancedBehavioralIntelligence";
 import ZeroTrustArchitecture from "@/components/ZeroTrustArchitecture";
 import AIThreatHuntingSystem from "@/components/AIThreatHuntingSystem";
+import DeveloperDashboard from "@/components/DeveloperDashboard";
+import CompanyDashboard from "@/components/CompanyDashboard";
+import AccessControlWrapper from "@/components/AccessControlWrapper";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -87,7 +90,7 @@ interface AuthenticatedAppProps {
 export default function AuthenticatedApp({ user, onLogout }: AuthenticatedAppProps) {
   const [isAuthenticated] = useState(true);
   const [userType] = useState<'founder' | 'normal'>('normal');
-  const userData: UserData = {
+  const userData = {
     email: user.email,
     accessLevel: user.accessLevel,
     permissions: user.permissions,
@@ -119,19 +122,28 @@ export default function AuthenticatedApp({ user, onLogout }: AuthenticatedAppPro
       <TooltipProvider>
         <div className="dark">
           <Toaster />
-          <NormalUserRouter />
+          <NormalUserRouter user={user} onLogout={handleLogout} />
         </div>
       </TooltipProvider>
     </QueryClientProvider>
   );
 }
 
-function NormalUserRouter() {
+function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogout: () => void }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-      <GlobalNavigation />
+      <GlobalNavigation user={user} onLogout={onLogout} />
       <Switch>
-        <Route path="/" component={SatyaAIExactDashboard} />
+        <Route path="/" component={() => {
+          // Dynamic dashboard based on user access level
+          if (user.accessLevel === 'developer') {
+            return <DeveloperDashboard user={user} />;
+          } else if (user.accessLevel === 'company') {
+            return <CompanyDashboard user={user} />;
+          } else {
+            return <SatyaAIExactDashboard />;
+          }
+        }} />
         <Route path="/analysis" component={UnifiedAnalysis} />
         <Route path="/ai-employee-request" component={AIEmployeeRequestForm} />
         <Route path="/3d-landing" component={CyberTech3DLanding} />
@@ -154,10 +166,26 @@ function NormalUserRouter() {
         <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
         <Route path="/request-access" component={RequestAccessPortal} />
         <Route path="/security-features" component={StreamlinedSecurityCenter} />
-        <Route path="/quantum-security" component={QuantumSecurityLab} />
-        <Route path="/behavioral-intelligence" component={AdvancedBehavioralIntelligence} />
-        <Route path="/zero-trust" component={ZeroTrustArchitecture} />
-        <Route path="/ai-threat-hunting" component={AIThreatHuntingSystem} />
+        <Route path="/quantum-security" component={() => (
+          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['Full System Access']}>
+            <QuantumSecurityLab />
+          </AccessControlWrapper>
+        )} />
+        <Route path="/behavioral-intelligence" component={() => (
+          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['AI behavioral analysis']}>
+            <AdvancedBehavioralIntelligence />
+          </AccessControlWrapper>
+        )} />
+        <Route path="/zero-trust" component={() => (
+          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['Enterprise zero-trust security']}>
+            <ZeroTrustArchitecture />
+          </AccessControlWrapper>
+        )} />
+        <Route path="/ai-threat-hunting" component={() => (
+          <AccessControlWrapper user={user} requiredLevel="developer" requiredPermissions={['Advanced AI-powered threat detection']}>
+            <AIThreatHuntingSystem />
+          </AccessControlWrapper>
+        )} />
         <Route path="/legitimacy-analyzer" component={LegitimacyThreatAnalyzer} />
         <Route path="/cybercrime-law" component={CybercrimeLawCenter} />
         <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
