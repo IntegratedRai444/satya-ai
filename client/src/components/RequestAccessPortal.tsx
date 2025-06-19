@@ -86,6 +86,26 @@ export default function RequestAccessPortal() {
     duration: '30'
   });
   const [activeTab, setActiveTab] = useState('request');
+  const [authorizedUsers, setAuthorizedUsers] = useState([
+    {
+      id: 'user-1',
+      email: 'rishabhkapoor@atomicmail.io',
+      password: 'Rai444',
+      accessLevel: 'developer',
+      status: 'active',
+      lastLogin: new Date().toISOString(),
+      permissions: ['Full System Access', 'Developer Tools', 'Admin Panel', 'All Features']
+    },
+    {
+      id: 'user-2', 
+      email: 'rishabhkap0444@gmail.com',
+      password: 'Rishabhkapoor@0444',
+      accessLevel: 'company',
+      status: 'active',
+      lastLogin: new Date().toISOString(),
+      permissions: ['Company Dashboard', 'Reports', 'Analytics', 'Team Management']
+    }
+  ]);
   const { toast } = useToast();
 
   const accessLevels: AccessLevel[] = [
@@ -132,6 +152,28 @@ export default function RequestAccessPortal() {
       maxDuration: '365 days',
       icon: Crown,
       color: 'text-orange-400'
+    },
+    {
+      id: 'company',
+      name: 'Company Access',
+      description: 'Corporate level access with team management and reporting',
+      permissions: ['Company Dashboard', 'Team Reports', 'Analytics', 'User Management', 'Compliance Reports'],
+      riskLevel: 'Medium',
+      requiresApproval: true,
+      maxDuration: '365 days',
+      icon: Building2,
+      color: 'text-cyan-400'
+    },
+    {
+      id: 'developer',
+      name: 'Developer Access',
+      description: 'Full development access with API keys and system controls',
+      permissions: ['Full System Access', 'Developer Tools', 'API Management', 'Admin Panel', 'All Features', 'Code Access'],
+      riskLevel: 'Critical',
+      requiresApproval: true,
+      maxDuration: 'Indefinite',
+      icon: Settings,
+      color: 'text-green-400'
     },
     {
       id: 'admin',
@@ -250,9 +292,9 @@ export default function RequestAccessPortal() {
 
     submitAccessRequest.mutate({
       ...requestForm,
-      userId: currentUser?.id || 'current_user',
-      userEmail: currentUser?.email || 'user@company.com',
-      userName: currentUser?.firstName + ' ' + currentUser?.lastName || 'Current User',
+      userId: (currentUser as any)?.id || 'current_user',
+      userEmail: (currentUser as any)?.email || 'user@company.com',
+      userName: ((currentUser as any)?.firstName + ' ' + (currentUser as any)?.lastName) || 'Current User',
       currentLevel: 'basic', // This would come from user data
       requestDate: new Date().toISOString(),
       status: 'pending'
@@ -448,6 +490,86 @@ export default function RequestAccessPortal() {
               >
                 {submitAccessRequest.isPending ? 'Submitting...' : 'Submit Access Request'}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Authorized Users Management */}
+          <Card className="bg-slate-900 border-slate-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-green-400" />
+                Authorized System Users
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {authorizedUsers.map((user) => (
+                  <Card key={user.id} className="bg-slate-800 border-slate-700">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${user.accessLevel === 'developer' ? 'bg-green-600' : 'bg-cyan-600'}`}>
+                            {user.accessLevel === 'developer' ? <Settings className="w-4 h-4" /> : <Building2 className="w-4 h-4" />}
+                          </div>
+                          <div>
+                            <p className="font-semibold">{user.email}</p>
+                            <p className="text-sm text-slate-400">{user.accessLevel.toUpperCase()} ACCESS</p>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-green-400 border-green-400">
+                          {user.status.toUpperCase()}
+                        </Badge>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                        <div>
+                          <p className="text-xs text-slate-400 mb-1">Login Credentials</p>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Mail className="w-3 h-3 text-blue-400" />
+                              <span className="text-sm font-mono">{user.email}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Lock className="w-3 h-3 text-purple-400" />
+                              <span className="text-sm font-mono">{user.password}</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p className="text-xs text-slate-400 mb-1">Access Details</p>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Clock className="w-3 h-3 text-yellow-400" />
+                              <span className="text-xs">Last Login: {new Date(user.lastLogin).toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Shield className="w-3 h-3 text-green-400" />
+                              <span className="text-xs">Status: Active</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <p className="text-xs text-slate-400 mb-2">Permissions:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {user.permissions.slice(0, 4).map((permission, index) => (
+                            <Badge key={index} variant="outline" className="text-xs text-blue-400 border-blue-400">
+                              {permission}
+                            </Badge>
+                          ))}
+                          {user.permissions.length > 4 && (
+                            <Badge variant="outline" className="text-xs text-slate-400 border-slate-400">
+                              +{user.permissions.length - 4} more
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </CardContent>
           </Card>
 
