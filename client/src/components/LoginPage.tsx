@@ -37,6 +37,7 @@ interface AuthenticatedUser {
 
 // Authorized users database
 const AUTHORIZED_USERS = [
+  // Founder Level Accounts
   {
     id: 'founder-001',
     email: 'founder@satyaai.com',
@@ -53,6 +54,39 @@ const AUTHORIZED_USERS = [
     ],
     status: 'active' as const
   },
+  {
+    id: 'founder-002',
+    email: 'ceo@satyaai.com',
+    password: 'CEO2024',
+    accessLevel: 'founder' as const,
+    permissions: [
+      'Founder Control',
+      'All System Access',
+      'Complete Platform Control',
+      'User Management',
+      'System Configuration',
+      'All Features',
+      'Admin Override'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'founder-003',
+    email: 'admin@satyaai.com',
+    password: 'Admin2024',
+    accessLevel: 'founder' as const,
+    permissions: [
+      'Founder Control',
+      'All System Access',
+      'Complete Platform Control',
+      'User Management',
+      'System Configuration',
+      'All Features',
+      'Admin Override'
+    ],
+    status: 'active' as const
+  },
+  // Developer Level Accounts
   {
     id: 'dev-001',
     email: 'rishabhkapoor@atomicmail.io',
@@ -71,6 +105,58 @@ const AUTHORIZED_USERS = [
     status: 'active' as const
   },
   {
+    id: 'dev-002',
+    email: 'dev@satyaai.com',
+    password: 'Dev2024',
+    accessLevel: 'developer' as const,
+    permissions: [
+      'Full System Access',
+      'Developer Tools', 
+      'Admin Panel',
+      'All Features',
+      'Code Access',
+      'API Management',
+      'System Configuration',
+      'User Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'dev-003',
+    email: 'developer@demo.com',
+    password: 'developer123',
+    accessLevel: 'developer' as const,
+    permissions: [
+      'Full System Access',
+      'Developer Tools', 
+      'Admin Panel',
+      'All Features',
+      'Code Access',
+      'API Management',
+      'System Configuration',
+      'User Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'dev-004',
+    email: 'tech@satyaai.com',
+    password: 'Tech2024',
+    accessLevel: 'developer' as const,
+    permissions: [
+      'Full System Access',
+      'Developer Tools', 
+      'Admin Panel',
+      'All Features',
+      'Code Access',
+      'API Management',
+      'System Configuration',
+      'User Management'
+    ],
+    status: 'active' as const
+  },
+  // Company Level Accounts
+  {
     id: 'comp-001', 
     email: 'rishabhkap0444@gmail.com',
     password: 'Rishabhkapoor@0444',
@@ -87,9 +173,122 @@ const AUTHORIZED_USERS = [
     status: 'active' as const
   },
   {
+    id: 'comp-002',
+    email: 'company@demo.com',
+    password: 'company123',
+    accessLevel: 'company' as const,
+    permissions: [
+      'Company Dashboard',
+      'Team Reports', 
+      'Analytics',
+      'User Management',
+      'Compliance Reports',
+      'Security Overview',
+      'Team Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'comp-003',
+    email: 'enterprise@satyaai.com',
+    password: 'Enterprise2024',
+    accessLevel: 'company' as const,
+    permissions: [
+      'Company Dashboard',
+      'Team Reports', 
+      'Analytics',
+      'User Management',
+      'Compliance Reports',
+      'Security Overview',
+      'Team Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'comp-004',
+    email: 'business@demo.com',
+    password: 'business123',
+    accessLevel: 'company' as const,
+    permissions: [
+      'Company Dashboard',
+      'Team Reports', 
+      'Analytics',
+      'User Management',
+      'Compliance Reports',
+      'Security Overview',
+      'Team Management'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'comp-005',
+    email: 'corp@satyaai.com',
+    password: 'Corp2024',
+    accessLevel: 'company' as const,
+    permissions: [
+      'Company Dashboard',
+      'Team Reports', 
+      'Analytics',
+      'User Management',
+      'Compliance Reports',
+      'Security Overview',
+      'Team Management'
+    ],
+    status: 'active' as const
+  },
+  // Basic Level Accounts
+  {
     id: 'basic-001',
     email: 'user@demo.com',
     password: 'demo123',
+    accessLevel: 'basic' as const,
+    permissions: [
+      'Basic Analysis',
+      'Security Reports',
+      'Limited Access'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'basic-002',
+    email: 'basic@demo.com',
+    password: 'basic123',
+    accessLevel: 'basic' as const,
+    permissions: [
+      'Basic Analysis',
+      'Security Reports',
+      'Limited Access'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'basic-003',
+    email: 'personal@demo.com',
+    password: 'personal123',
+    accessLevel: 'basic' as const,
+    permissions: [
+      'Basic Analysis',
+      'Security Reports',
+      'Limited Access'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'basic-004',
+    email: 'individual@demo.com',
+    password: 'individual123',
+    accessLevel: 'basic' as const,
+    permissions: [
+      'Basic Analysis',
+      'Security Reports',
+      'Limited Access'
+    ],
+    status: 'active' as const
+  },
+  {
+    id: 'basic-005',
+    email: 'student@demo.com',
+    password: 'student123',
     accessLevel: 'basic' as const,
     permissions: [
       'Basic Analysis',

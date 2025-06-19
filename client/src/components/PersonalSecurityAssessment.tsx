@@ -23,7 +23,7 @@ import { useState } from 'react';
 
 export default function PersonalSecurityAssessment() {
   const [currentSection, setCurrentSection] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [assessmentComplete, setAssessmentComplete] = useState(false);
 
   const securitySections = [
@@ -401,7 +401,7 @@ export default function PersonalSecurityAssessment() {
                     <Checkbox
                       id={question.id}
                       checked={answers[question.id] || false}
-                      onCheckedChange={(checked) => handleAnswer(question.id, checked)}
+                      onCheckedChange={(checked) => handleAnswer(question.id, Boolean(checked))}
                     />
                   </div>
                   <div className="flex-1">
