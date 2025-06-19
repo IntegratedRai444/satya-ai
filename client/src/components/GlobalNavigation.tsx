@@ -130,6 +130,15 @@ export function GlobalNavigation() {
         { path: '/audit-logs', label: 'Audit Logs', icon: FileText, description: 'System activity monitoring' },
         { path: '/api-access', label: 'API Access', icon: Network, description: 'API keys and integration' }
       ]
+    },
+    {
+      category: 'Advanced Research & Development',
+      items: [
+        { path: '/quantum-security', label: 'Quantum Security Lab', icon: Scan, description: 'Quantum computing and advanced cryptography' },
+        { path: '/behavioral-intelligence', label: 'Behavioral Intelligence', icon: Brain, description: 'AI-powered behavioral analysis and prediction' },
+        { path: '/zero-trust', label: 'Zero Trust Architecture', icon: Shield, description: 'Never trust, always verify security framework' },
+        { path: '/ai-threat-hunting', label: 'AI Threat Hunting', icon: Target, description: 'Advanced AI-powered threat detection and hunting' }
+      ]
     }
   ];
 

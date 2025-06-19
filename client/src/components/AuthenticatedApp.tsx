@@ -19,6 +19,10 @@ import { LegitimacyThreatAnalyzer } from "@/components/LegitimacyThreatAnalyzer"
 import UnifiedAnalysisPortal from "@/components/UnifiedAnalysisPortal";
 import RequestAccessPortal from "@/components/RequestAccessPortal";
 import StreamlinedSecurityCenter from "@/components/StreamlinedSecurityCenter";
+import QuantumSecurityLab from "@/components/QuantumSecurityLab";
+import AdvancedBehavioralIntelligence from "@/components/AdvancedBehavioralIntelligence";
+import ZeroTrustArchitecture from "@/components/ZeroTrustArchitecture";
+import AIThreatHuntingSystem from "@/components/AIThreatHuntingSystem";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -184,6 +188,10 @@ function NormalUserRouter() {
         <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
         <Route path="/request-access" component={RequestAccessPortal} />
         <Route path="/security-features" component={StreamlinedSecurityCenter} />
+        <Route path="/quantum-security" component={QuantumSecurityLab} />
+        <Route path="/behavioral-intelligence" component={AdvancedBehavioralIntelligence} />
+        <Route path="/zero-trust" component={ZeroTrustArchitecture} />
+        <Route path="/ai-threat-hunting" component={AIThreatHuntingSystem} />
         <Route path="/legitimacy-analyzer" component={LegitimacyThreatAnalyzer} />
         <Route path="/cybercrime-law" component={CybercrimeLawCenter} />
         <Route path="/threat-intelligence" component={ThreatIntelligenceDashboard} />
