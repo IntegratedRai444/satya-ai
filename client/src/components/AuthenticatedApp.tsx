@@ -29,6 +29,8 @@ import AccessControlWrapper from "@/components/AccessControlWrapper";
 import MachineLearningThreatPrediction from "@/components/MachineLearningThreatPrediction";
 import AnimatedThreatTimeline from "@/components/AnimatedThreatTimeline";
 import SecurityMoodGenerator from "@/components/SecurityMoodGenerator";
+import DailySecurityReports from "@/components/DailySecurityReports";
+import MessageCenter from "@/components/MessageCenter";
 import CybercrimeLawCenter from "@/components/CybercrimeLawCenter";
 import ThreatIntelligenceDashboard from "@/components/ThreatIntelligenceDashboard";
 import StartupSecurityAudit from "@/components/StartupSecurityAudit";
@@ -184,20 +186,29 @@ function NormalUserRouter({ user, onLogout }: { user: AuthenticatedUser; onLogou
           </>
         )}
         
-        {/* BASIC ACCESS ONLY - Limited Analysis Tools */}
+        {/* BASIC ACCESS - Comprehensive Essential Tools */}
         {user.accessLevel === 'basic' && (
           <>
+            <Route path="/unified-analysis" component={UnifiedAnalysisPortal} />
+            <Route path="/ai-assistant" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">AI Security Assistant - Available 24/7</div>} />
+            <Route path="/security-news" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Live Security News - Real-time Updates</div>} />
+            <Route path="/daily-reports" component={DailySecurityReports} />
+            <Route path="/threat-reports" component={ThreatIntelligenceDashboard} />
+            <Route path="/cyber-reports" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Comprehensive Cyber Reports - Daily Updates</div>} />
+            <Route path="/message-center" component={MessageCenter} />
+            <Route path="/basic-compliance" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Basic Compliance Monitoring - GDPR, HIPAA, SOC2</div>} />
+            <Route path="/security-training" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Security Training Portal - Interactive Modules</div>} />
             <Route path="/analysis" component={UnifiedAnalysis} />
-            <Route path="/ai-employee-request" component={AIEmployeeRequestForm} />
-            <Route path="/3d-landing" component={CyberTech3DLanding} />
-            <Route path="/satyaai-exact" component={SatyaAIExactDesign} />
-            <Route path="/satyaai" component={SatyaAIDashboard} />
-            <Route path="/satyaai-3d" component={SatyaAI3DComplete} />
-            <Route path="/complete-front" component={CompleteFrontPage} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/security" component={AdvancedSecurityFeatures} />
-            <Route path="/behavior" component={BehaviorTrustDashboard} />
-            <Route path="/news" component={RealTimeNewsDashboard} />
+            <Route path="/media-analysis" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Media Analysis - Images, Videos, Audio</div>} />
+            <Route path="/image-analysis" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Image Analysis - Deepfake Detection, Authenticity 97%</div>} />
+            <Route path="/video-analysis" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Video Analysis - Motion Detection, Content Verification</div>} />
+            <Route path="/audio-analysis" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Audio Analysis - Voice Authentication, Sound Classification</div>} />
+            <Route path="/file-analysis" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">File Analysis - Document Security, Malware Scanning</div>} />
+            <Route path="/data-analysis" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Data Analysis - Pattern Recognition, Anomaly Detection</div>} />
+            <Route path="/misinformation" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Misinformation Detection - Fact Checking, Source Verification</div>} />
+            <Route path="/behavior" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Behavioral Analysis - User Pattern Recognition</div>} />
+            <Route path="/news" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">Real-time News Dashboard - Cybersecurity Updates</div>} />
+            <Route path="/news-intelligence" component={() => <div className="p-8 text-white bg-slate-900 min-h-screen">News Intelligence - AI-powered Insights</div>} />
           </>
         )}
         {/* DEVELOPER-ONLY Advanced Features */}

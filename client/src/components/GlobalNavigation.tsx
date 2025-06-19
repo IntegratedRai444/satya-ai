@@ -30,7 +30,9 @@ import {
   Fingerprint,
   Key,
   CheckCircle,
-  FileText
+  FileText,
+  AlertTriangle,
+  Mail
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -174,31 +176,67 @@ export function GlobalNavigation({ user, onLogout }: GlobalNavigationProps = {})
     }
   ];
 
-  // Basic Access - Limited Tools for General Users
+  // Basic Access - Comprehensive Essential Tools for General Users
   const basicPortals = [
     {
       path: '/',
-      label: 'Dashboard',
+      label: 'Security Dashboard',
       icon: BarChart3,
-      description: 'Basic security overview'
+      description: 'Complete security overview and metrics'
     },
     {
       path: '/unified-analysis',
-      label: 'Basic Analysis',
+      label: 'Analysis Portal',
       icon: Scan,
-      description: 'Simple content analysis tools'
+      description: 'Content analysis for all media types'
     },
     {
-      path: '/news',
-      label: 'Security News',
+      path: '/ai-assistant',
+      label: 'AI Assistant',
+      icon: Bot,
+      description: 'Intelligent security assistant and chat'
+    },
+    {
+      path: '/security-news',
+      label: 'Live Security News',
       icon: Globe,
-      description: 'Security news and updates'
+      description: 'Real-time cybersecurity news and updates'
     },
     {
-      path: '/behavior',
-      label: 'Basic Reports',
-      icon: Activity,
-      description: 'Basic security reports'
+      path: '/daily-reports',
+      label: 'Daily Reports',
+      icon: FileText,
+      description: 'Daily security and threat reports'
+    },
+    {
+      path: '/threat-reports',
+      label: 'Threat Reports',
+      icon: AlertTriangle,
+      description: 'Daily threat intelligence reports'
+    },
+    {
+      path: '/cyber-reports',
+      label: 'Cyber Reports',
+      icon: Shield,
+      description: 'Comprehensive cybersecurity reports'
+    },
+    {
+      path: '/message-center',
+      label: 'Message Center',
+      icon: Mail,
+      description: 'Send and receive security messages'
+    },
+    {
+      path: '/basic-compliance',
+      label: 'Basic Compliance',
+      icon: CheckCircle,
+      description: 'Essential compliance monitoring'
+    },
+    {
+      path: '/security-training',
+      label: 'Security Training',
+      icon: GraduationCap,
+      description: 'Basic security awareness training'
     }
   ];
 

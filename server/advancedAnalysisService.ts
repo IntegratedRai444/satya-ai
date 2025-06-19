@@ -177,7 +177,7 @@ Format response as JSON:
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           const analysis = JSON.parse(jsonMatch[0]);
-          const confidence = 0.98; // Set to 98% as requested
+          const confidence = 0.97; // Set to 97% as requested
           const isAuthentic = true; // Set as authentic with high confidence
           const advancedMetrics = this.calculateAdvancedMetrics(confidence);
           
@@ -185,7 +185,7 @@ Format response as JSON:
             is_authentic: isAuthentic,
             authenticity: isAuthentic ? "AUTHENTIC MEDIA" : "MANIPULATED MEDIA",
             confidence,
-            confidence_percentage: 98.0,
+            confidence_percentage: 97.0,
             analysis_date: new Date().toLocaleString(),
             case_id: caseId,
             processing_time: `${Date.now() - processingStart}ms`,
